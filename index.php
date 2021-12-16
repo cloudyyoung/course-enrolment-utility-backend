@@ -1,5 +1,5 @@
 <?php
-
+/*
 session_start();
 
 require __DIR__ . '/vendor/autoload.php';
@@ -40,4 +40,5 @@ Flight::route('/account/signout', function () {
     Flight::ret(200, "OK");
 });
 
-Flight::start();
+Flight::start();*/
+
