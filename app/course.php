@@ -2,6 +2,9 @@
 
 namespace App;
 
+//aka --> contractable
+//AKA --> course_Id
+
 class course 
 {
 
@@ -12,27 +15,57 @@ class course
 
     //End point 5
     //Don;t forget to add the mongoDB part 
-    public static function Course_Information ($code, $number)
+    public static function Course_Information ($code,$number, $con)
     {
-        $con = mysqli_connect("155.138.157.78","ucalgary","cv0V9c9ZqCf55g.0","ucalgary");
-        if (mysqli_connect_errno($con))
-        {
-            echo "Failed to connect to MySQL: " . mysqli_connect_error();
-        }
-        $sql = "SELECT C.Course_ID, C.NoGPA, C.Repeat, C.Code, C.Number, C.Units, C.Topic, C.Notes, C.Description, C.Credit, H.Hours, A.Aka, T.Time_length
-                FROM COURSE as S, HOURS as H, AKA as A, TIME_LENGTH as T
-                WHERE C.Course_ID = H.Course_ID AND
-                C.Course_ID = A.Course_ID AND
-                C.Course_ID = T.Course_ID AND
-                C.Code = $code AND C.Number = $number";
+
+        $sql = "SELECT `C`.`course_id`, `C`.`no_gpa`, `C`.`repeat`, `C`.`code`, `C`.`number`, `C`.`units`, `C`.`topic`, `C`.`notes`, `C`.`descrption`, `C`.`credit`, `H`.`hours`, `A`.`aka`, `T`.`time_length`
+                FROM `course` as `C`, `hours` as `H`, `AKA` as `A`, `time_length` as `T`
+                WHERE `C`.`course_id` = `H`.`course_id AND
+                `C`.`course_id` = `A`.`course_id` AND
+                `C`.`course_id` = `T`.`course_id` AND
+                `C`.`code` = '$code' AND `C`.`number` = '$number'";
 
         $result = mysqli_query($con, $sql);
         return $result;
+
+
+
     }
+
+
+    //extra end points, get all courses
+    public static function AllCourses($con)
+    {
+      $sql = "SELECT `C`.`course_id`, `C`.`no_gpa`, `C`.`repeat`, `C`.`code`, `C`.`number`, `C`.`units`, `C`.`topic`, `C`.`notes`, `C`.`descrption`, `C`.`credit`, `H`.`hours`, `A`.`aka`, `T`.`time_length`
+      FROM `course` as `C`, `hours` as `H`, `AKA` as `A`, `time_length` as `T`
+      WHERE `C`.`course_id` = `H`.`course_id AND
+      `C`.`course_id` = `A`.`course_id` AND
+      `C`.`course_id` = `T`.`course_id`";
+
+      $result = mysqli_query($con, $sql);
+      return $result;
+    }
+
+    //extra end points, get all courses that has the same code
+    public static function CoursesCode ($code, $con)
+    {
+
+        $sql = "SELECT `C`.`course_id`, `C`.`no_gpa`, `C`.`repeat`, `C`.`code`, `C`.`number`, `C`.`units`, `C`.`topic`, `C`.`notes`, `C`.`descrption`, `C`.`credit`, `H`.`hours`, `A`.`aka`, `T`.`time_length`
+                FROM `course` as `C`, `hours` as `H`, `AKA` as `A`, `time_length` as `T`
+                WHERE `C`.`course_id` = `H`.`course_id AND
+                `C`.`course_id` = `A`.`course_id` AND
+                `C`.`course_id` = `T`.`course_id` AND
+                `C`.`code` = '$code' ";
+
+        $result = mysqli_query($con, $sql);
+        return $result;
+
+
+
+    }
+
 }
-
 /*
-
 // Database connection 
  // larp-cloud 
  $client = new MongoDB\Client( 
@@ -40,7 +73,5 @@ class course
  ); 
    $larp_db = $client->larp; 
  Flight::set("larp_db", $larp_db); 
-
-
 
 */

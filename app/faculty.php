@@ -2,6 +2,13 @@
 
 namespace App;
 
+
+//aka --> contractable
+//AKA --> course_Id
+/*
+ *DONT FORGET TO CHANGE THE TABLE NAME AND ATTRIBUTES TO MATCH THE MYSQL DATABASE
+ */
+
 class Faculty 
 {
     public function __construct($object)
@@ -10,65 +17,77 @@ class Faculty
     }
 
     //End point 7
-    public static function Faculty_Information($faculty_id)
+    public static function Faculty_Information($faculty_id,  $con)
     {
-        $con = mysqli_connect("155.138.157.78","ucalgary","cv0V9c9ZqCf55g.0","ucalgary");
-        if (mysqli_connect_errno($con))
-        {
-            echo "Failed to connect to MySQL: " . mysqli_connect_error();
-        }
-        $sql = "SELECT F.Fauclty_ID, F.Name, F.Code, F.contactable_ID, A.Aka, P.Phone, W.Website, R.Room, E.Email
-                FROM FACULTY as F, CONTACTABLE as C, AKA as A, PHONE AS P, WEBSITE as W, ROOM as R, EMAIL AS E
-                WHERE F.Contactable_ID = A.Contactable_ID AND
-                F.Contactable_ID = P.Contactable_ID AND
-                F.Contactable_ID = W.Contactable_ID AND
-                F.Contactable_ID = R.Contactable_ID AND
-                F.Contactable_ID = E.Contactable_ID AND
-                F.Faculty_ID = $faculty_id";
+        $sql = "SELECT `F`.`faculty_id`, `F`.`name`, `F`.`code`, `F`.`contactable_id`, `A`.`aka`, `P`.`phone`, `W`.`website`, `R`.`room`, `E`.`email`
+                FROM `faculty` as `F`, `aka` as `A`, `phone` AS `P`, `website` as `W`, `room(contactable),` as `R`, `email` AS `E`
+                WHERE `F`.`contactable_id` = `A.contactable_id` AND
+                `F`.`contactable_id` = `P`.`contactable_id` AND
+                `F`.`contactable_id` = `W`.`contactable_id` AND
+                `F`.`contactable_id` = `R`.`contactable_id` AND
+                `F`.`contactable_id` = `E`.`contactable_id` AND
+                `F`.`faculty_id` = '$faculty_id'";
         $result = mysqli_query($con, $sql);
         return $result;
     }
 
+    //extra end point for end point 7
+    public static function AllFaculty($con)
+    {
+        $sql = "SELECT `F`.`faculty_id`, `F`.`name`, `F`.`code`, `F`.`contactable_id`, `A`.`aka`, `P`.`phone`, `W`.`website`, `R`.`room`, `E`.`email`
+                FROM `faculty` as `F`, `aka` as `A`, `phone` AS `P`, `website` as `W`, `room(contactable),` as `R`, `email` AS `E`
+                WHERE `F`.`contactable_id` = `A.contactable_id` AND
+                `F`.`contactable_id` = `P`.`contactable_id` AND
+                `F`.`contactable_id` = `W`.`contactable_id` AND
+                `F`.`contactable_id` = `R`.`contactable_id` AND
+                `F`.`contactable_id` = `E`.`contactable_id`";
+        $result = mysqli_query($con, $sql);
+        return $result;
+    }    
+
 
     //End point 8
-    public static function Department_Information($department_id)
+    public static function Department_Information($department_id, $con)
     {
-        $con = mysqli_connect("155.138.157.78","ucalgary","cv0V9c9ZqCf55g.0","ucalgary");
-        if (mysqli_connect_errno($con))
-        {
-            echo "Failed to connect to MySQL: " . mysqli_connect_error();
-        }
-
-        $sql = "SELECT D.Department_ID, D.Name, D.Code, D.Faculty_ID, A.Aka, P.Phone, W.Website, R.Room, E.Email
-                FROM DEPARTMENT as D, CONTACTABLE as C, AKA as A, PHONE AS P, WEBSITE as W, ROOM as R, EMAIL AS E
-                WHERE D.Contactable_ID = A.Contactable_ID AND
-                D.Contactable_ID = P.Contactable_ID AND
-                D.Contactable_ID = W.Contactable_ID AND
-                D.Contactable_ID = R.Contactable_ID AND
-                D.Contactable_ID = E.Contactable_ID AND
-                D.Department_ID = $department_id";
+        $sql = "SELECT `D`.`department_id`, `D`.`name`, `D`.`code`, `D`.`faculty_id`, `A`.`aka`, `P`.`phone`, `W`.`website`, `R`.`room`, `E`.`email`
+                FROM `department` as `D`, `aka` as `A`, `phone` AS `P`, `website` as `W`, `room(contactable)` as `R`, `email` AS `E`
+                WHERE `D`.`contactable_id` = `A`.`contactable_id` AND
+                `D`.`contactable_id` = `P`.`contactable_id` AND
+                `D`.`contactable_id` = `W`.`contactable_id` AND
+                `D`.`contactable_id` = `R`.`contactable_id` AND
+                `D`.`contactable_id` = `E`.`contactable_id` AND
+                `D`.`department_id` = '$department_id'";
         $result = mysqli_query($con, $sql);
         return $result;
         
     }
 
-
+    //Extra end for end point 8
+    public static function AllDepartment($con)
+    {
+        $sql = "SELECT `D`.`department_id`, `D`.`name`, `D`.`code`, `D`.`faculty_id`, `A`.`aka`, `P`.`phone`, `W`.`website`, `R`.`room`, `E`.`email`
+                FROM `department` as `D`, `aka` as `A`, `phone` AS `P`, `website` as `W`, `room(contactable)` as `R`, `email` AS `E`
+                WHERE `D`.`contactable_id` = `A`.`contactable_id` AND
+                `D`.`contactable_id` = `P`.`contactable_id` AND
+                `D`.`contactable_id` = `W`.`contactable_id` AND
+                `D`.`contactable_id` = `R`.`contactable_id` AND
+                `D`.`contactable_id` = `E`.`contactable_id`";
+        $result = mysqli_query($con, $sql);
+        return $result;
+        
+    }    
 
 
     //End point 4
-    public static function Instructor_Information($Instructor_id)
+    public static function Instructor_Information($Instructor_id, $con)
     {
-        $con = mysqli_connect("155.138.157.78","ucalgary","cv0V9c9ZqCf55g.0","ucalgary");
-        if (mysqli_connect_errno($con))
-        {
-            echo "Failed to connect to MySQL: " . mysqli_connect_error();
-        }
-        $sql =" SELECT I.Instructor_ID, I.Name, I.Department_ID, T.Title, P.Phones, R.Room
-                FROM INSTRUCTOR as I, TITLE as T, PHONES as P, ROOM as R
-                WHERE I.Instructor_ID = T.Instructor_ID AND
-                I.Instructor_ID = P.Instructor_ID AND
-                I.Instructor_ID = R.Instructor_ID AND
-                I.Instructor_ID = $Instructor_id";
+
+        $sql =" SELECT `I`.`instructor_id`, `I`.`name`, `I`.`department_id`, `T`.`title`, `P`.`phones`, `R`.`room`
+                FROM `instructor` as `I`, `title` as `T`, phones as P, room as R
+                WHERE `I`.`instructor_id` = `T`.`instructor_id` AND
+                `I`.`instructor_id` = `P`.`instructor_id` AND
+                `I`.`instructor_id` = `R`.`instructor_id` AND
+                `I`.`instructor_id` = '$Instructor_id'";
         $result = mysqli_query($con, $sql);
         return $result;
     }
@@ -77,89 +96,99 @@ class Faculty
 
 
     //End point 12
-    public static function Program_Information($Program_ID)
+    public static function Program_Information($Program_ID, $con)
     {
-        $con = mysqli_connect("155.138.157.78","ucalgary","cv0V9c9ZqCf55g.0","ucalgary");
-        if (mysqli_connect_errno($con))
-        {
-            echo "Failed to connect to MySQL: " . mysqli_connect_error();
-        }
 
-        $sql = "SELECT P.Program_ID, P.Name, P.Code, P.Department_ID, A.Aka, P.Phone, W.Website, R.Room, E.Email
-                FROM PROGRAM AS P, AKA as A, PHONE AS P, WEBSITE as W, ROOM as R, EMAIL AS E
-                WHERE P.Contactable_ID = A.Contactable_ID AND
-                P.Contactable_ID = P.Contactable_ID AND
-                P.Contactable_ID = W.Contactable_ID AND
-                P.Contactable_ID = R.Contactable_ID AND
-                P.Contactable_ID = E.Contactable_ID AND
-                P.Program_ID = $Program_ID";
+        $sql = "SELECT `P`.`program_id`, `P`.`name`, `P`.`code`, `P`.`department_id`, `A`.`aka`, `P`.`phone`, `W`.`website`, `R`.`room`, `E`.`email`
+                FROM `program` AS `P,` `aka` as `A`, `phone` AS `P`, `website` as `W`, `room` as `R`, `email` as `E`
+                WHERE `P`.`contactable_id` = `A`.`contactable_id` AND
+                `P`.`contactable_id` = `P`.`contactable_id` AND
+                `P`.`contactable_id` = `W`.`contactable_id` AND
+                `P`.`contactable_id` = `R`.`contactable_id` AND
+                `P`.`contactable_id` = `E`.`contactable_id` AND
+                `P`.`program_id` = '$Program_ID'";
 
         $result = mysqli_query($con, $sql);
         return $result;
     }
+
+    //Extra end point for End point 12
+    public static function AllProgram($con)
+    {
+
+        $sql = "SELECT `P`.`program_id`, `P`.`name`, `P`.`code`, `P`.`department_id`, `A`.`aka`, `P`.`phone`, `W`.`website`, `R`.`room`, `E`.`email`
+                FROM `program` AS `P,` `aka` as `A`, `phone` AS `P`, `website` as `W`, `room` as `R`, `email` as `E`
+                WHERE `P`.`contactable_id` = `A`.`contactable_id` AND
+                `P`.`contactable_id` = `P`.`contactable_id` AND
+                `P`.`contactable_id` = `W`.`contactable_id` AND
+                `P`.`contactable_id` = `R`.`contactable_id` AND
+                `P`.`contactable_id` = `E`.`contactable_id`";
+
+        $result = mysqli_query($con, $sql);
+        return $result;
+    }
+
+
 
 
 
 
 
     //End point 11
-    public static function Concentration_Information($Program_ID, $Concentration_Name)
-    {
-        $con = mysqli_connect("155.138.157.78","ucalgary","cv0V9c9ZqCf55g.0","ucalgary");
-        if (mysqli_connect_errno($con))
-        {
-            echo "Failed to connect to MySQL: " . mysqli_connect_error();
-        }
+   public static function ConcentrationForProgram($Program_ID,$con)
+   {
 
-        $sql = "SELECT C.Program_ID, C.Name, C.Description
-                FROM CONCENTRATION AS C
-                WHERE C.Program_ID = $Program_ID AND C.Name = $Concentration_Name";
+
+       $sql = "SELECT `C`.`program_id`, `C`.`name`, `C`.`description`
+               FROM `concentration` as `C`
+               WHERE `C`.`program_id` = '$Program_ID'";
+       $result = mysqli_query($con, $sql);
+       return $result;
+   }
+
+
+    //Extra end point for end point 11
+    public static function AllConcentration($con)
+    {
+
+
+        $sql = "SELECT `C`.`program_id`, `C`.`name`, `C`.`description`
+                FROM `concentration` as `C`";
         $result = mysqli_query($con, $sql);
         return $result;
     }
 
+
     //End point 2
-    public static function Account_Signup($email, $password)
-    {
-        $con = mysqli_connect("155.138.157.78","ucalgary","cv0V9c9ZqCf55g.0","ucalgary");
-        if (mysqli_connect_errno($con))
-        {
-            echo "Failed to connect to MySQL: " . mysqli_connect_error();
-        }
-              
-        $sql = "INSERT INTO users (Email, Password) VALUES ('". $email."','". $password ."')";
+    public static function Account_Signup($email, $password, $con)
+    {                                                            
+        $sql = "INSERT INTO `user` (`email`, `password`) VALUES ('$email','$password')";
         $result = mysqli_query($con, $sql);
         return $result;
     }
 
     //End point 9
-    public static function Enroll_Plan($term, $year)
+    public static function Enroll_Plan($term, $year, $con)
     {
-        $con = mysqli_connect("155.138.157.78","ucalgary","cv0V9c9ZqCf55g.0","ucalgary");
-        if (mysqli_connect_errno($con))
-        {
-            echo "Failed to connect to MySQL: " . mysqli_connect_error();
-        }
-        $sql = "SELECT C.Code, C.Number
-                FROM COURSE as C, SECTION AS C
-                WHERE C.Code = S.Code AND C.Number = S.Number AND
-                C.Year = $year AND C.term = $term";
+
+        $sql = "SELECT `C`.`code`, `C`.`number`
+                FROM `course` as `C`, `section` as `C`
+                WHERE `C`.`code` = `S`.`code` AND `C`.`number` = `S`.`number` AND
+                `S`.`year` = '$year' AND `S`.`term` = '$term'";
         $result = mysqli_query($con, $sql);
         return $result;
     }
 
     //End point 15
-    public static function View_Stat()
+    public static function View_Stat($con)
     {
-        $con = mysqli_connect("155.138.157.78","ucalgary","cv0V9c9ZqCf55g.0","ucalgary");
-        if (mysqli_connect_errno($con))
-        {
-            echo "Failed to connect to MySQL: " . mysqli_connect_error();
-        }
+
         $sql = "SELECT COUNT(*)
-                FROM USER";
+                FROM `user`";
         $result = mysqli_query($con, $sql);
         return $result;                
     }
+
+
 
 }
