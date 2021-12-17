@@ -15,7 +15,7 @@ use App\StatusCodes;
 //ID FROM department(check,get), concentration, faculty(check,get), and program(check) implment something simlar to course where get all if no specific variables are mentioned
 
 //End Point 7
-Flight::route('/localhost/api/faculty(/@faculty_id:[0-9]{4})', function ($faculty_id){
+Flight::route('/api/faculty(/@faculty_id:[0-9]{4})', function ($faculty_id){
     //get the faculty_id by listening
     //$faculty_id = $_GET["faculty_id"];
 
@@ -50,7 +50,7 @@ Flight::route('/localhost/api/faculty(/@faculty_id:[0-9]{4})', function ($facult
 
 
 //End point 8
-Flight::route('/localhost/api/department(/@department_id:[0-9]{5})', function ($department_id){
+Flight::route('/api/department(/@department_id:[0-9]{5})', function ($department_id){
     
     //get the faculty_id by listening
     //$department_id = $_GET["department_id"];
@@ -87,7 +87,7 @@ Flight::route('/localhost/api/department(/@department_id:[0-9]{5})', function ($
 
 
 //End point 4
-Flight::route('/localhost/api/instructor', function (){
+Flight::route('/api/instructor', function (){
     
     //get the faculty_id by listening
     $instructor_id = $_GET["instructor_id"];
@@ -116,7 +116,7 @@ Flight::route('/localhost/api/instructor', function (){
 
 
 //End point 12
-Flight::route('/localhost/api/program(/@program_id:[0-9]{5})', function ($program_id){
+Flight::route('/api/program(/@program_id:[0-9]{5})', function ($program_id){
     
     //get the faculty_id by listening
    // $Program_id = $_GET["Program_id"];
@@ -155,7 +155,7 @@ Flight::route('/localhost/api/program(/@program_id:[0-9]{5})', function ($progra
 
 
 //End point 11
-Flight::route('/localhost/api/program/concentration(/@program_id:[0-9]{5})', function ($program_id,){
+Flight::route('/api/program/concentration(/@program_id:[0-9]{5})', function ($program_id,){
     
     //get the faculty_id by listening
     //$Program_id = $_GET["Program_ID"];
@@ -196,7 +196,7 @@ Flight::route('/localhost/api/program/concentration(/@program_id:[0-9]{5})', fun
 
 
 //End point 2
-Flight::route('/localhost/api/program/account', function (){
+Flight::route('/api/program/account', function (){
     
     //get the faculty_id by listening
     $email = $_POST["email"];
@@ -227,7 +227,7 @@ Flight::route('/localhost/api/program/account', function (){
 
 
 //End point 9
-Flight::route('/localhost/api/program/account/student/plan', function (){
+Flight::route('/api/program/account/student/plan', function (){
     
     //get the faculty_id by listening
     $term = $_GET["term"];
@@ -258,7 +258,7 @@ Flight::route('/localhost/api/program/account/student/plan', function (){
 
 
 //End point 15
-Flight::route('/localhost/api/program/account/admin/states', function (){
+Flight::route('/api/program/account/admin/states', function (){
     
 
     //connect to the SQL database
@@ -332,7 +332,7 @@ Flight::route('/api/course(/@code:[A-Za-z]{3,4}(/@number:[0-9]{3}))', function($
 
 
 //End point 6
-Flight::route('/localhost/api/program/account/course/section', function (){
+Flight::route('/api/program/account/course/section', function (){
     
     $code = $_GET["code"];
     $number = $_GET["number"];
