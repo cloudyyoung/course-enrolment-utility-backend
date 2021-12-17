@@ -10,7 +10,8 @@ class course
         
     }
 
-    //INCOMPLETE, WILL DO LATER
+    //End point 5
+    //Don;t forget to add the mongoDB part 
     public static function Course_Information ($code, $number)
     {
         $con = mysqli_connect("155.138.157.78","ucalgary","cv0V9c9ZqCf55g.0","ucalgary");

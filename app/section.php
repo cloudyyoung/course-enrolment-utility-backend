@@ -10,7 +10,9 @@ class section
     }
 
     //INCOMPLETE, WILL DO LATER
-    public static function Course_Information ($code, $number, $term, $year)
+    //Code and number is used for the primary key of the table course.
+    //End point 6
+    public static function Section_Information ($code, $number, $term, $year)
     {
         $con = mysqli_connect("155.138.157.78","ucalgary","cv0V9c9ZqCf55g.0","ucalgary");
         if (mysqli_connect_errno($con))
@@ -23,7 +25,8 @@ class section
         WHERE 
         I.Instructor_ID = T.Instructor_ID AND 
         S.Course_ID = T.Course_ID AND T.Term = S.Term AND T.Year = S.Year AND T.Name = S.Name AND
-        S.Term = $term AND S.Year = $year AND " ;
+        C.Code = S.Code AND C.Number = S.Number AND C.Code = $code AND C.Number = $number AND
+        S.Term = $term AND S.Year = $year" ;
     }
 
 }

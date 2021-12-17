@@ -9,6 +9,7 @@ class Faculty
         
     }
 
+    //End point 7
     public static function Faculty_Information($faculty_id)
     {
         $con = mysqli_connect("155.138.157.78","ucalgary","cv0V9c9ZqCf55g.0","ucalgary");
@@ -28,6 +29,8 @@ class Faculty
         return $result;
     }
 
+
+    //End point 8
     public static function Department_Information($department_id)
     {
         $con = mysqli_connect("155.138.157.78","ucalgary","cv0V9c9ZqCf55g.0","ucalgary");
@@ -49,6 +52,10 @@ class Faculty
         
     }
 
+
+
+
+    //End point 4
     public static function Instructor_Information($Instructor_id)
     {
         $con = mysqli_connect("155.138.157.78","ucalgary","cv0V9c9ZqCf55g.0","ucalgary");
@@ -68,6 +75,8 @@ class Faculty
 
 
 
+
+    //End point 12
     public static function Program_Information($Program_ID)
     {
         $con = mysqli_connect("155.138.157.78","ucalgary","cv0V9c9ZqCf55g.0","ucalgary");
@@ -89,6 +98,11 @@ class Faculty
         return $result;
     }
 
+
+
+
+
+    //End point 11
     public static function Concentration_Information($Program_ID, $Concentration_Name)
     {
         $con = mysqli_connect("155.138.157.78","ucalgary","cv0V9c9ZqCf55g.0","ucalgary");
@@ -103,4 +117,37 @@ class Faculty
         $result = mysqli_query($con, $sql);
         return $result;
     }
+
+    //End point 2
+    public static function Account_Signup($email, $password)
+    {
+        $con = mysqli_connect("155.138.157.78","ucalgary","cv0V9c9ZqCf55g.0","ucalgary");
+        if (mysqli_connect_errno($con))
+        {
+            echo "Failed to connect to MySQL: " . mysqli_connect_error();
+        }
+              
+        $sql = "INSERT INTO users (Email, Password) VALUES ('". $email."','". $password ."')";
+        $result = mysqli_query($con, $sql);
+        return $result;
+    }
+
+    //End point 9
+    public static function Enroll_Plan($term, $year)
+    {
+        $con = mysqli_connect("155.138.157.78","ucalgary","cv0V9c9ZqCf55g.0","ucalgary");
+        if (mysqli_connect_errno($con))
+        {
+            echo "Failed to connect to MySQL: " . mysqli_connect_error();
+        }
+        $sql = "SELECT C.Code, C.Number
+                FROM COURSE as C, SECTION AS C
+                WHERE C.Code = S.Code AND C.Number = S.Number AND
+                C.Year = $year AND C.term = $term";
+        $result = mysqli_query($con, $sql);
+        return $result;
+    }
+
+    //End point 10
+
 }
