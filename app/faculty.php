@@ -148,6 +148,18 @@ class Faculty
         return $result;
     }
 
-    //End point 10
+    //End point 15
+    public static function View_Stat()
+    {
+        $con = mysqli_connect("155.138.157.78","ucalgary","cv0V9c9ZqCf55g.0","ucalgary");
+        if (mysqli_connect_errno($con))
+        {
+            echo "Failed to connect to MySQL: " . mysqli_connect_error();
+        }
+        $sql = "SELECT COUNT(*)
+                FROM USER";
+        $result = mysqli_query($con, $sql);
+        return $result;                
+    }
 
 }
