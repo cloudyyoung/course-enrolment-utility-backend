@@ -1,8 +1,12 @@
 <?php
+session_start();
 
-use App\course;
-use App\faculty;
+require __DIR__ . '/vendor/autoload.php';
+require "app/util.php";
+
 use App\section;
+use App\faculty;
+use App\course;
 use App\StatusCodes;
 
 //if failed to connect to the database then Flight::ret(StatusCodes::INTERNAL_SERVER_ERROR, "Unable to connect to the database", null) 
@@ -362,10 +366,7 @@ Flight::route('/localhost/api/program/account/course/section', function (){
 
 
 /*
-session_start();
 
-require __DIR__ . '/vendor/autoload.php';
-require "app/util.php";
 
 use App\Lobby;
 use App\Account;
