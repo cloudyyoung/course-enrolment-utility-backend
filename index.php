@@ -437,9 +437,7 @@ Flight::route('POST /api/account/student', function () {
 //SetPlan($con, $term , $year, $courses)
 Flight::route('POST /api/account/student/plan', function () {
 
-    $term = Flight::request()->data->term;
-    $year = Flight::request()->data->year;
-    $courses = Flight::request()->data->courses;
+    $course_id = Flight::request()->data->course_id;
 
     if (isset($_SESSION['user_id']) == false)
     {
@@ -452,7 +450,7 @@ Flight::route('POST /api/account/student/plan', function () {
         Flight::ret(StatusCodes::INTERNAL_SERVER_ERROR, "Unable to connect to the database", null) ;
     }
 
-    $account = account::SetPlan($con, $term , $year, $courses);
+    $account = account::SetPlan($con, $course_id);
     if ($account == null) {
         Flight::ret(401, "Username or password incorrect");
     } else {

@@ -176,14 +176,23 @@ class Account
         //return null if the user is NOT logged in or the user is NOT a student
         if (isset($_SESSION['user_id']) == false)
         {
-            return $result;
+            return false;
         }        
         else if ($_SESSION['type']!= "student")
         {
-            return $result;
+            return false;
         }
 
         $currentID = $_SESSION['user_id'];
+
+        //delete major in and minor in before setting:
+            $sql = "DELETE  FROM `major_in` 
+                WHERE `user_id` = '$currentID'";
+            mysqli_query($con, $sql);
+
+            $sql = "DELETE  FROM `minor_in` 
+                WHERE `user_id` = '$currentID'";
+            mysqli_query($con, $sql);
 
         //insert each major one by one
         if($major == null){
@@ -213,8 +222,37 @@ class Account
 
 
     //End point 14
-    public static function SetPlan($con, $term , $year, $courses)
+    public static function SetPlan($con, $courses_id)
     {
+        if (isset($_SESSION['user_id']) == false)
+        {
+            return false;
+        }     
+        else if ($_SESSION['type']!= "student")
+        {
+            return false;
+        }
+        
+        $currentID = $_SESSION['user_id'];
+        $courses_id = json_decode($courses_id);
+
+        $sql = "DELETE  FROM `enrolls` 
+                        WHERE `user_id` = '$currentID'";
+
+        if (!mysqli_query($con, $sql))
+        {
+            return false;
+        }
+
+        foreach ($courses_id as &$insert) {
+            $sql = "INSERT INTO `enrolls` (`user_id`, `course_id`) VALUES ('$currentID','$insert')";
+            mysqli_query($con, $sql);            
+        }
+
+        return $courses_id;
+
+        //delete then write
+        /*
         $result = null;
         
         //return null if the user is NOT logged in or the user is NOT a student
@@ -238,7 +276,7 @@ class Account
         $result["term"] = $term;
         $result["year"] = $year;
         $result["courses"] = $courses;
-        return $result;
+        return $result;*/
 
     }    
 
