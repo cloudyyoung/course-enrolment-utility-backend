@@ -409,13 +409,16 @@ Flight::route('GET /api/account', function () {
 
 
 //End point 13
-Flight::route('POST /api/account/student', function () {
-    $major = Flight::request()->data->major;
-    $minor = Flight::request()->data->minor;
+Flight::route('PUT /api/account/student', function () {
     if (isset($_SESSION['user_id']) == false)
     {
         Flight::ret(401, "Please log in first.");
     }
+
+    $major = [];
+    $minor = [];
+    @$major = Flight::put()["major"];
+    @$minor = Flight::put()["minor"];
 
     $con = mysqli_connect("155.138.157.78","ucalgary","cv0V9c9ZqCf55g.0","ucalgary");
     if (mysqli_connect_errno())
@@ -435,7 +438,7 @@ Flight::route('POST /api/account/student', function () {
 
 //End point 14
 //SetPlan($con, $term , $year, $courses)
-Flight::route('POST /api/account/student/plan', function () {
+Flight::route('PUT /api/account/student/plan', function () {
 
     $course_id = Flight::request()->data->course_id;
 
@@ -459,7 +462,7 @@ Flight::route('POST /api/account/student/plan', function () {
 });
 
 
-Flight::ret(StatusCodes::BAD_REQUEST, "Operation is not supported", null);
+// Flight::ret(StatusCodes::BAD_REQUEST, "Operation is not supported", null);
 
 Flight::start();
 
