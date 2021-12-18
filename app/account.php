@@ -176,7 +176,7 @@ class Account
 
 
     //End point 13
-    public static function SetMajorMinor($con, $major, $minor)
+    public static function SetMajorMinor($con, $major, $minor, $concentration, $program_id)
     {
         $result = null;
         
@@ -192,7 +192,7 @@ class Account
 
         $currentID = $_SESSION['user_id'];
 
-        //delete major in and minor in before setting:
+        //delete major in, minor in and concentrate in before setting:
             $sql = "DELETE  FROM `major_in` 
                 WHERE `user_id` = '$currentID'";
             mysqli_query($con, $sql);
@@ -201,7 +201,12 @@ class Account
                 WHERE `user_id` = '$currentID'";
             mysqli_query($con, $sql);
 
-        //insert each major one by one
+            $sql = "DELETE  FROM `concentrate_in` 
+                WHERE `user_id` = '$currentID'";
+            mysqli_query($con, $sql);            
+        
+
+        //insert each major and concentration one by one
         if($major == null){
             $major = "[]";
         }
@@ -221,9 +226,18 @@ class Account
             mysqli_query($con, $sql);
         }
 
+        if($concentration == null){
+            $concentration = "[]";
+        }
+        $concentration = json_decode($concentration);
+        foreach ($concentration as &$insert) {
+            $sql = "INSERT INTO `concentrate_in` (`user_id`,`program_id`, `concentration_name`) VALUES ('$currentID', '$program_id' ,'$insert')";
+            mysqli_query($con, $sql);
+        }
 
         $result["major"] = $major;
         $result["minor"] = $minor;
+        $result["concentration"] = $concentration;
         return $result;
     }
 

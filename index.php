@@ -335,6 +335,35 @@ Flight::route('GET /api/course(/@code:[A-Za-z]{3,4}(/@number:[0-9]{3}))', functi
 
 
 
+//End point 5 with CID
+Flight::route('GET /api/course(/@course_id:[0-9]{4})', function($course_id){
+    
+    //$course_id = $_GET["course_id"];
+    //connect to the SQL database
+    $con = mysqli_connect("155.138.157.78","ucalgary","cv0V9c9ZqCf55g.0","ucalgary");
+    if (mysqli_connect_errno())
+    {
+        Flight::ret(StatusCodes::INTERNAL_SERVER_ERROR, "Unable to connect to the database", null) ;
+    }
+    else
+    {
+
+        $result = course::Course_Information_CID($course_id, $con);
+
+        if (!$result) 
+        {
+            Flight::ret(StatusCodes::NOT_FOUND, null, null) ;
+        } 
+        else
+        {
+            Flight::ret(StatusCodes::OK, null, $result) ;
+        }        
+    }
+
+});
+
+
+
 //End point 6
 Flight::route('GET /api/course/@code:[A-Za-z]{3,4}/@number:[0-9]{3}/section/@year:[0-9]{4}/@term', function ($code, $number, $year, $term){
     //connect to the SQL database
@@ -401,7 +430,7 @@ Flight::route('GET /api/account', function () {
 
     $account = account::Account_Information( $con);
     if ($account == null) {
-        Flight::ret(401, "Username or password incorrect");
+        Flight::ret(500, "Username or password incorrect");
     } else {
         Flight::ret(200, "OK", $account);
     }
@@ -417,8 +446,12 @@ Flight::route('PUT /api/account/student', function () {
 
     $major = [];
     $minor = [];
+    $concentration = []; 
+
     @$major = Flight::put()["major"];
     @$minor = Flight::put()["minor"];
+    @$concentration = Flight::put()["concentration"];
+    @$program_id = Flight::put()["program_id"];
 
     $con = mysqli_connect("155.138.157.78","ucalgary","cv0V9c9ZqCf55g.0","ucalgary");
     if (mysqli_connect_errno())
@@ -426,7 +459,7 @@ Flight::route('PUT /api/account/student', function () {
         Flight::ret(StatusCodes::INTERNAL_SERVER_ERROR, "Unable to connect to the database", null) ;
     }
 
-    $account = account::SetMajorMinor( $con, $major, $minor);
+    $account = account::SetMajorMinor( $con, $major, $minor, $concentration, $program_id);
     if ($account == null) {
         Flight::ret(401, "Username or password incorrect");
     } else {
@@ -464,7 +497,7 @@ Flight::route('PUT /api/account/student/plan', function () {
 });
 
 
-
+//End point 10
 Flight::route('GET /api/account/student', function () {
 
     if (isset($_SESSION['user_id']) == false)
