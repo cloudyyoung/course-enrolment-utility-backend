@@ -253,7 +253,9 @@ class Account
             mysqli_query($con, $sql);            
         }
 
-        return $course_id;
+
+        $result_out = Array("course_id" => $course_id);
+        return $result_out;
 
         //delete then write
         /*
