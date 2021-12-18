@@ -9,8 +9,8 @@ require "app/util.php";
 use App\section;
 use App\faculty;
 use App\course;
-use App\StatusCodes;
 use App\account;
+use App\StatusCodes;
 //if failed to connect to the database then Flight::ret(StatusCodes::INTERNAL_SERVER_ERROR, "Unable to connect to the database", null) 
 
 //If the result is wrong
@@ -309,6 +309,7 @@ Flight::route('/api/course(/@code:[A-Za-z]{3,4}(/@number:[0-9]{3}))', function($
         {
             echo("C, 1");
             $result = course::AllCourses( $con);
+            var_dump(array($result));
         }
 
         //if only course is given
@@ -316,6 +317,7 @@ Flight::route('/api/course(/@code:[A-Za-z]{3,4}(/@number:[0-9]{3}))', function($
         {
             echo("C, 2");
             $result = course::CoursesCode($code, $con);
+            var_dump($result);
         }
         
         //If both are given
@@ -332,7 +334,7 @@ Flight::route('/api/course(/@code:[A-Za-z]{3,4}(/@number:[0-9]{3}))', function($
         } 
         else
         {
-            Flight::ret(StatusCodes::OK, null, $result) ;
+            Flight::ret(StatusCodes::OK, null, $result->fetch_all(MYSQLI_ASSOC)) ;
         }        
     }
 
