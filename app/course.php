@@ -273,6 +273,7 @@ class course
 
       $CodeAndNumber = mysqli_query($con, $sql);
       $CodeAndNumber = $CodeAndNumber->fetch_all(MYSQLI_ASSOC);
+      $CodeAndNumber = $CodeAndNumber[0];
 
       //create the course name with code and number 
       $key = $CodeAndNumber['code'] . " ". $CodeAndNumber['number'];
@@ -281,21 +282,13 @@ class course
       $client = new \MongoDB\Client( 
         'mongodb+srv://ucalgary:ureqIynl0ZMm0GGr@cluster0.yoz3k.mongodb.net/myFirstDatabase?retryWrites=true&w=majority' 
         ); 
-        $database = $client->requisite;
-        $collection = $database->CPSC;
-        $requisite=$collection->find(array('key' => $key));
+      $database = $client->requisite;
+      $collection = $database->CPSC;
+      $requisite=$collection->find(array('key' => $key));
 
-        $result['prereq'] = [];
-
-        foreach($requisite as &$data)
-        {
-          array_push($result['prereq'], $data['prerequisite']);
-        }
+      $result["prereq"] = $requisite["prerequisite"];
 
       return $result;
-
-
-
     }
 
 }
