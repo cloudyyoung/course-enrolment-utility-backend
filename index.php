@@ -437,7 +437,7 @@ Flight::route('PUT /api/account/student', function () {
 
 
 //End point 14
-//SetPlan($con, $term , $year, $courses)
+
 Flight::route('PUT /api/account/student/plan', function () {
 
     $course_id = Flight::request()->data->course_id;

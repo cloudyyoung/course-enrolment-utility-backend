@@ -236,6 +236,10 @@ class Account
         $currentID = $_SESSION['user_id'];
         $courses_id = json_decode($courses_id);
 
+        if($courses_id == null){
+            $courses_id = "[]";
+        }
+        
         $sql = "DELETE  FROM `enrolls` 
                         WHERE `user_id` = '$currentID'";
 

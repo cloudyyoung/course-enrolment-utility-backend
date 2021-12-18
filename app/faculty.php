@@ -380,7 +380,7 @@ class Faculty
         $user = $result["user_id"];
 
         $sql = "INSERT INTO `student` (`user_id`) VALUES ('$user')";
-
+        mysqli_query($con, $sql);
 
         $result["email"] = $email;
         $result["password"] = $password;
