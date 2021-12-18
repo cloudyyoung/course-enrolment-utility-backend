@@ -229,11 +229,11 @@ Flight::route('POST /api/account', function (){
 
 
 //End point 9
-Flight::route('GET /api/account/student/plan', function (){
+Flight::route('GET /api/account/student/plan/@year:[0-9]{4}/@term', function ($year, $term){
     
     //get the faculty_id by listening
-    $term = $_GET["term"];
-    $year = $_GET["year"];
+    // $term = $_GET["term"];
+    // $year = $_GET["year"];
 
     //connect to the SQL database
     $con = mysqli_connect("155.138.157.78","ucalgary","cv0V9c9ZqCf55g.0","ucalgary");
