@@ -416,7 +416,7 @@ class Faculty
     public static function View_Stat($con)
     {
 
-        $sql = "SELECT COUNT(*)
+        $sql = "SELECT COUNT(*) AS `totalNumberOfUsers`
                 FROM `user`";
         $result = mysqli_query($con, $sql);
         
@@ -426,6 +426,7 @@ class Faculty
         }
  
         $result = $result->fetch_all(MYSQLI_ASSOC);
+        $result = $result[0];
         return $result;           
     }
 

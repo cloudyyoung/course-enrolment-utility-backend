@@ -260,7 +260,7 @@ Flight::route('GET /api/account/student/plan', function (){
 
 
 //End point 15
-Flight::route('GET /api/account/admin/states', function (){
+Flight::route('GET /api/account/admin/statistics', function (){
     
 
     //connect to the SQL database
