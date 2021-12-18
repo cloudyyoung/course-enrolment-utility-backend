@@ -377,6 +377,11 @@ class Faculty
         $result = $result->fetch_all(MYSQLI_ASSOC);
         $result = $result[0];
 
+        $user = $result["user_id"];
+
+        $sql = "INSERT INTO `student` (`user_id`) VALUES ('$user')";
+
+
         $result["email"] = $email;
         $result["password"] = $password;
         return $result;
