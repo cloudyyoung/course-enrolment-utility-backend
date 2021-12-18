@@ -4,7 +4,7 @@ namespace App;
 
 //aka --> contractable
 //AKA --> course_Id
-
+require 'vendor/autoload.php';
 class course 
 {
 
@@ -264,7 +264,36 @@ class course
       {
         array_push($result["time_length"], $insert["time_length"]);
       }
+
+
+      //get code and number of the course
+      $sql = "SELECT `code`,`number`
+              FROM `course`
+              WHERE `course_id` = '$course_id'";
+
+      $CodeAndNumber = mysqli_query($con, $sql);
+      $CodeAndNumber = $CodeAndNumber->fetch_all(MYSQLI_ASSOC);
+
+      //create the course name with code and number 
+      $key = $CodeAndNumber['code'] . " ". $CodeAndNumber['number'];
+
+      //get the data from mongodb
+      $client = new \MongoDB\Client( 
+        'mongodb+srv://ucalgary:ureqIynl0ZMm0GGr@cluster0.yoz3k.mongodb.net/myFirstDatabase?retryWrites=true&w=majority' 
+        ); 
+        $database = $client->requisite;
+        $collection = $database->CPSC;
+        $requisite=$collection->find(array('key' => $key));
+
+        $result['prereq'] = [];
+
+        foreach($requisite as &$data)
+        {
+          array_push($result['prereq'], $data['prerequisite']);
+        }
+
       return $result;
+
 
 
     }
