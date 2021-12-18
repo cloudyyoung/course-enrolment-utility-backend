@@ -191,6 +191,7 @@ class Account
         }
         $major = json_decode($major);
         foreach ($major as &$insert) {
+
             $sql = "INSERT INTO `major_in` (`user_id`, `program_id`) VALUES ('$currentID','$insert')";
             mysqli_query($con, $sql);
         }
