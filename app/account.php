@@ -169,7 +169,7 @@ class Account
 
 
     //End point 13
-    public static function SetMajorMinor($con, $major = null, $minor = null)
+    public static function SetMajorMinor($con, $major, $minor)
     {
         $result = null;
         
@@ -186,17 +186,24 @@ class Account
         $currentID = $_SESSION['user_id'];
 
         //insert each major one by one
-        foreach ($major as &$insert)
-        {
+        if($major == null){
+            $major = "[]";
+        }
+        $major = json_decode($major);
+        foreach ($major as &$insert) {
             $sql = "INSERT INTO `major_in` (`user_id`, `program_id`) VALUES ('$currentID','$insert')";
             mysqli_query($con, $sql);
         }
-
-        foreach ($minor as &$insert)
-        {
+        
+        if($minor == null){
+            $minor = "[]";
+        }
+        $minor = json_decode($minor);
+        foreach ($minor as &$insert) {
             $sql = "INSERT INTO `minor_in` (`user_id`, `program_id`) VALUES ('$currentID','$insert')";
             mysqli_query($con, $sql);
         }
+
 
         $result["major"] = $major;
         $result["minor"] = $minor;

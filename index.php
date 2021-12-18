@@ -21,7 +21,7 @@ use App\StatusCodes;
 //ID FROM department(check,get), concentration, faculty(check,get), and program(check) implment something simlar to course where get all if no specific variables are mentioned
 
 //End Point 7
-Flight::route('/api/faculty(/@faculty_id:[0-9]{4})', function ($faculty_id){
+Flight::route('GET /api/faculty(/@faculty_id:[0-9]{4})', function ($faculty_id){
     //get the faculty_id by listening
     //$faculty_id = $_GET["faculty_id"];
 
@@ -56,7 +56,7 @@ Flight::route('/api/faculty(/@faculty_id:[0-9]{4})', function ($faculty_id){
 
 
 //End point 8
-Flight::route('/api/department(/@department_id:[0-9]{5})', function ($department_id){
+Flight::route('GET /api/department(/@department_id:[0-9]{5})', function ($department_id){
     
     //get the faculty_id by listening
     //$department_id = $_GET["department_id"];
@@ -93,7 +93,7 @@ Flight::route('/api/department(/@department_id:[0-9]{5})', function ($department
 
 
 //End point 4
-Flight::route('/api/instructor/@instructor_id:[0-9]{6}', function ($instructor_id){
+Flight::route('GET /api/instructor/@instructor_id:[0-9]{6}', function ($instructor_id){
     
     //connect to the SQL database
     $con = mysqli_connect("155.138.157.78","ucalgary","cv0V9c9ZqCf55g.0","ucalgary");
@@ -118,7 +118,7 @@ Flight::route('/api/instructor/@instructor_id:[0-9]{6}', function ($instructor_i
 
 
 //End point 12
-Flight::route('/api/program(/@program_id:[0-9]{5})', function ($program_id){
+Flight::route('GET /api/program(/@program_id:[0-9]{5})', function ($program_id){
     
     //get the faculty_id by listening
    // $Program_id = $_GET["Program_id"];
@@ -157,7 +157,7 @@ Flight::route('/api/program(/@program_id:[0-9]{5})', function ($program_id){
 
 
 //End point 11
-Flight::route('/api/program(/@program_id:[0-9]{5})/concentration', function ($program_id,){
+Flight::route('GET /api/program(/@program_id:[0-9]{5})/concentration', function ($program_id,){
     
     //get the faculty_id by listening
     //$Program_id = $_GET["Program_ID"];
@@ -229,7 +229,7 @@ Flight::route('POST /api/account', function (){
 
 
 //End point 9
-Flight::route('/api/account/student/plan', function (){
+Flight::route('GET /api/account/student/plan', function (){
     
     //get the faculty_id by listening
     $term = $_GET["term"];
@@ -260,7 +260,7 @@ Flight::route('/api/account/student/plan', function (){
 
 
 //End point 15
-Flight::route('/api/account/admin/states', function (){
+Flight::route('GET /api/account/admin/states', function (){
     
 
     //connect to the SQL database
@@ -288,7 +288,7 @@ Flight::route('/api/account/admin/states', function (){
 
 
 //End point 5
-Flight::route('/api/course(/@code:[A-Za-z]{3,4}(/@number:[0-9]{3}))', function($code, $number){
+Flight::route('GET /api/course(/@code:[A-Za-z]{3,4}(/@number:[0-9]{3}))', function($code, $number){
     
     //$course_id = $_GET["course_id"];
     //connect to the SQL database
@@ -334,7 +334,7 @@ Flight::route('/api/course(/@code:[A-Za-z]{3,4}(/@number:[0-9]{3}))', function($
 
 
 //End point 6
-Flight::route('/api/course/@code:[A-Za-z]{3,4}/@number:[0-9]{3}/section/@year:[0-9]{4}/@term', function ($code, $number, $year, $term){
+Flight::route('GET /api/course/@code:[A-Za-z]{3,4}/@number:[0-9]{3}/section/@year:[0-9]{4}/@term', function ($code, $number, $year, $term){
     //connect to the SQL database
     $con = mysqli_connect("155.138.157.78","ucalgary","cv0V9c9ZqCf55g.0","ucalgary");
     if (mysqli_connect_errno())
@@ -384,7 +384,7 @@ Flight::route('PUT /api/account', function () {
 
 
 //End point 3
-Flight::route('/api/account', function () {
+Flight::route('GET /api/account', function () {
 
     if (isset($_SESSION['user_id']) == false)
     {
@@ -407,10 +407,7 @@ Flight::route('/api/account', function () {
 
 
 //End point 13
-Flight::route('/api/account/student', function () {
-
-
-
+Flight::route('POST /api/account/student', function () {
     $major = Flight::request()->data->major;
     $minor = Flight::request()->data->minor;
     if (isset($_SESSION['user_id']) == false)
@@ -419,7 +416,7 @@ Flight::route('/api/account/student', function () {
     }
 
     $con = mysqli_connect("155.138.157.78","ucalgary","cv0V9c9ZqCf55g.0","ucalgary");
-    if (mysqli_connect_errno($con))
+    if (mysqli_connect_errno())
     {
         Flight::ret(StatusCodes::INTERNAL_SERVER_ERROR, "Unable to connect to the database", null) ;
     }
@@ -436,7 +433,7 @@ Flight::route('/api/account/student', function () {
 
 //End point 14
 //SetPlan($con, $term , $year, $courses)
-Flight::route('/api/account/student', function () {
+Flight::route('POST /api/account/student', function () {
 
     $term = Flight::request()->data->term;
     $year = Flight::request()->data->year;
