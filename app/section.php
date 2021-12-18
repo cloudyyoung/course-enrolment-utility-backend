@@ -15,7 +15,7 @@ class section
     public static function Section_Information($code, $number, $term, $year, $con)
     {
         $code = strtoupper($code);
-        $sql = "SELECT * FROM `section` NATURAL JOIN `course`
+        $sql = "SELECT `course_id`, `term`, `year`, `name`, `time`, `note`, `room` FROM `section` NATURAL JOIN `course`
                 WHERE `code`='$code' AND `number`=$number AND `term`='$term' AND `year`=$year ";
         $result = mysqli_query($con, $sql);
         
