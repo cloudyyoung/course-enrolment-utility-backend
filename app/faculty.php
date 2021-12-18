@@ -400,6 +400,7 @@ class Faculty
         }
  
         $result = $result->fetch_all(MYSQLI_ASSOC);
+        $result = $result[0];
         return $result;
     }
 

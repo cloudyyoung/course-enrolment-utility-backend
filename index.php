@@ -433,7 +433,7 @@ Flight::route('POST /api/account/student', function () {
 
 //End point 14
 //SetPlan($con, $term , $year, $courses)
-Flight::route('POST /api/account/student', function () {
+Flight::route('POST /api/account/student/plan', function () {
 
     $term = Flight::request()->data->term;
     $year = Flight::request()->data->year;
