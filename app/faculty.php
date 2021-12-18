@@ -16,79 +16,239 @@ class Faculty
         
     }
 
+//FROM `faculty` as `F`, `aka` as `A`, `phone` AS `P`, `website` as `W`, `room(contactable),` as `R`, `email` AS `E`
+
+
+    public static function process_info_contactable($result, $result1, $result2, $result3,$result4 ,$result5 )
+    {
+        //if one of them is incorrect then return false
+        if (!$result || !$result1 || !$result2 || !$result3 || !$result4 || !$result5)
+        {
+          return false;
+        }
+
+
+
+        //transform the result into readable formats
+        $result = $result->fetch_all(MYSQLI_ASSOC);
+        $result1 = $result1->fetch_all(MYSQLI_ASSOC);
+        $result2 = $result2->fetch_all(MYSQLI_ASSOC);
+        $result3 = $result3->fetch_all(MYSQLI_ASSOC);
+        $result4 = $result4->fetch_all(MYSQLI_ASSOC);
+        $result5 = $result5->fetch_all(MYSQLI_ASSOC);
+
+        //transform the result from other results into result
+        $result["aka"] = [];
+        $result["phone"] = [];
+        $result["website"] = [];
+        $result["room(contactable)"] = [];
+        $result["email"] = [];
+
+
+        foreach ($result1 as &$insert)
+        {
+          array_push($result["aka"], $insert["aka"]);
+        }
+
+
+        foreach ($result2 as &$insert)
+        {
+          array_push($result["phone"], $insert["aka"]);
+        }
+
+
+        foreach ($result3 as &$insert)
+        {
+          array_push($result["website"], $insert["website"]);
+        }
+
+
+        foreach ($result4 as &$insert)
+        {
+          array_push($result["room(contactable)"], $insert["room(contactable)"]);
+        }
+
+        foreach ($result5 as &$insert)
+        {
+          array_push($result["email"], $insert["email"]);
+        }
+
+        return $result;
+    }
+
     //End point 7
     public static function Faculty_Information($faculty_id,  $con)
     {
-        $sql = "SELECT `F`.`faculty_id`, `F`.`name`, `F`.`code`, `F`.`contactable_id`, `A`.`aka`, `P`.`phone`, `W`.`website`, `R`.`room`, `E`.`email`
-                FROM `faculty` as `F`, `aka` as `A`, `phone` AS `P`, `website` as `W`, `room(contactable),` as `R`, `email` AS `E`
-                WHERE `F`.`contactable_id` = `A.contactable_id` AND
-                `F`.`contactable_id` = `P`.`contactable_id` AND
-                `F`.`contactable_id` = `W`.`contactable_id` AND
-                `F`.`contactable_id` = `R`.`contactable_id` AND
-                `F`.`contactable_id` = `E`.`contactable_id` AND
-                `F`.`faculty_id` = '$faculty_id'";
+        //get all components
+        $sql = "SELECT `F`.`faculty_id`, `F`.`name`, `F`.`code`, `F`.`contactable_id`
+                FROM `faculty` as `F`
+                WHERE `F`.`faculty_id` = '$faculty_id'";
+
+        $sql1 = "   SELECT `A`.`aka`
+                    FROM `aka` as `A`, `faculty` as `F`
+                    WHERE `A`.`contactable_id` = `F`.`contactable_id` AND `F`.`faculty_id` = '$faculty_id'";
+
+        $sql2 = "   SELECT `P`.`phone`
+                    FROM `phone` AS `P`, `faculty` as `F`
+                    WHERE `P`.`contactable_id` = `F`.`contactable_id` AND `F`.`faculty_id` = '$faculty_id'";
+
+        $sql3 = "   SELECT `W`.`website`
+                    FROM website,` as `W`, `faculty` as `F`
+                    WHERE `W`.`contactable_id` = `F`.`contactable_id` AND `F`.`faculty_id` = '$faculty_id'";
+
+        $sql4 = "   SELECT `R`.`room(contactable)`
+                    FROM room(contactable),` as `R`, `faculty` as `F`
+                    WHERE `A`.`contactable_id` = `F`.`contactable_id` AND `F`.`faculty_id` = '$faculty_id'";
+
+        $sql5 = "   SELECT `E`.`email`
+                    FROM `email` AS `E`, `faculty` as `F`
+                    WHERE `E`.`email` = `F`.`contactable_id` AND `F`.`faculty_id` = '$faculty_id'";    
+                    
+                    
+        //get the result of the query for each components
         $result = mysqli_query($con, $sql);
-        return $result;
+        $result1 = mysqli_query($con, $sql1);
+        $result2 = mysqli_query($con, $sql2);
+        $result3 = mysqli_query($con, $sql3);
+        $result4 = mysqli_query($con, $sql4);
+        $result5 = mysqli_query($con, $sql5);
+        return (faculty::process_info_contactable($result, $result1, $result2, $result3,$result4 ,$result5 ));
+        
     }
 
     //extra end point for end point 7
     public static function AllFaculty($con)
     {
-        $sql = "SELECT `F`.`faculty_id`, `F`.`name`, `F`.`code`, `F`.`contactable_id`, `A`.`aka`, `P`.`phone`, `W`.`website`, `R`.`room`, `E`.`email`
-                FROM `faculty` as `F`, `aka` as `A`, `phone` AS `P`, `website` as `W`, `room(contactable),` as `R`, `email` AS `E`
-                WHERE `F`.`contactable_id` = `A.contactable_id` AND
-                `F`.`contactable_id` = `P`.`contactable_id` AND
-                `F`.`contactable_id` = `W`.`contactable_id` AND
-                `F`.`contactable_id` = `R`.`contactable_id` AND
-                `F`.`contactable_id` = `E`.`contactable_id`";
+        $sql = "SELECT `F`.`faculty_id`, `F`.`name`, `F`.`code`, `F`.`contactable_id`
+                FROM `faculty` as `F`";
+        
         $result = mysqli_query($con, $sql);
+
+        if (!$result)
+        {
+            return false;
+        }
+
+        $result = $result->fetch_all(MYSQLI_ASSOC);
         return $result;
     }    
+
 
 
     //End point 8
     public static function Department_Information($department_id, $con)
     {
         $sql = "SELECT `D`.`department_id`, `D`.`name`, `D`.`code`, `D`.`faculty_id`, `A`.`aka`, `P`.`phone`, `W`.`website`, `R`.`room`, `E`.`email`
-                FROM `department` as `D`, `aka` as `A`, `phone` AS `P`, `website` as `W`, `room(contactable)` as `R`, `email` AS `E`
-                WHERE `D`.`contactable_id` = `A`.`contactable_id` AND
-                `D`.`contactable_id` = `P`.`contactable_id` AND
-                `D`.`contactable_id` = `W`.`contactable_id` AND
-                `D`.`contactable_id` = `R`.`contactable_id` AND
-                `D`.`contactable_id` = `E`.`contactable_id` AND
-                `D`.`department_id` = '$department_id'";
+                FROM `department` as `D`
+                WHERE `D`.`department_id` = '$department_id'";
+
+        $sql1 = "   SELECT `A`.`aka`
+                    FROM `aka` as `A`, `department` as `D`
+                    WHERE `A`.`contactable_id` = `F`.`contactable_id` AND `D`.`department_id` = '$department_id'";
+
+        $sql2 = "   SELECT `P`.`phone`
+                    FROM `phone` AS `P`, `department` as `D`
+                    WHERE `P`.`contactable_id` = `F`.`contactable_id` AND `D`.`department_id` = '$department_id'";
+
+        $sql3 = "   SELECT `W`.`website`
+                    FROM website,` as `W`, `department` as `D`
+                    WHERE `W`.`contactable_id` = `F`.`contactable_id` AND `D`.`department_id` = '$department_id'";
+
+        $sql4 = "   SELECT `R`.`room(contactable)`
+                    FROM room(contactable),` as `R`, `department` as `D`
+                    WHERE `A`.`contactable_id` = `F`.`contactable_id` AND`D`.`department_id` = '$department_id'";
+
+        $sql5 = "   SELECT `E`.`email`
+                    FROM `email` AS `E`, `department` as `D`
+                    WHERE `E`.`email` = `F`.`contactable_id` AND `D`.`department_id` = '$department_id'";    
+                    
+                    
+        //get the result of the query for each components
         $result = mysqli_query($con, $sql);
-        return $result;
+        $result1 = mysqli_query($con, $sql1);
+        $result2 = mysqli_query($con, $sql2);
+        $result3 = mysqli_query($con, $sql3);
+        $result4 = mysqli_query($con, $sql4);
+        $result5 = mysqli_query($con, $sql5);
+        return (faculty::process_info_contactable($result, $result1, $result2, $result3,$result4 ,$result5 ));
         
     }
+
+
 
     //Extra end for end point 8
     public static function AllDepartment($con)
     {
-        $sql = "SELECT `D`.`department_id`, `D`.`name`, `D`.`code`, `D`.`faculty_id`, `A`.`aka`, `P`.`phone`, `W`.`website`, `R`.`room`, `E`.`email`
-                FROM `department` as `D`, `aka` as `A`, `phone` AS `P`, `website` as `W`, `room(contactable)` as `R`, `email` AS `E`
-                WHERE `D`.`contactable_id` = `A`.`contactable_id` AND
-                `D`.`contactable_id` = `P`.`contactable_id` AND
-                `D`.`contactable_id` = `W`.`contactable_id` AND
-                `D`.`contactable_id` = `R`.`contactable_id` AND
-                `D`.`contactable_id` = `E`.`contactable_id`";
+        $sql = "SELECT `D`.`department_id`, `D`.`name`, `D`.`code`, `D`.`faculty_id`
+                FROM `department` as `D`";
+
+
         $result = mysqli_query($con, $sql);
+
+        if (!$result)
+        {
+            return false;
+        }
+
+        $result = $result->fetch_all(MYSQLI_ASSOC);
         return $result;
+
+
         
     }    
 
-
+    //`T`.`title`, `P`.`phones`, `R`.`room`
     //End point 4
     public static function Instructor_Information($Instructor_id, $con)
     {
 
-        $sql =" SELECT `I`.`instructor_id`, `I`.`name`, `I`.`department_id`, `T`.`title`, `P`.`phones`, `R`.`room`
-                FROM `instructor` as `I`, `title` as `T`, phones as P, room as R
-                WHERE `I`.`instructor_id` = `T`.`instructor_id` AND
-                `I`.`instructor_id` = `P`.`instructor_id` AND
-                `I`.`instructor_id` = `R`.`instructor_id` AND
-                `I`.`instructor_id` = '$Instructor_id'";
+        $sql =" SELECT `I`.`instructor_id`, `I`.`name`, `I`.`department_id`
+                FROM `instructor` as `I`
+                WHERE `I`.`instructor_id` = '$Instructor_id'";
+        
+        $sql1 =" SELECT `T`.`title`
+                FROM `instructor` as `I`, `title` as `T`
+                WHERE `I`.`instructor_id` = `T`.`instructor_id` AND `I`.`instructor_id` = '$Instructor_id'";
+                
+        $sql2 =" SELECT `P`.`phones`
+                FROM `instructor` as `I`, `phones` as `P`
+                WHERE `I`.`instructor_id` = `P`.`instructor_id` AND `I`.`instructor_id` = '$Instructor_id'";
+                
+        $sql3 =" SELECT `R`.`room`
+                FROM `instructor` as `I`, `room` as `R`
+                WHERE `I`.`instructor_id` = `R`.`instructor_id` AND `I`.`instructor_id` = '$Instructor_id'";
+                
         $result = mysqli_query($con, $sql);
+        $result1 = mysqli_query($con, $sql1);
+        $result2 = mysqli_query($con, $sql2);
+        $result3 = mysqli_query($con, $sql3);
+
+        $result = $result->fetch_all(MYSQLI_ASSOC);
+        $result1 = $result1->fetch_all(MYSQLI_ASSOC);
+        $result2 = $result2->fetch_all(MYSQLI_ASSOC);
+        $result3 = $result3->fetch_all(MYSQLI_ASSOC);
+
+        $result["title"] = [];
+        $result["phones"] = [];
+        $result["room"] = [];
+
+        foreach ($result1 as &$insert)
+        {
+          array_push($result["title"], $insert["title"]);
+        }
+
+
+        foreach ($result2 as &$insert)
+        {
+          array_push($result["phones"], $insert["phones"]);
+        }
+
+
+        foreach ($result3 as &$insert)
+        {
+          array_push($result["room"], $insert["room"]);
+        }
+
         return $result;
     }
 
@@ -99,32 +259,56 @@ class Faculty
     public static function Program_Information($Program_ID, $con)
     {
 
-        $sql = "SELECT `P`.`program_id`, `P`.`name`, `P`.`code`, `P`.`department_id`, `A`.`aka`, `P`.`phone`, `W`.`website`, `R`.`room`, `E`.`email`
-                FROM `program` AS `P,` `aka` as `A`, `phone` AS `P`, `website` as `W`, `room` as `R`, `email` as `E`
-                WHERE `P`.`contactable_id` = `A`.`contactable_id` AND
-                `P`.`contactable_id` = `P`.`contactable_id` AND
-                `P`.`contactable_id` = `W`.`contactable_id` AND
-                `P`.`contactable_id` = `R`.`contactable_id` AND
-                `P`.`contactable_id` = `E`.`contactable_id` AND
-                `P`.`program_id` = '$Program_ID'";
+        $sql = "SELECT `P`.`program_id`, `P`.`name`, `P`.`code`, `P`.`department_id`
+                FROM `program` as `P`
+                WHERE `P`.`program_id` = '$Program_ID'";
+
+        $sql1 = "   SELECT `A`.`aka`
+                    FROM `aka` as `A`, `program` as `Pa`
+                    WHERE `A`.`contactable_id` = `P`.`contactable_id` AND `Pa`.`program_id` = '$Program_ID'";
+
+        $sql2 = "   SELECT `P`.`phone`
+                    FROM `phone` AS `P`, `program` as `Pa`
+                    WHERE `P`.`contactable_id` = `P`.`contactable_id` AND `Pa`.`program_id` = '$Program_ID'";
+
+        $sql3 = "   SELECT `W`.`website`
+                    FROM website,` as `W`, `program` as `Pa`
+                    WHERE `W`.`contactable_id` = `P`.`contactable_id` AND `Pa`.`program_id` = '$Program_ID'";
+
+        $sql4 = "   SELECT `R`.`room(contactable)`
+                    FROM room(contactable),` as `R`,`program` as `Pa`
+                    WHERE `A`.`contactable_id` = `P`.`contactable_id` AND`Pa`.`program_id` = '$Program_ID'";
+
+        $sql5 = "   SELECT `E`.`email`
+                    FROM `email` AS `E`,`program` as `Pa`
+                    WHERE `E`.`email` = `P`.`contactable_id` AND `Pa`.`program_id` = '$Program_ID'";    
 
         $result = mysqli_query($con, $sql);
-        return $result;
+        //get the result of the query for each components
+        $result = mysqli_query($con, $sql);
+        $result1 = mysqli_query($con, $sql1);
+        $result2 = mysqli_query($con, $sql2);
+        $result3 = mysqli_query($con, $sql3);
+        $result4 = mysqli_query($con, $sql4);
+        $result5 = mysqli_query($con, $sql5);
+        return (faculty::process_info_contactable($result, $result1, $result2, $result3,$result4 ,$result5 ));
     }
 
     //Extra end point for End point 12
     public static function AllProgram($con)
     {
 
-        $sql = "SELECT `P`.`program_id`, `P`.`name`, `P`.`code`, `P`.`department_id`, `A`.`aka`, `P`.`phone`, `W`.`website`, `R`.`room`, `E`.`email`
-                FROM `program` AS `P,` `aka` as `A`, `phone` AS `P`, `website` as `W`, `room` as `R`, `email` as `E`
-                WHERE `P`.`contactable_id` = `A`.`contactable_id` AND
-                `P`.`contactable_id` = `P`.`contactable_id` AND
-                `P`.`contactable_id` = `W`.`contactable_id` AND
-                `P`.`contactable_id` = `R`.`contactable_id` AND
-                `P`.`contactable_id` = `E`.`contactable_id`";
+        $sql = "SELECT `P`.`program_id`, `P`.`name`, `P`.`code`, `P`.`department_id`
+                FROM `program` AS `P`
+                WHERE `P`.`contactable_id` = `E`.`contactable_id`";
 
         $result = mysqli_query($con, $sql);
+        if (!$result)
+        {
+            return false;
+        }
+
+        $result = $result->fetch_all(MYSQLI_ASSOC);
         return $result;
     }
 
@@ -143,6 +327,12 @@ class Faculty
                FROM `concentration` as `C`
                WHERE `C`.`program_id` = '$Program_ID'";
        $result = mysqli_query($con, $sql);
+       if (!$result)
+       {
+           return false;
+       }
+
+       $result = $result->fetch_all(MYSQLI_ASSOC);
        return $result;
    }
 
@@ -155,6 +345,12 @@ class Faculty
         $sql = "SELECT `C`.`program_id`, `C`.`name`, `C`.`description`
                 FROM `concentration` as `C`";
         $result = mysqli_query($con, $sql);
+        if (!$result)
+        {
+            return false;
+        }
+
+        $result = $result->fetch_all(MYSQLI_ASSOC);
         return $result;
     }
 
@@ -164,9 +360,27 @@ class Faculty
     {                                                            
         $sql = "INSERT INTO `user` (`email`, `password`) VALUES ('$email','$password')";
         $result = mysqli_query($con, $sql);
+        if (!$result)
+        {
+            return false;
+        }
+
+
+        $sql = "SELECT `U`.`user_id`
+                FROM user as U
+                WHERE U.email = $email AND U.password = $password";
+
+        $result = mysqli_query($con, $sql);
+        $result = $result->fetch_all(MYSQLI_ASSOC);
+
+        $result["email"] = $email;
+        $result["password"] = $password;
         return $result;
     }
 
+
+
+    
     //End point 9
     public static function Enroll_Plan($term, $year, $con)
     {
@@ -176,8 +390,17 @@ class Faculty
                 WHERE `C`.`code` = `S`.`code` AND `C`.`number` = `S`.`number` AND
                 `S`.`year` = '$year' AND `S`.`term` = '$term'";
         $result = mysqli_query($con, $sql);
+        if (!$result)
+        {
+            return false;
+        }
+ 
+        $result = $result->fetch_all(MYSQLI_ASSOC);
         return $result;
     }
+
+
+
 
     //End point 15
     public static function View_Stat($con)
@@ -186,7 +409,14 @@ class Faculty
         $sql = "SELECT COUNT(*)
                 FROM `user`";
         $result = mysqli_query($con, $sql);
-        return $result;                
+        
+        if (!$result)
+        {
+            return false;
+        }
+ 
+        $result = $result->fetch_all(MYSQLI_ASSOC);
+        return $result;           
     }
 
 

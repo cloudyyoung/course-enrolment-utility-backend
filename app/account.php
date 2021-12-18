@@ -26,7 +26,7 @@ class Account
         //if the result is wrong
         if (!$result)
         {
-            return $result;
+            return false;
         }
 
         //check if the account is a student account
@@ -45,6 +45,8 @@ class Account
         {
             $result["type"] = "student";
         }
+
+        $result = $result->fetch_all(MYSQLI_ASSOC);
         $_SESSION['user_id'] = $result['user_id'];
         $_SESSION['type'] = $result['type'];
         return $result;
@@ -57,7 +59,7 @@ class Account
         
         if (isset($_SESSION['user_id']) == false)
         {
-            return $result;
+            return false;
         }
         else
         {
@@ -71,6 +73,7 @@ class Account
             WHERE `U`.`email` ='$currentID'";
             $result = mysqli_query($con, $sql);
 
+            $result = $result->fetch_all(MYSQLI_ASSOC);
             //add the type into the result and return
             $result['type'] = $currentType;
             return $result;
@@ -78,7 +81,7 @@ class Account
         }
     }
 
-
+/*
     //End point 10
     //INCOMPLETE, DO LATER
     public static function Student_Information($con)
@@ -118,9 +121,9 @@ class Account
                 FROM `major_in` as `M`
                 WHERE `U`.`email` = '$currentID'";  
     }
+*/
 
 
-/*
     //End point 13
     public static function SetMajorMinor($con, $major = null, $minor = null)
     {
@@ -154,7 +157,7 @@ class Account
         $result["major"] = $major;
         $result["minor"] = $minor;
         return $result;
-    }*/
+    }
 
 
     //End point 14

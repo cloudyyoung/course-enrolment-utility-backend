@@ -334,7 +334,7 @@ Flight::route('/api/course(/@code:[A-Za-z]{3,4}(/@number:[0-9]{3}))', function($
         } 
         else
         {
-            Flight::ret(StatusCodes::OK, null, $result->fetch_all(MYSQLI_ASSOC)) ;
+            Flight::ret(StatusCodes::OK, null, $result) ;
         }        
     }
 
@@ -417,7 +417,7 @@ Flight::route('/api/account', function () {
     }
 });
 
-/*
+
 //End point 13
 Flight::route('/api/account/student', function () {
 
@@ -442,7 +442,7 @@ Flight::route('/api/account/student', function () {
     } else {
         Flight::ret(200, "OK", $account);
     }
-});*/
+});
 
 
 
