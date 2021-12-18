@@ -76,7 +76,7 @@ class course
         }
 
 
-        $key = $code . " ". $number;
+        $key = strtoupper($code) . " ". $number;
 
         //get the data from mongodb
         $client = new \MongoDB\Client( 
