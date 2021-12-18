@@ -14,7 +14,7 @@ use App\StatusCodes;
 //if failed to connect to the database then Flight::ret(StatusCodes::INTERNAL_SERVER_ERROR, "Unable to connect to the database", null) 
 
 //If the result is wrong
-// if (!$result) {Flight::ret(StatusCodes::NotFound, $mysqli->error, null) }
+// if ($result === false) {Flight::ret(StatusCodes::NotFound, $mysqli->error, null) }
 
 //Flight::ret(StatusCodes::OK, null, $result)
 
@@ -43,7 +43,7 @@ Flight::route('GET /api/faculty(/@faculty_id:[0-9]{4})', function ($faculty_id){
             $result = faculty::Faculty_Information($faculty_id, $con);
         }
         
-        if (!$result) 
+        if ($result === false) 
         {
             Flight::ret(StatusCodes::NOT_FOUND, null, null) ;
         } 
@@ -79,7 +79,7 @@ Flight::route('GET /api/department(/@department_id:[0-9]{5})', function ($depart
             $result = faculty::Department_Information($department_id, $con);
         }
         
-        if (!$result) 
+        if ($result === false) 
         {
             Flight::ret(StatusCodes::NOT_FOUND, null, null) ;
         } 
@@ -104,7 +104,7 @@ Flight::route('GET /api/instructor/@instructor_id:[0-9]{6}', function ($instruct
     else
     {
         $result = faculty::Instructor_Information($instructor_id, $con);
-        if (!$result) 
+        if ($result === false) 
         {
             Flight::ret(StatusCodes::NOT_FOUND, null, null) ;
         } 
@@ -142,7 +142,7 @@ Flight::route('GET /api/program(/@program_id:[0-9]{5})', function ($program_id){
             $result = faculty::Program_Information($program_id, $con);
         }
         
-        if (!$result) 
+        if ($result === false) 
         {
             Flight::ret(StatusCodes::NOT_FOUND, null, null) ;
         } 
@@ -182,7 +182,7 @@ Flight::route('GET /api/program(/@program_id:[0-9]{5})/concentration', function 
             $result = faculty::ConcentrationForProgram($program_id,$con);
         }
         
-        if (!$result) 
+        if ($result === false) 
         {
             Flight::ret(StatusCodes::NOT_FOUND, null, null) ;
         } 
@@ -213,7 +213,7 @@ Flight::route('POST /api/account', function (){
     else
     {
         $result = faculty::Account_Signup($email, $password, $con);
-        if (!$result) 
+        if ($result === false) 
         {
             Flight::ret(StatusCodes::NOT_FOUND, "Email already exists.", null) ;
         } 
@@ -244,7 +244,7 @@ Flight::route('GET /api/account/student/plan', function (){
     else
     {
         $result = faculty::Enroll_Plan($term, $year, $con);
-        if (!$result) 
+        if ($result === false) 
         {
             Flight::ret(StatusCodes::NOT_FOUND, null, null) ;
         } 
@@ -274,7 +274,7 @@ Flight::route('GET /api/account/admin/statistics', function (){
         $result = faculty::View_Stat($con);
         if($result == null){
             Flight::ret(StatusCodes::UNAUTHORIZED, "Unauthorized request", null) ;
-        }else if (!$result) 
+        }else if ($result === false) 
         {
             Flight::ret(StatusCodes::NOT_FOUND, null, null) ;
         } 
@@ -321,7 +321,7 @@ Flight::route('GET /api/course(/@code:[A-Za-z]{3,4}(/@number:[0-9]{3}))', functi
         }
         
        
-        if (!$result) 
+        if ($result === false) 
         {
             Flight::ret(StatusCodes::NOT_FOUND, null, null) ;
         } 
@@ -350,7 +350,7 @@ Flight::route('GET /api/course(/@course_id:[0-9]{4})', function($course_id){
 
         $result = course::Course_Information_CID($course_id, $con);
 
-        if (!$result) 
+        if ($result === false) 
         {
             Flight::ret(StatusCodes::NOT_FOUND, "Internal error occured", null) ;
         } 
@@ -380,7 +380,7 @@ Flight::route('GET /api/course/@code:[A-Za-z]{3,4}/@number:[0-9]{3}/section/@yea
     else
     {
         $result = section::Section_Information($code, $number, $term, $year, $con);
-        if (!$result) 
+        if ($result === false) 
         {
             Flight::ret(StatusCodes::NOT_FOUND, null, null) ;
         } 
@@ -408,11 +408,11 @@ Flight::route('PUT /api/account', function () {
     }
 
     $account = account::Authenticate($email, $password, $con);
-    if(!$account){
-        Flight::ret(403, null, null);
-    }else if ($account == null) {
+    if ($account == null) {
         Flight::ret(401, "Username or password incorrect");
-    } else {
+    }else if(!$account){
+        Flight::ret(403, "Internal error", null);
+    }else {
         Flight::ret(200, "OK", $account);
     }
 });
