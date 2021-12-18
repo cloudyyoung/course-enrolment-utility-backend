@@ -35,17 +35,17 @@ class Account
         }
 
         $result = $result[0];
+        $uid = $result["user_id"];
 
         //check if the account is a student account
-        $sql2 = "SELECT `U`.`user_id`, `U`.`email`
-                FROM `user` as `U`, student as S
-                WHERE `U`.`user_id` = `S`.`user_id` AND
-                `U`.`email` = '$username' AND `U`.`password` = '$password'";        
+        $sql2 = "SELECT *
+                FROM `student` as `S`
+                WHERE `S`.`user_id` = $uid";        
         $result2 = mysqli_query($con, $sql2);    
         $result2 = $result2->fetch_all(MYSQLI_ASSOC);
 
         //if the account is NOT a student account
-        if (count($result) == 0)
+        if (count($result2) == 0)
         {
             $result["type"] = "admin";
         }

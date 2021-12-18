@@ -425,18 +425,34 @@ class Faculty
             return null;
         }
 
-        $sql = "SELECT COUNT(*) AS `totalNumberOfUsers`
+        $sql = "SELECT COUNT(*) AS `totalUsers`
                 FROM `user`";
         $result = mysqli_query($con, $sql);
-        
         if (!$result)
+        {
+            return false;
+        }
+
+        $sql = "SELECT COUNT(*) AS `totalCourses`
+                FROM `course`";
+        $result1 = mysqli_query($con, $sql);
+        if (!$result1)
         {
             return false;
         }
  
         $result = $result->fetch_all(MYSQLI_ASSOC);
         $result = $result[0];
-        return $result;           
+
+        $result1 = $result1->fetch_all(MYSQLI_ASSOC);
+        $result1 = $result1[0];
+
+        $result_out = Array(
+            "totalUsers" => $result["totalUsers"],
+            "totalCourses" => $result1["totalCourses"]
+        );
+
+        return $result_out;           
     }
 
 
