@@ -1,7 +1,6 @@
 <?php
 
 use App\StatusCodes;
-use App\Account;
 
 
 // RESTful
@@ -25,11 +24,10 @@ Flight::map('ret', function ($code = StatusCodes::NO_CONTENT, $message = '', $ar
     Flight::stop();
 });
 
-/*
-Flight::map('authenticate', function () {
-    if (!Account::Authenticate()) {
-        Flight::ret(401, "Sign in is required");
-        Flight::stop();
-        die();
-    }
-});*/
+
+
+Flight::map("put", function () {
+    parse_str(file_get_contents("php://input"), $put);
+    var_dump($put);
+    return $put;
+});

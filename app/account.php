@@ -28,11 +28,13 @@ class Account
         }
 
         //if the result is wrong or incorrect password or username then we terminate
-        $temp = $result->fetch_all(MYSQLI_ASSOC);
-        if (count($temp) == 0)
+        $result = $result->fetch_all(MYSQLI_ASSOC);
+        if (count($result) == 0)
         {
-            return false;
+            return null;
         }
+
+        $result = $result[0];
 
         //check if the account is a student account
         $sql2 = "SELECT `U`.`user_id`, `U`.`email`
@@ -43,7 +45,7 @@ class Account
         $result2 = $result2->fetch_all(MYSQLI_ASSOC);
 
         //if the account is NOT a student account
-        if (count($temp) == 0)
+        if (count($result) == 0)
         {
             $result["type"] = "admin";
         }

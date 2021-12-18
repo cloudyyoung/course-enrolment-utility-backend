@@ -362,17 +362,19 @@ Flight::route('/api/course/@code:[A-Za-z]{3,4}/@number:[0-9]{3}/section/@year:[0
 
 //End point 1
 Flight::route('PUT /api/account', function () {
-
-    $username = Flight::request()->data->username;
-    $password = Flight::request()->data->password;
+    $email = Flight::put()["email"];
+    $password = Flight::put()["password"];
+    
     $con = mysqli_connect("155.138.157.78","ucalgary","cv0V9c9ZqCf55g.0","ucalgary");
     if (mysqli_connect_errno())
     {
         Flight::ret(StatusCodes::INTERNAL_SERVER_ERROR, "Unable to connect to the database", null) ;
     }
 
-    $account = account::Authenticate($username, $password, $con);
-    if ($account == null) {
+    $account = account::Authenticate($email, $password, $con);
+    if(!$account){
+        Flight::ret(403, null, null);
+    }else if ($account == null) {
         Flight::ret(401, "Username or password incorrect");
     } else {
         Flight::ret(200, "OK", $account);
@@ -475,9 +477,9 @@ use App\Account;
 $larp_db = $client->larp;
 
 Flight::route('/account/signin', function () {
-    $username = Flight::request()->data->username;
+    $email = Flight::request()->data->email;
     $password = Flight::request()->data->password;
-    $account = Account::SignIn($username, $password);
+    $account = Account::SignIn($email, $password);
     if ($account == null) {
         Flight::ret(401, "Username or password incorrect");
     } else {
