@@ -176,7 +176,7 @@ class Account
 
 
     //End point 13
-    public static function SetMajorMinor($con, $major, $minor, $concentration, $program_id)
+    public static function SetMajorMinor($con, $major, $minor, $concentration)
     {
         $result = null;
         
@@ -229,9 +229,12 @@ class Account
         if($concentration == null){
             $concentration = "[]";
         }
+        
         $concentration = json_decode($concentration);
         foreach ($concentration as &$insert) {
-            $sql = "INSERT INTO `concentrate_in` (`user_id`,`program_id`, `concentration_name`) VALUES ('$currentID', '$program_id' ,'$insert')";
+            $pid = $insert['program_id'];
+            $name = $insert['name'];
+            $sql = "INSERT INTO `concentrate_in` (`user_id`,`program_id`, `concentration_name`) VALUES ('$currentID', '$pid' ,' $name ')";
             mysqli_query($con, $sql);
         }
 
