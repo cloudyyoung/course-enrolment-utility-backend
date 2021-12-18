@@ -18,7 +18,7 @@ class course
     public static function Course_Information ($code,$number, $con)
     {
 
-        $sql = "SELECT `C`.`course_id`, `C`.`no_gpa`, `C`.`repeat`, `C`.`code`, `C`.`number`, `C`.`units`, `C`.`topic`, `C`.`notes`, `C`.`descrption`, `C`.`credit`, `H`.`hours`, `A`.`aka`, `T`.`time_length`
+        $sql = "SELECT `C`.`course_id`, `C`.`no_gpa`, `C`.`repeat`, `C`.`code`, `C`.`number`, `C`.`units`, `C`.`topic`, `C`.`notes`, `C`.`description`, `C`.`credit`, `H`.`hours`, `A`.`aka`, `T`.`time_length`
                 FROM `course` as `C`, `hours` as `H`, `AKA` as `A`, `time_length` as `T`
                 WHERE `C`.`course_id` = `H`.`course_id AND
                 `C`.`course_id` = `A`.`course_id` AND
@@ -36,9 +36,9 @@ class course
     //extra end points, get all courses
     public static function AllCourses($con)
     {
-      $sql = "SELECT `C`.`course_id`, `C`.`no_gpa`, `C`.`repeat`, `C`.`code`, `C`.`number`, `C`.`units`, `C`.`topic`, `C`.`notes`, `C`.`descrption`, `C`.`credit`, `H`.`hours`, `A`.`aka`, `T`.`time_length`
+      $sql = "SELECT `C`.`course_id`, `C`.`no_gpa`, `C`.`repeat`, `C`.`code`, `C`.`number`, `C`.`units`, `C`.`topic`, `C`.`notes`, `C`.`description`, `C`.`credit`, `H`.`hours`, `A`.`aka`, `T`.`time_length`
       FROM `course` as `C`, `hours` as `H`, `AKA` as `A`, `time_length` as `T`
-      WHERE `C`.`course_id` = `H`.`course_id AND
+      WHERE `C`.`course_id` = `H`.`course_id` AND
       `C`.`course_id` = `A`.`course_id` AND
       `C`.`course_id` = `T`.`course_id`";
 
@@ -50,9 +50,9 @@ class course
     public static function CoursesCode ($code, $con)
     {
 
-        $sql = "SELECT `C`.`course_id`, `C`.`no_gpa`, `C`.`repeat`, `C`.`code`, `C`.`number`, `C`.`units`, `C`.`topic`, `C`.`notes`, `C`.`descrption`, `C`.`credit`, `H`.`hours`, `A`.`aka`, `T`.`time_length`
+        $sql = "SELECT `C`.`course_id`, `C`.`no_gpa`, `C`.`repeat`, `C`.`code`, `C`.`number`, `C`.`units`, `C`.`topic`, `C`.`notes`, `C`.`description`, `C`.`credit`, `H`.`hours`, `A`.`aka`, `T`.`time_length`
                 FROM `course` as `C`, `hours` as `H`, `AKA` as `A`, `time_length` as `T`
-                WHERE `C`.`course_id` = `H`.`course_id AND
+                WHERE `C`.`course_id` = `H`.`course_id` AND
                 `C`.`course_id` = `A`.`course_id` AND
                 `C`.`course_id` = `T`.`course_id` AND
                 `C`.`code` = '$code' ";
