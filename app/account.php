@@ -23,9 +23,13 @@ class Account
                 WHERE `U`.`email` = '$username' AND `U`.`password` = '$password'";
         $result = mysqli_query($con, $sql);
 
+        if(!$result){
+            return false;
+        }
+
         //if the result is wrong or incorrect password or username then we terminate
         $temp = $result->fetch_all(MYSQLI_ASSOC);
-        if (count($temp) == 0 || !$result)
+        if (count($temp) == 0)
         {
             return false;
         }

@@ -198,7 +198,7 @@ Flight::route('/api/program(/@program_id:[0-9]{5})/concentration', function ($pr
 
 
 //End point 2
-Flight::route('/api/account', function (){
+Flight::route('POST /api/account', function (){
     
     //get the faculty_id by listening
     $email = $_POST["email"];
@@ -361,7 +361,7 @@ Flight::route('/api/course/@code:[A-Za-z]{3,4}/@number:[0-9]{3}/section/@year:[0
 
 
 //End point 1
-Flight::route('/api/account', function () {
+Flight::route('PUT /api/account', function () {
 
     $username = Flight::request()->data->username;
     $password = Flight::request()->data->password;
