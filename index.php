@@ -93,11 +93,8 @@ Flight::route('/api/department(/@department_id:[0-9]{5})', function ($department
 
 
 //End point 4
-Flight::route('/api/instructor', function (){
+Flight::route('/api/instructor/@instructor_id:[0-9]{6}', function ($instructor_id){
     
-    //get the faculty_id by listening
-    $instructor_id = $_GET["instructor_id"];
-
     //connect to the SQL database
     $con = mysqli_connect("155.138.157.78","ucalgary","cv0V9c9ZqCf55g.0","ucalgary");
     if (mysqli_connect_errno())
@@ -116,7 +113,6 @@ Flight::route('/api/instructor', function (){
             Flight::ret(StatusCodes::OK, null, $result) ;
         }        
     }
-
 });
 
 
@@ -161,7 +157,7 @@ Flight::route('/api/program(/@program_id:[0-9]{5})', function ($program_id){
 
 
 //End point 11
-Flight::route('/api/program/concentration(/@program_id:[0-9]{5})', function ($program_id,){
+Flight::route('/api/program(/@program_id:[0-9]{5})/concentration', function ($program_id,){
     
     //get the faculty_id by listening
     //$Program_id = $_GET["Program_ID"];
@@ -307,23 +303,18 @@ Flight::route('/api/course(/@code:[A-Za-z]{3,4}(/@number:[0-9]{3}))', function($
         //If Code and number are null then get all courses
         if ($code == null && $number == null)
         {
-            echo("C, 1");
             $result = course::AllCourses( $con);
-            var_dump(array($result));
         }
 
         //if only course is given
         else if ($number == null)
         {
-            echo("C, 2");
             $result = course::CoursesCode($code, $con);
-            var_dump($result);
         }
         
         //If both are given
         else
         {
-            echo("C, 3");
             $result = course::Course_Information($code, $number, $con);
         }
         
@@ -343,12 +334,7 @@ Flight::route('/api/course(/@code:[A-Za-z]{3,4}(/@number:[0-9]{3}))', function($
 
 
 //End point 6
-Flight::route('/api/account/course/section', function (){
-    
-    $code = $_GET["code"];
-    $number = $_GET["number"];
-    $term = $_GET["term"];
-    $year = $_GET["year"];
+Flight::route('/api/course/@code:[A-Za-z]{3,4}/@number:[0-9]{3}/section/@year:[0-9]{4}/@term:(spring|summer|fall|winter)', function ($code, $number, $year, $term){
     //connect to the SQL database
     $con = mysqli_connect("155.138.157.78","ucalgary","cv0V9c9ZqCf55g.0","ucalgary");
     if (mysqli_connect_errno())

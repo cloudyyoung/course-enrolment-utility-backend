@@ -18,7 +18,7 @@ class course
     public static function Course_Information ($code,$number, $con)
     {
 
-        $sql = "SELECT `C`.`course_id`, `C`.`no_gpa`, `C`.`repeat`, `C`.`code`, `C`.`number`, `C`.`units`, `C`.`topic`, `C`.`notes`, `C`.`description`, `C`.`credits`
+        $sql = "SELECT *
                 FROM `course` as `C`
                 WHERE `C`.`code` = '$code' AND `C`.`number` = '$number'";
 
@@ -49,6 +49,7 @@ class course
         }
 
         $result = $result->fetch_all(MYSQLI_ASSOC);
+        $result = $result[0];
         $result1 = $result1->fetch_all(MYSQLI_ASSOC);
         $result2 = $result2->fetch_all(MYSQLI_ASSOC);
         $result3 = $result3->fetch_all(MYSQLI_ASSOC);
@@ -83,7 +84,7 @@ class course
     //extra end points, get all courses
     public static function AllCourses($con)
     {
-        $sql = "SELECT `C`.`course_id`, `C`.`no_gpa`, `C`.`repeat`, `C`.`code`, `C`.`number`, `C`.`units`, `C`.`topic`, `C`.`notes`, `C`.`description`, `C`.`credits`
+        $sql = "SELECT *
                 FROM `course` as `C`";
 
         /*$sql1 = " SELECT `H`.`hours`
@@ -144,7 +145,7 @@ class course
     public static function CoursesCode ($code, $con)
     {
 
-        $sql = "SELECT `C`.`course_id`, `C`.`no_gpa`, `C`.`repeat`, `C`.`code`, `C`.`number`, `C`.`units`, `C`.`topic`, `C`.`notes`, `C`.`description`, `C`.`credits`
+        $sql = "SELECT *
                 FROM `course` as `C` WHERE `C`.`code` = '$code'";
 /*
         $sql1 = " SELECT `H`.`hours`
@@ -172,6 +173,7 @@ class course
         }
         /*
         $result = $result->fetch_all(MYSQLI_ASSOC);
+        $result = $result[0];
         $result1 = $result1->fetch_all(MYSQLI_ASSOC);
         $result2 = $result2->fetch_all(MYSQLI_ASSOC);
         $result3 = $result3->fetch_all(MYSQLI_ASSOC);
@@ -196,6 +198,7 @@ class course
         {
           array_push($result["time_length"], $insert["time_length"]);
         }*/
+        $result = $result->fetch_all(MYSQLI_ASSOC);
         return $result;
 
 

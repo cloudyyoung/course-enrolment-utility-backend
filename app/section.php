@@ -15,13 +15,13 @@ class section
     public static function Section_Information ($course_id, $term, $year, $con)
     {
 
-        $sql = "SELECT `S`.`Course_ID`, `S`.`Term`, `S`.`Year`, `S`.`Name`, `S`.`Time`, `S`.`Note`, `S`.`Room`, `I`.`Name`
-        FROM `SECTION` as `S,` `TEACHES` as `T,` `INSTRUCTOR` as `I`, `COURSE` as `C`
+        $sql = "SELECT `S`.`course_id`, `S`.`term`, `S`.`year`, `S`.`name`, `S`.`time`, `S`.`note`, `S`.`room`, `I`.`name`
+        FROM `section` as `S`, `teaches` as `T`, `instructor` as `I`, `course` as `C`
         WHERE 
-        `I`.`Instructor_ID` = `T`.`Instructor_ID` AND 
-        `S`.`Course_ID` = `T`.`Course_ID` AND `T`.`Term` = `S`.`Term` AND `T`.`Year` = `S`.`Year` AND `T`.`Name` = `S`.`Name` AND
-        `C`.`Code` = `S`.`Code` AND `C`.`Number` = `S`.`Number` AND `C`.`course_id` = '$course_id' AND
-        `S`.`Term` = '$term' AND `S`.`Year` = '$year'" ;
+        `I`.`instructor_id` = `T`.`instructor_id` AND 
+        `S`.`course_id` = `T`.`course_id` AND `T`.`Term` = `S`.`Term` AND `T`.`year` = `S`.`year` AND `T`.`name` = `S`.`name` AND
+        `C`.`code` = `S`.`code` AND `C`.`number` = `S`.`number` AND `C`.`course_id` = '$course_id' AND
+        `S`.`Term` = '$term' AND `S`.`year` = '$year'" ;
         $result = mysqli_query($con, $sql);
         return $result;
     
