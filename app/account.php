@@ -222,7 +222,7 @@ class Account
 
 
     //End point 14
-    public static function SetPlan($con, $courses_id)
+    public static function SetPlan($term, $year, $course_id, $con)
     {
         if (isset($_SESSION['user_id']) == false)
         {
@@ -234,26 +234,26 @@ class Account
         }
         
         $currentID = $_SESSION['user_id'];
-        $courses_id = json_decode($courses_id);
+        $course_id = json_decode($course_id);
 
-        if($courses_id == null){
-            $courses_id = "[]";
+        if($course_id == null){
+            $course_id = "[]";
         }
         
         $sql = "DELETE  FROM `enrolls` 
-                        WHERE `user_id` = '$currentID'";
+                        WHERE `user_id` = '$currentID' AND `term` = $term AND `year` = $year";
 
         if (!mysqli_query($con, $sql))
         {
             return false;
         }
 
-        foreach ($courses_id as &$insert) {
-            $sql = "INSERT INTO `enrolls` (`user_id`, `course_id`) VALUES ('$currentID','$insert')";
+        foreach ($course_id as &$insert) {
+            $sql = "INSERT INTO `enrolls` (`user_id`,`course_id` ,`term`,`year`) VALUES ('$currentID','$insert','$term','$year')";
             mysqli_query($con, $sql);            
         }
 
-        return $courses_id;
+        return $course_id;
 
         //delete then write
         /*
