@@ -235,6 +235,10 @@ class course
       }
 
       $result = $result->fetch_all(MYSQLI_ASSOC);
+      if(count($result) == 0){
+        return null;
+      }
+
       $result = $result[0];
       $result1 = $result1->fetch_all(MYSQLI_ASSOC);
       $result2 = $result2->fetch_all(MYSQLI_ASSOC);
