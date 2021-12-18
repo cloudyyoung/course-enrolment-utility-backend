@@ -22,6 +22,7 @@ Flight::map('ret', function ($code = StatusCodes::NO_CONTENT, $message = '', $ar
     }
 
     Flight::stop();
+    die();
 });
 
 

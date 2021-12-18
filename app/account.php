@@ -82,6 +82,7 @@ class Account
             $result = mysqli_query($con, $sql);
 
             $result = $result->fetch_all(MYSQLI_ASSOC);
+            $result = $result[0];
 
             //add the type into the result and return
             $result['type'] = $currentType;
