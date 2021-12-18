@@ -487,11 +487,11 @@ Flight::route('PUT /api/account/student', function () {
 
 //End point 14
 
-Flight::route('PUT /api/account/student/plan', function () {
+Flight::route('PUT /api/account/student/plan/@year:[0-9]{4}/@term', function ($year, $term) {
 
     $course_id = Flight::put()["course_id"];
-    $term = Flight::put()["term"];
-    $year = Flight::put()["year"];
+    // $term = Flight::put()["term"];
+    // $year = Flight::put()["year"];
 
     if (isset($_SESSION['user_id']) == false)
     {
@@ -505,11 +505,7 @@ Flight::route('PUT /api/account/student/plan', function () {
     }
 
     $account = account::SetPlan($term, $year, $course_id, $con);
-    if ($account == null) {
-        Flight::ret(401, "Unexpected error.");
-    } else {
-        Flight::ret(200, "OK", $account);
-    }
+    Flight::ret(200, "OK", $account);
 });
 
 
