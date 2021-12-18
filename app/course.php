@@ -92,7 +92,7 @@ class course
         $result["coreq"] = json_decode($requisite["corequisite"]);
   
         return $result;
-        return $result;
+
 
 
 
