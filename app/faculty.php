@@ -388,11 +388,10 @@ class Faculty
     //End point 9
     public static function Enroll_Plan($term, $year, $con)
     {
-
-        $sql = "SELECT `C`.`code`, `C`.`number`
-                FROM `course` AS `C`, `section` AS `C`
-                WHERE `C`.`code` = `S`.`code` AND `C`.`number` = `S`.`number` AND
-                `S`.`year` = '$year' AND `S`.`term` = '$term'";
+        $currentID = $_SESSION['user_id'];
+        $sql = "SELECT `course_id`
+                FROM `enrolls`
+                WHERE `user_id` = '$currentID' AND `term` = '$term' AND `year` = '$year'";
         $result = mysqli_query($con, $sql);
         if (!$result)
         {
