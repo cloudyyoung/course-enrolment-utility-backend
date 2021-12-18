@@ -202,7 +202,7 @@ Flight::route('/api/program/concentration(/@program_id:[0-9]{5})', function ($pr
 
 
 //End point 2
-Flight::route('/api/program/account', function (){
+Flight::route('/api/account', function (){
     
     //get the faculty_id by listening
     $email = $_POST["email"];
@@ -233,7 +233,7 @@ Flight::route('/api/program/account', function (){
 
 
 //End point 9
-Flight::route('/api/program/account/student/plan', function (){
+Flight::route('/api/account/student/plan', function (){
     
     //get the faculty_id by listening
     $term = $_GET["term"];
@@ -264,7 +264,7 @@ Flight::route('/api/program/account/student/plan', function (){
 
 
 //End point 15
-Flight::route('/api/program/account/admin/states', function (){
+Flight::route('/api/account/admin/states', function (){
     
 
     //connect to the SQL database
@@ -343,7 +343,7 @@ Flight::route('/api/course(/@code:[A-Za-z]{3,4}(/@number:[0-9]{3}))', function($
 
 
 //End point 6
-Flight::route('/api/program/account/course/section', function (){
+Flight::route('/api/account/course/section', function (){
     
     $code = $_GET["code"];
     $number = $_GET["number"];
