@@ -8,7 +8,7 @@ use App\section;
 use App\faculty;
 use App\course;
 use App\StatusCodes;
-
+use App\account;
 //if failed to connect to the database then Flight::ret(StatusCodes::INTERNAL_SERVER_ERROR, "Unable to connect to the database", null) 
 
 //If the result is wrong
@@ -362,6 +362,113 @@ Flight::route('/api/program/account/course/section', function (){
     }
 
 });
+
+
+
+
+
+//End point 1
+Flight::route('/api/account', function () {
+
+    $username = Flight::request()->data->username;
+    $password = Flight::request()->data->password;
+    $con = mysqli_connect("155.138.157.78","ucalgary","cv0V9c9ZqCf55g.0","ucalgary");
+    if (mysqli_connect_errno($con))
+    {
+        Flight::ret(StatusCodes::INTERNAL_SERVER_ERROR, "Unable to connect to the database", null) ;
+    }
+
+    $account = account::Authenticate($username, $password, $con);
+    if ($account == null) {
+        Flight::ret(401, "Username or password incorrect");
+    } else {
+        Flight::ret(200, "OK", $account);
+    }
+});
+
+
+
+//End point 3
+Flight::route('/api/account', function () {
+
+    if (isset($_SESSION['user_id']) == false)
+    {
+        Flight::ret(401, "Please log in first.");
+    }
+
+    $con = mysqli_connect("155.138.157.78","ucalgary","cv0V9c9ZqCf55g.0","ucalgary");
+    if (mysqli_connect_errno($con))
+    {
+        Flight::ret(StatusCodes::INTERNAL_SERVER_ERROR, "Unable to connect to the database", null) ;
+    }
+
+    $account = account::Account_Information( $con);
+    if ($account == null) {
+        Flight::ret(401, "Username or password incorrect");
+    } else {
+        Flight::ret(200, "OK", $account);
+    }
+});
+
+
+//End point 13
+Flight::route('/api/account/student', function () {
+
+
+
+    $major = Flight::request()->data->major;
+    $minor = Flight::request()->data->minor;
+    if (isset($_SESSION['user_id']) == false)
+    {
+        Flight::ret(401, "Please log in first.");
+    }
+
+    $con = mysqli_connect("155.138.157.78","ucalgary","cv0V9c9ZqCf55g.0","ucalgary");
+    if (mysqli_connect_errno($con))
+    {
+        Flight::ret(StatusCodes::INTERNAL_SERVER_ERROR, "Unable to connect to the database", null) ;
+    }
+
+    $account = account::SetMajorMinor( $con, $major, $minor);
+    if ($account == null) {
+        Flight::ret(401, "Username or password incorrect");
+    } else {
+        Flight::ret(200, "OK", $account);
+    }
+});
+
+
+
+//End point 14
+//SetPlan($con, $term , $year, $courses)
+Flight::route('/api/account/student', function () {
+
+    $term = Flight::request()->data->term;
+    $year = Flight::request()->data->year;
+    $courses = Flight::request()->data->courses;
+
+    if (isset($_SESSION['user_id']) == false)
+    {
+        Flight::ret(401, "Please log in first.");
+    }
+
+    $con = mysqli_connect("155.138.157.78","ucalgary","cv0V9c9ZqCf55g.0","ucalgary");
+    if (mysqli_connect_errno($con))
+    {
+        Flight::ret(StatusCodes::INTERNAL_SERVER_ERROR, "Unable to connect to the database", null) ;
+    }
+
+    $account = account::SetPlan($con, $term , $year, $courses);
+    if ($account == null) {
+        Flight::ret(401, "Username or password incorrect");
+    } else {
+        Flight::ret(200, "OK", $account);
+    }
+});
+
+
+
+Flight::start();
 
 
 

@@ -25,10 +25,11 @@ Flight::map('ret', function ($code = StatusCodes::NO_CONTENT, $message = '', $ar
     Flight::stop();
 });
 
+/*
 Flight::map('authenticate', function () {
     if (!Account::Authenticate()) {
         Flight::ret(401, "Sign in is required");
         Flight::stop();
         die();
     }
-});
+});*/
