@@ -397,10 +397,16 @@ class Faculty
         {
             return false;
         }
- 
+
         $result = $result->fetch_all(MYSQLI_ASSOC);
-        $result = $result[0];
-        return $result;
+        $result_out_list = [];
+        foreach($result as &$insert)
+        {
+            array_push($result_out_list, $insert["course_id"]);
+        }
+        $result_out = Array("course_id" => $result_out_list);
+ 
+        return $result_out;
     }
 
 
