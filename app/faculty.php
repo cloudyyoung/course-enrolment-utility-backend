@@ -371,10 +371,11 @@ class Faculty
 
         $sql = "SELECT `U`.`user_id`
                 FROM user as U
-                WHERE U.email = $email AND U.password = $password";
+                WHERE `U`.`email` = '$email'";
 
         $result = mysqli_query($con, $sql);
         $result = $result->fetch_all(MYSQLI_ASSOC);
+        $result = $result[0];
 
         $result["email"] = $email;
         $result["password"] = $password;
