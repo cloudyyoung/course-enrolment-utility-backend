@@ -74,6 +74,24 @@ class course
         {
           array_push($result["time_length"], $insert["time_length"]);
         }
+
+
+        $key = $result['code'] . " ". $result['number'];
+
+        //get the data from mongodb
+        $client = new \MongoDB\Client( 
+          'mongodb+srv://ucalgary:ureqIynl0ZMm0GGr@cluster0.yoz3k.mongodb.net/myFirstDatabase?retryWrites=true&w=majority' 
+        ); 
+        $database = $client->requisite;
+        $collection = $database->CPSC;
+        $cursor = $collection->find(array('key' => $key));
+        $requisite = $cursor->toArray()[0];
+  
+        $result["prereq"] = json_decode($requisite["prerequisite"]);
+        $result["antireq"] = json_decode($requisite["antirequisite"]);
+        $result["coreq"] = json_decode($requisite["corequisite"]);
+  
+        return $result;
         return $result;
 
 
