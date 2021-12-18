@@ -215,7 +215,7 @@ Flight::route('POST /api/account', function (){
         $result = faculty::Account_Signup($email, $password, $con);
         if (!$result) 
         {
-            Flight::ret(StatusCodes::NOT_FOUND, null, null) ;
+            Flight::ret(StatusCodes::NOT_FOUND, "Email already exists.", null) ;
         } 
         else
         {
