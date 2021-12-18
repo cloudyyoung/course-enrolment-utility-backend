@@ -76,7 +76,7 @@ class course
         }
 
 
-        $key = $result['code'] . " ". $result['number'];
+        $key = $code . " ". $number;
 
         //get the data from mongodb
         $client = new \MongoDB\Client( 
@@ -92,7 +92,7 @@ class course
         $result["coreq"] = json_decode($requisite["corequisite"]);
   
         return $result;
-        return $result;
+
 
 
 
