@@ -255,10 +255,10 @@ class Account
         {
             return false;
         }     
-        else if ($_SESSION['type']!= "student")
-        {
-            return false;
-        }
+        // else if ($_SESSION['type']!= "student")
+        // {
+        //     return false;
+        // }
         
         $currentID = $_SESSION['user_id'];
         $course_id = json_decode($course_id);
