@@ -1,6 +1,8 @@
 <?php
 session_start();
 
+
+
 require __DIR__ . '/vendor/autoload.php';
 require "app/util.php";
 
@@ -25,7 +27,7 @@ Flight::route('/api/faculty(/@faculty_id:[0-9]{4})', function ($faculty_id){
 
     //connect to the SQL database
     $con = mysqli_connect("155.138.157.78","ucalgary","cv0V9c9ZqCf55g.0","ucalgary");
-    if (mysqli_connect_errno($con))
+    if (mysqli_connect_errno())
     {
         Flight::ret(StatusCodes::INTERNAL_SERVER_ERROR, "Unable to connect to the database", null) ;
     }
@@ -61,7 +63,7 @@ Flight::route('/api/department(/@department_id:[0-9]{5})', function ($department
 
     //connect to the SQL database
     $con = mysqli_connect("155.138.157.78","ucalgary","cv0V9c9ZqCf55g.0","ucalgary");
-    if (mysqli_connect_errno($con))
+    if (mysqli_connect_errno())
     {
         Flight::ret(StatusCodes::INTERNAL_SERVER_ERROR, "Unable to connect to the database", null) ;
     }
@@ -98,7 +100,7 @@ Flight::route('/api/instructor', function (){
 
     //connect to the SQL database
     $con = mysqli_connect("155.138.157.78","ucalgary","cv0V9c9ZqCf55g.0","ucalgary");
-    if (mysqli_connect_errno($con))
+    if (mysqli_connect_errno())
     {
         Flight::ret(StatusCodes::INTERNAL_SERVER_ERROR, "Unable to connect to the database", null) ;
     }
@@ -127,7 +129,7 @@ Flight::route('/api/program(/@program_id:[0-9]{5})', function ($program_id){
 
     //connect to the SQL database
     $con = mysqli_connect("155.138.157.78","ucalgary","cv0V9c9ZqCf55g.0","ucalgary");
-    if (mysqli_connect_errno($con))
+    if (mysqli_connect_errno())
     {
         Flight::ret(StatusCodes::INTERNAL_SERVER_ERROR, "Unable to connect to the database", null) ;
     }
@@ -167,7 +169,7 @@ Flight::route('/api/program/concentration(/@program_id:[0-9]{5})', function ($pr
 
     //connect to the SQL database
     $con = mysqli_connect("155.138.157.78","ucalgary","cv0V9c9ZqCf55g.0","ucalgary");
-    if (mysqli_connect_errno($con))
+    if (mysqli_connect_errno())
     {
         Flight::ret(StatusCodes::INTERNAL_SERVER_ERROR, "Unable to connect to the database", null) ;
     }
@@ -208,7 +210,7 @@ Flight::route('/api/program/account', function (){
 
     //connect to the SQL database
     $con = mysqli_connect("155.138.157.78","ucalgary","cv0V9c9ZqCf55g.0","ucalgary");
-    if (mysqli_connect_errno($con))
+    if (mysqli_connect_errno())
     {
         Flight::ret(StatusCodes::INTERNAL_SERVER_ERROR, "Unable to connect to the database", null) ;
     }
@@ -239,7 +241,7 @@ Flight::route('/api/program/account/student/plan', function (){
 
     //connect to the SQL database
     $con = mysqli_connect("155.138.157.78","ucalgary","cv0V9c9ZqCf55g.0","ucalgary");
-    if (mysqli_connect_errno($con))
+    if (mysqli_connect_errno())
     {
         Flight::ret(StatusCodes::INTERNAL_SERVER_ERROR, "Unable to connect to the database", null) ;
     }
@@ -267,7 +269,7 @@ Flight::route('/api/program/account/admin/states', function (){
 
     //connect to the SQL database
     $con = mysqli_connect("155.138.157.78","ucalgary","cv0V9c9ZqCf55g.0","ucalgary");
-    if (mysqli_connect_errno($con))
+    if (mysqli_connect_errno())
     {
         Flight::ret(StatusCodes::INTERNAL_SERVER_ERROR, "Unable to connect to the database", null) ;
     }
@@ -295,7 +297,7 @@ Flight::route('/api/course(/@code:[A-Za-z]{3,4}(/@number:[0-9]{3}))', function($
     //$course_id = $_GET["course_id"];
     //connect to the SQL database
     $con = mysqli_connect("155.138.157.78","ucalgary","cv0V9c9ZqCf55g.0","ucalgary");
-    if (mysqli_connect_errno($con))
+    if (mysqli_connect_errno())
     {
         Flight::ret(StatusCodes::INTERNAL_SERVER_ERROR, "Unable to connect to the database", null) ;
     }
@@ -344,7 +346,7 @@ Flight::route('/api/program/account/course/section', function (){
     $year = $_GET["year"];
     //connect to the SQL database
     $con = mysqli_connect("155.138.157.78","ucalgary","cv0V9c9ZqCf55g.0","ucalgary");
-    if (mysqli_connect_errno($con))
+    if (mysqli_connect_errno())
     {
         Flight::ret(StatusCodes::INTERNAL_SERVER_ERROR, "Unable to connect to the database", null) ;
     }
@@ -373,7 +375,7 @@ Flight::route('/api/account', function () {
     $username = Flight::request()->data->username;
     $password = Flight::request()->data->password;
     $con = mysqli_connect("155.138.157.78","ucalgary","cv0V9c9ZqCf55g.0","ucalgary");
-    if (mysqli_connect_errno($con))
+    if (mysqli_connect_errno())
     {
         Flight::ret(StatusCodes::INTERNAL_SERVER_ERROR, "Unable to connect to the database", null) ;
     }
@@ -397,7 +399,7 @@ Flight::route('/api/account', function () {
     }
 
     $con = mysqli_connect("155.138.157.78","ucalgary","cv0V9c9ZqCf55g.0","ucalgary");
-    if (mysqli_connect_errno($con))
+    if (mysqli_connect_errno())
     {
         Flight::ret(StatusCodes::INTERNAL_SERVER_ERROR, "Unable to connect to the database", null) ;
     }
@@ -410,7 +412,7 @@ Flight::route('/api/account', function () {
     }
 });
 
-
+/*
 //End point 13
 Flight::route('/api/account/student', function () {
 
@@ -435,7 +437,7 @@ Flight::route('/api/account/student', function () {
     } else {
         Flight::ret(200, "OK", $account);
     }
-});
+});*/
 
 
 
@@ -453,7 +455,7 @@ Flight::route('/api/account/student', function () {
     }
 
     $con = mysqli_connect("155.138.157.78","ucalgary","cv0V9c9ZqCf55g.0","ucalgary");
-    if (mysqli_connect_errno($con))
+    if (mysqli_connect_errno())
     {
         Flight::ret(StatusCodes::INTERNAL_SERVER_ERROR, "Unable to connect to the database", null) ;
     }
