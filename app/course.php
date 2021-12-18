@@ -18,7 +18,7 @@ class course
     public static function Course_Information ($code,$number, $con)
     {
 
-        $sql = "SELECT `C`.`course_id`, `C`.`no_gpa`, `C`.`repeat`, `C`.`code`, `C`.`number`, `C`.`units`, `C`.`topic`, `C`.`notes`, `C`.`description`, `C`.`credits`, `H`.`hours`, `A`.`aka`, `T`.`time_length`
+        $sql = "SELECT `C`.`course_id`, `C`.`no_gpa`, `C`.`repeat`, `C`.`code`, `C`.`number`, `C`.`units`, `C`.`topic`, `C`.`notes`, `C`.`description`, `C`.`credits`
                 FROM `course` as `C`
                 WHERE `C`.`code` = '$code' AND `C`.`number` = '$number'";
 
@@ -33,8 +33,7 @@ class course
     //extra end points, get all courses
     public static function AllCourses($con)
     {
-      $sql = "SELECT `C`.`course_id`, `C`.`no_gpa`, `C`.`repeat`, `C`.`code`, `C`.`number`, `C`.`units`, `C`.`topic`, `C`.`notes`, `C`.`description`, `C`.`credits`, `H`.`hours`, `A`.`aka`, `T`.`time_length`
-      FROM `course` as `C`";
+      $sql = "SELECT `C`.`course_id`, `C`.`no_gpa`, `C`.`repeat`, `C`.`code`, `C`.`number`, `C`.`units`, `C`.`topic`, `C`.`notes`, `C`.`description`, `C`.`credits` FROM `course` as `C`";
 
 
       $result = mysqli_query($con, $sql);
@@ -45,8 +44,7 @@ class course
     public static function CoursesCode ($code, $con)
     {
 
-        $sql = "SELECT `C`.`course_id`, `C`.`no_gpa`, `C`.`repeat`, `C`.`code`, `C`.`number`, `C`.`units`, `C`.`topic`, `C`.`notes`, `C`.`description`, `C`.`credits`, `H`.`hours`, `A`.`aka`, `T`.`time_length`
-                FROM `course` as `C`
+        $sql = "SELECT `C`.`course_id`, `C`.`no_gpa`, `C`.`repeat`, `C`.`code`, `C`.`number`, `C`.`units`, `C`.`topic`, `C`.`notes`, `C`.`description`, `C`.`credits` FROM `course` as `C`
                 WHERE `C`.`code` = '$code' ";
 
         $result = mysqli_query($con, $sql);
