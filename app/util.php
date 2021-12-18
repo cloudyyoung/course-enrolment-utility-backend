@@ -29,6 +29,5 @@ Flight::map('ret', function ($code = StatusCodes::NO_CONTENT, $message = '', $ar
 
 Flight::map("put", function () {
     parse_str(file_get_contents("php://input"), $put);
-    var_dump($put);
     return $put;
 });

@@ -490,8 +490,6 @@ Flight::route('PUT /api/account/student', function () {
 Flight::route('PUT /api/account/student/plan/@year:[0-9]{4}/@term', function ($year, $term) {
 
     $course_id = Flight::put()["course_id"];
-    // $term = Flight::put()["term"];
-    // $year = Flight::put()["year"];
 
     if (isset($_SESSION['user_id']) == false)
     {
@@ -499,12 +497,14 @@ Flight::route('PUT /api/account/student/plan/@year:[0-9]{4}/@term', function ($y
     }
 
     $con = mysqli_connect("155.138.157.78","ucalgary","cv0V9c9ZqCf55g.0","ucalgary");
-    if (mysqli_connect_errno())
-    {
+    if (mysqli_connect_errno()){
         Flight::ret(StatusCodes::INTERNAL_SERVER_ERROR, "Unable to connect to the database", null) ;
     }
 
     $account = account::SetPlan($term, $year, $course_id, $con);
+    if($account === false){
+        Flight::ret(StatusCodes::NOT_FOUND, "Unauthroized access", null);
+    }
     Flight::ret(200, "OK", $account);
 });
 
