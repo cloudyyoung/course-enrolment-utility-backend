@@ -461,6 +461,7 @@ Flight::route('POST /api/account/student/plan', function () {
 });
 
 
+Flight::ret(StatusCodes::BAD_REQUEST, "Operation is not supported", null);
 
 Flight::start();
 
