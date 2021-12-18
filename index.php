@@ -534,16 +534,12 @@ Flight::route('PUT /api/account/student/plan/@year:[0-9]{4}/@term', function ($y
     }
 
     $con = mysqli_connect("155.138.157.78","ucalgary","cv0V9c9ZqCf55g.0","ucalgary");
-<<<<<<< HEAD
 
     $year = mysqli_real_escape_string($con, $year);
     $term = mysqli_real_escape_string($con, $term);
 
     if (mysqli_connect_errno())
     {
-=======
-    if (mysqli_connect_errno()){
->>>>>>> f58cd66e12cde15e6bfe0e213ea5000b15893d8c
         Flight::ret(StatusCodes::INTERNAL_SERVER_ERROR, "Unable to connect to the database", null) ;
     }
 
