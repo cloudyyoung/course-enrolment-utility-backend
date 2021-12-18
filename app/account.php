@@ -211,6 +211,7 @@ class Account
             $major = "[]";
         }
         $major = json_decode($major);
+        $result["major"] = $major;
         foreach ($major as &$insert) {
 
             $sql = "INSERT INTO `major_in` (`user_id`, `program_id`) VALUES ('$currentID','$insert')";
@@ -221,6 +222,7 @@ class Account
             $minor = "[]";
         }
         $minor = json_decode($minor);
+        $result["minor"] = $minor;
         foreach ($minor as &$insert) {
             $sql = "INSERT INTO `minor_in` (`user_id`, `program_id`) VALUES ('$currentID','$insert')";
             mysqli_query($con, $sql);
@@ -231,6 +233,7 @@ class Account
         }
         
         $concentration = json_decode($concentration);
+        $result["concentration"] = $concentration;
         foreach ($concentration as &$insert) {
             $pid = $insert['program_id'];
             $name = $insert['name'];
@@ -238,9 +241,9 @@ class Account
             mysqli_query($con, $sql);
         }
 
-        $result["major"] = $major;
-        $result["minor"] = $minor;
-        $result["concentration"] = $concentration;
+        //$result["major"] = $major;
+       // $result["minor"] = $minor;
+        //$result["concentration"] = $concentration;
         return $result;
     }
 
