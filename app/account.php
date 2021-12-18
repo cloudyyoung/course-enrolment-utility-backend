@@ -230,7 +230,7 @@ class Account
             $concentration = "[]";
         }
         
-        //$concentration = json_decode($concentration);
+        $concentration = json_decode($concentration);
         foreach ($concentration as &$insert) {
             $pid = $insert['program_id'];
             $name = $insert['name'];
