@@ -241,7 +241,7 @@ class Account
         }
         
         $sql = "DELETE  FROM `enrolls` 
-                        WHERE `user_id` = '$currentID' AND `term` = $term AND `year` = $year";
+                        WHERE `user_id` = '$currentID' AND `term` = '$term' AND `year` = '$year'";
 
         if (!mysqli_query($con, $sql))
         {

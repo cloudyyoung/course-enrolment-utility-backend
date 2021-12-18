@@ -457,11 +457,35 @@ Flight::route('PUT /api/account/student/plan', function () {
 
     $account = account::SetPlan($term, $year, $course_id, $con);
     if ($account == null) {
-        Flight::ret(401, "Username or password incorrect");
+        Flight::ret(401, "Unexpected error.");
     } else {
         Flight::ret(200, "OK", $account);
     }
 });
+
+
+
+Flight::route('GET /api/account/student', function () {
+
+    if (isset($_SESSION['user_id']) == false)
+    {
+        Flight::ret(401, "Please log in first.");
+    }
+
+    $con = mysqli_connect("155.138.157.78","ucalgary","cv0V9c9ZqCf55g.0","ucalgary");
+    if (mysqli_connect_errno())
+    {
+        Flight::ret(StatusCodes::INTERNAL_SERVER_ERROR, "Unable to connect to the database", null) ;
+    }
+
+    $account = account::Student_Information($con);
+    if ($account == null) {
+        Flight::ret(401, "Unexpected error.");
+    } else {
+        Flight::ret(200, "OK", $account);
+    }
+});
+
 
 
 // Flight::ret(StatusCodes::BAD_REQUEST, "Operation is not supported", null);
