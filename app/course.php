@@ -37,7 +37,7 @@ class course
 
 
       $result = mysqli_query($con, $sql);
-      return $result;
+      return $result->fetch_all(MYSQLI_ASSOC);
     }
 
     //extra end points, get all courses that has the same code
