@@ -206,6 +206,10 @@ Flight::route('POST /api/account', function (){
 
     //connect to the SQL database
     $con = mysqli_connect("155.138.157.78","ucalgary","cv0V9c9ZqCf55g.0","ucalgary");
+
+    $email = mysqli_real_escape_string($con, $email);
+    $password = mysqli_real_escape_string($con, $password);
+
     if (mysqli_connect_errno())
     {
         Flight::ret(StatusCodes::INTERNAL_SERVER_ERROR, "Unable to connect to the database", null) ;
@@ -230,13 +234,20 @@ Flight::route('POST /api/account', function (){
 
 //End point 9
 Flight::route('GET /api/account/student/plan/@year:[0-9]{4}/@term', function ($year, $term){
-    
+
     //get the faculty_id by listening
     // $term = $_GET["term"];
     // $year = $_GET["year"];
 
+
     //connect to the SQL database
     $con = mysqli_connect("155.138.157.78","ucalgary","cv0V9c9ZqCf55g.0","ucalgary");
+
+    
+    $year = mysqli_real_escape_string($con, $year);
+    $term = mysqli_real_escape_string($con, $term);
+    
+
     if (mysqli_connect_errno())
     {
         Flight::ret(StatusCodes::INTERNAL_SERVER_ERROR, "Unable to connect to the database", null) ;
