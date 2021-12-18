@@ -127,11 +127,12 @@ class Account
                 WHERE `user_id` = '$currentID'";  
 
         //get all course taken
-        $sql3 = "SELECT *
+        //get course ID only
+        $sql3 = "SELECT `course_id`
                 FROM `enrolls`
                 WHERE `user_id` = '$currentID'";  
 
-
+        $result_out=[];
         //get the results from the query and put them all the result 3
         $result = mysqli_query($con, $sql);
         $result1 = mysqli_query($con, $sql1);
@@ -142,26 +143,32 @@ class Account
         $result2 = $result2->fetch_all(MYSQLI_ASSOC);
         $result3 = $result3->fetch_all(MYSQLI_ASSOC);
 
-        $result3["major"] = [];
-        $result3["minor"] = [];
-        $result3["concentration_name"] = [];
+        
+        $result_out["major"] = [];
+        $result_out["minor"] = [];
+        $result_out["concentration_name"] = [];
+        $result_out["course_id"] = [];
 
         foreach ($result as &$insert)
         {
-            array_push($result3["major"], $insert["major"]);
+            array_push($result_out["major"], $insert["major"]);
         }   
 
         foreach ($result1 as &$insert)
         {
-            array_push($result3["minor"], $insert["minor"]);
+            array_push($result_out["minor"], $insert["minor"]);
         }  
 
         foreach ($result2 as &$insert)
         {
-            array_push($result3["concentration_name"], $insert["concentration_name"]);
-        }       
+            array_push($result_out["concentration_name"], $insert["concentration_name"]);
+        }    
 
-        return $result3;
+        foreach ($result3 as &$insert)
+        {
+            array_push($result_out["course_id"], $insert["course_id"]);
+        }     
+        return $result_out;
 
 
     }
