@@ -307,18 +307,21 @@ Flight::route('/api/course(/@code:[A-Za-z]{3,4}(/@number:[0-9]{3}))', function($
         //If Code and number are null then get all courses
         if ($code == null && $number == null)
         {
+            echo("C, 1");
             $result = course::AllCourses( $con);
         }
 
         //if only course is given
         else if ($number == null)
         {
+            echo("C, 2");
             $result = course::CoursesCode($code, $con);
         }
         
         //If both are given
         else
         {
+            echo("C, 3");
             $result = course::Course_Information($code, $number, $con);
         }
         
