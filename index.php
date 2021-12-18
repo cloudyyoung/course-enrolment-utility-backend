@@ -272,7 +272,9 @@ Flight::route('GET /api/account/admin/statistics', function (){
     else
     {
         $result = faculty::View_Stat($con);
-        if (!$result) 
+        if($result == null){
+            Flight::ret(StatusCodes::UNAUTHORIZED, "Unauthorized request", null) ;
+        }else if (!$result) 
         {
             Flight::ret(StatusCodes::NOT_FOUND, null, null) ;
         } 

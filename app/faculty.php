@@ -415,6 +415,10 @@ class Faculty
     //End point 15
     public static function View_Stat($con)
     {
+        $type = $_SESSION["type"];
+        if($type != "admin"){
+            return null;
+        }
 
         $sql = "SELECT COUNT(*) AS `totalNumberOfUsers`
                 FROM `user`";
