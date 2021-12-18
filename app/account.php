@@ -23,8 +23,9 @@ class Account
                 WHERE `U`.`email` = '$username' AND `U`.`password` = '$password'";
         $result = mysqli_query($con, $sql);
 
-        //if the result is wrong
-        if (!$result)
+        //if the result is wrong or incorrect password or username then we terminate
+        $temp = $result->fetch_all(MYSQLI_ASSOC);
+        if (count($temp) == 0 || !$result)
         {
             return false;
         }
@@ -35,9 +36,10 @@ class Account
                 WHERE `U`.`user_id` = `S`.`user_id` AND
                 `U`.`email` = '$username' AND `U`.`password` = '$password'";        
         $result2 = mysqli_query($con, $sql2);    
-        
+        $result2 = $result2->fetch_all(MYSQLI_ASSOC);
+
         //if the account is NOT a student account
-        if (!$result2)
+        if (count($temp) == 0)
         {
             $result["type"] = "admin";
         }
@@ -46,8 +48,7 @@ class Account
             $result["type"] = "student";
         }
 
-        $result = $result->fetch_all(MYSQLI_ASSOC);
-        $result = $result[0];
+        //set the session and return the result
         $_SESSION['user_id'] = $result['user_id'];
         $_SESSION['type'] = $result['type'];
         return $result;
@@ -68,14 +69,14 @@ class Account
             $currentID = $_SESSION['user_id'] ;
             $currentType= $_SESSION['type'];
 
-            //get the email of the user
+            //get the email of the user and account id
             $sql = "SELECT `U`.`user_id`, `U`.`email`
             FROM `user` as `U`
-            WHERE `U`.`email` ='$currentID'";
+            WHERE `U`.`user_id` ='$currentID'";
             $result = mysqli_query($con, $sql);
 
             $result = $result->fetch_all(MYSQLI_ASSOC);
-            $result = $result[0];
+
             //add the type into the result and return
             $result['type'] = $currentType;
             return $result;
@@ -83,7 +84,7 @@ class Account
         }
     }
 
-/*
+
     //End point 10
     //INCOMPLETE, DO LATER
     public static function Student_Information($con)
@@ -93,11 +94,11 @@ class Account
         //return null if the user is NOT logged in or the user is NOT a student
         if (isset($_SESSION['user_id']) == false)
         {
-            return $result;
+            return false;
         }        
         else if ($_SESSION['type']!= "student")
         {
-            return $result;
+            return false;
         }
 
         $currentID = $_SESSION['user_id'];
@@ -109,21 +110,55 @@ class Account
                 WHERE `user_id` = '$currentID'";   
                 
         //get all the minor 
-        $sql2 = "SELECT `program_id` as minor
+        $sql1 = "SELECT `program_id` as minor
                 FROM `minor_in`
                 WHERE `user_id` = '$currentID'";  
 
         //get all the concentrations
-        $sql3 = "SELECT `C`.`program_id`, `C`.`concentration_name`
-                FROM `concentrate_in` as `C`
-                WHERE `C`.`user_id` = '$currentID'";  
+        $sql2 = "SELECT `concentration_name`
+                FROM `concentrate_in`
+                WHERE `user_id` = '$currentID'";  
 
         //get all course taken
-        $sql4 = "SELECT `M`.`program_id`
-                FROM `major_in` as `M`
-                WHERE `U`.`email` = '$currentID'";  
+        $sql3 = "SELECT *
+                FROM `enrolls`
+                WHERE `user_id` = '$currentID'";  
+
+
+        //get the results from the query and put them all the result 3
+        $result = mysqli_query($con, $sql);
+        $result1 = mysqli_query($con, $sql1);
+        $result2 = mysqli_query($con, $sql2);
+        $result3 = mysqli_query($con, $sql3);
+        $result = $result->fetch_all(MYSQLI_ASSOC);
+        $result1 = $result1->fetch_all(MYSQLI_ASSOC);
+        $result2 = $result2->fetch_all(MYSQLI_ASSOC);
+        $result3 = $result3->fetch_all(MYSQLI_ASSOC);
+
+        $result3["major"] = [];
+        $result3["minor"] = [];
+        $result3["concentration_name"] = [];
+
+        foreach ($result as &$insert)
+        {
+            array_push($result3["major"], $insert["major"]);
+        }   
+
+        foreach ($result1 as &$insert)
+        {
+            array_push($result3["minor"], $insert["minor"]);
+        }  
+
+        foreach ($result2 as &$insert)
+        {
+            array_push($result3["concentration_name"], $insert["concentration_name"]);
+        }       
+
+        return $result3;
+
+
     }
-*/
+
 
 
     //End point 13
