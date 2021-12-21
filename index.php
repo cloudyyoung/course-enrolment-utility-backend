@@ -6,11 +6,12 @@ session_start();
 require __DIR__ . '/vendor/autoload.php';
 require "app/util.php";
 
-use App\section;
-use App\faculty;
-use App\course;
-use App\account;
 use App\StatusCodes;
+use App\Section;
+use App\Faculty;
+use App\Course;
+use App\Account;
+
 //if failed to connect to the database then Flight::ret(StatusCodes::INTERNAL_SERVER_ERROR, "Unable to connect to the database", null) 
 
 //If the result is wrong
@@ -316,19 +317,19 @@ Flight::route('GET /api/course(/@code:[A-Za-z]{3,4}(/@number:[0-9]{3}))', functi
         //If Code and number are null then get all courses
         if ($code == null && $number == null)
         {
-            $result = course::AllCourses( $con);
+            $result = Course::All_Courses( $con);
         }
 
         //if only course is given
         else if ($number == null)
         {
-            $result = course::CoursesCode($code, $con);
+            $result = Course::CoursesCode($code, $con);
         }
         
         //If both are given
         else
         {
-            $result = course::Course_Information($code, $number, $con);
+            $result = Course::CourseInformation($code, $number, $con);
         }
         
        
@@ -359,7 +360,7 @@ Flight::route('GET /api/course(/@course_id:[0-9]{4})', function($course_id){
     else
     {
 
-        $result = course::Course_Information_CID($course_id, $con);
+        $result = Course::CourseInformation_CID($course_id, $con);
 
         if ($result === false) 
         {
@@ -532,50 +533,8 @@ Flight::route('GET /api/account/student', function () {
 });
 
 
-
-// Flight::ret(StatusCodes::BAD_REQUEST, "Operation is not supported", null);
+Flight::route("*", function(){
+    Flight::ret(StatusCodes::NOT_FOUND, "Endpoint not found", null);
+});
 
 Flight::start();
-
-
-
-/*
-
-
-use App\Lobby;
-use App\Account;
-
-
-$larp_db = $client->larp;
-
-Flight::route('/account/signin', function () {
-    $email = Flight::request()->data->email;
-    $password = Flight::request()->data->password;
-    $account = Account::SignIn($email, $password);
-    if ($account == null) {
-        Flight::ret(401, "Username or password incorrect");
-    } else {
-        Flight::ret(200, "OK", $account->info());
-    }
-});
-
-
-Flight::route('/lobby/@lobby_id:[0-9a-z]{24}(/@operation)', function ($lobby_id, $operation) {
-    Flight::authenticate();
-    Lobby::Lobby(["lobby_id" => $lobby_id], $operation);
-});
-
-
-Flight::route('/account', function () {
-    Flight::authenticate();
-    Flight::ret(200, "OK", Account::$account->info());
-});
-
-Flight::route('/account/signout', function () {
-    Flight::authenticate();
-    Account::SignOut();
-    Flight::ret(200, "OK");
-});
-
-Flight::start();*/
-
