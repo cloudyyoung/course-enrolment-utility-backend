@@ -7,11 +7,10 @@ require "app/exception.php";
 
 use App\StatusCodes;
 use App\Section;
+use App\Instructor;
 use App\Faculty;
 use App\Course;
 use App\Account;
-
-
 
 // End point 1 - Account Log In
 Flight::route('PUT /api/account', function () {
@@ -46,7 +45,7 @@ Flight::route('GET /api/account', function () {
 
 // End point 4 - Instructor Information
 Flight::route('GET /api/instructor/@instructor_id:[0-9]{6}', function ($instructor_id) {
-    $result = Faculty::InstructorInformation($instructor_id);
+    $result = Instructor::InstructorInformation($instructor_id);
     if ($result === false) {
         Flight::ret(StatusCodes::NOT_FOUND, null, null);
     } else {

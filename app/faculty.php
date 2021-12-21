@@ -176,61 +176,6 @@ class Faculty
         return $result;
     }
 
-    //`T`.`title`, `P`.`phones`, `R`.`room`
-    //End point 4
-    public static function InstructorInformation($Instructor_id)
-    {
-
-        $sql = " SELECT `I`.`instructor_id`, `I`.`name`, `I`.`department_id`
-                FROM `instructor` AS `I`
-                WHERE `I`.`instructor_id` = '$Instructor_id'";
-
-        $sql1 = " SELECT `T`.`title`
-                FROM `instructor` AS `I`, `title` AS `T`
-                WHERE `I`.`instructor_id` = `T`.`instructor_id` AND `I`.`instructor_id` = '$Instructor_id'";
-
-        $sql2 = " SELECT `P`.`phones`
-                FROM `instructor` AS `I`, `phones` AS `P`
-                WHERE `I`.`instructor_id` = `P`.`instructor_id` AND `I`.`instructor_id` = '$Instructor_id'";
-
-        $sql3 = " SELECT `R`.`room`
-                FROM `instructor` AS `I`, `room` AS `R`
-                WHERE `I`.`instructor_id` = `R`.`instructor_id` AND `I`.`instructor_id` = '$Instructor_id'";
-
-        $result = Flight::mysql($sql);
-        $result1 = Flight::mysql($sql1);
-        $result2 = Flight::mysql($sql2);
-        $result3 = Flight::mysql($sql3);
-
-        $result = $result->fetch_all(MYSQLI_ASSOC);
-        $result = $result[0];
-        $result1 = $result1->fetch_all(MYSQLI_ASSOC);
-        $result2 = $result2->fetch_all(MYSQLI_ASSOC);
-        $result3 = $result3->fetch_all(MYSQLI_ASSOC);
-
-        $result["title"] = [];
-        $result["phones"] = [];
-        $result["room"] = [];
-
-        foreach ($result1 as &$insert) {
-            array_push($result["title"], $insert["title"]);
-        }
-
-
-        foreach ($result2 as &$insert) {
-            array_push($result["phones"], $insert["phones"]);
-        }
-
-
-        foreach ($result3 as &$insert) {
-            array_push($result["room"], $insert["room"]);
-        }
-
-        return $result;
-    }
-
-
-
 
     //End point 12
     public static function ProgramInformation($Program_ID)
