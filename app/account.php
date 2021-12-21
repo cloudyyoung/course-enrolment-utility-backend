@@ -257,28 +257,20 @@ class Account
     //End point 2
     public static function Signup($email, $password)
     {
-        $sql = "INSERT INTO `user` (`email`, `password`) VALUES ('$email','$password')";
+        $sql = "CALL `EP2_SignUp`('$email', '$password');";
         $result = Flight::mysql($sql);
         if (!$result) {
             throw new MySQLDatabaseQueryException();
         }
-
-
-        $sql = "SELECT `U`.`user_id`
-                FROM user as U
-                WHERE `U`.`email` = '$email'";
-
-        $result = Flight::mysql($sql);
+        
         $result = $result->fetch_all(MYSQLI_ASSOC);
+        if(count($result) == 0){
+            throw new InternalErrorException();
+        }
+
         $result = $result[0];
 
-        $user = $result["user_id"];
-
-        $sql = "INSERT INTO `student` (`user_id`) VALUES ('$user')";
-        Flight::mysql($sql);
-
-        $result["email"] = $email;
-        $result["password"] = $password;
+        $result["type"] = "student";
         return $result;
     }
 
