@@ -12,9 +12,7 @@ class Account
     //End point 1
     public static function LogIn($username, $password)
     {
-        $sql = "SELECT `U`.`user_id`, `U`.`email`
-                FROM `user` as `U`
-                WHERE `U`.`email` = '$username' AND `U`.`password` = '$password'";
+        $sql = "CALL `EP1_ LogIn`('$username', '$password');";
         $result = Flight::mysql($sql);
         if (!$result) {
             throw new MySQLDatabaseQueryException();
@@ -27,25 +25,12 @@ class Account
         }
 
         $result = $result[0];
-        $uid = $result["user_id"];
-
-        //check if the account is a student account
-        $sql2 = "SELECT *
-                FROM `student` as `S`
-                WHERE `S`.`user_id` = $uid";
-        $result2 = Flight::mysql($sql2);
-        $result2 = $result2->fetch_all(MYSQLI_ASSOC);
-
-        //if the account is NOT a student account
-        if (count($result2) == 0) {
-            $result["type"] = "admin";
-        } else {
-            $result["type"] = "student";
-        }
-
+        unset($result["password"]);
+        
         //set the session and return the result
         $_SESSION['user_id'] = $result['user_id'];
         $_SESSION['type'] = $result['type'];
+        
         return $result;
     }
 
