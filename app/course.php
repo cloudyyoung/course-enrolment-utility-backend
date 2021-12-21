@@ -9,110 +9,57 @@ use Flight;
 require 'vendor/autoload.php';
 class Course
 {
-  //End point 5
-  //Don;t forget to add the mongoDB part 
-  public static function CourseInformation($code, $number)
+  //End point 5.3 - course code and number
+  public static function CourseCodeNumber($code, $number)
   {
 
-    $sql = "SELECT *
-                FROM `course` as `C`
-                WHERE `C`.`code` = '$code' AND `C`.`number` = '$number'";
-
-    $sql1 = " SELECT `H`.`hours`
-                  FROM `hours` as `H`, `course` as `C`
-                  WHERE `C`.`course_id` = `H`.`course_id` AND 
-                        `C`.`code` = '$code' AND `C`.`number` = '$number'";
-
-    $sql2 = " SELECT `A`.`aka`
-                  FROM `course_aka` as `A`, `course` as `C`
-                  WHERE `C`.`course_id` = `A`.`course_id` AND 
-                        `C`.`code` = '$code' AND `C`.`number` = '$number'";
-
-    $sql3 = " SELECT `T`.`time_length`
-                  FROM `time_length` as `T`, `course` as `C`
-                  WHERE `C`.`course_id` = `T`.`course_id` AND 
-                        `C`.`code` = '$code' AND `C`.`number` = '$number'";
-
-
+    $sql = "CALL `EP5.3_CourseCodeNumber`('$code', $number);";
     $result = Flight::mysql($sql);
-    $result1 = Flight::mysql($sql1);
-    $result2 = Flight::mysql($sql2);
-    $result3 = Flight::mysql($sql3);
-
-    if (!$result || !$result1 || !$result2 || !$result3) {
-      return false;
+    if($result === false){
+      throw new MySQLDatabaseQueryException();
+    }else if($result->num_rows == 0){
+      throw new NotFoundException("Course not found");
     }
 
     $result = $result->fetch_all(MYSQLI_ASSOC);
     $result = $result[0];
-    $result1 = $result1->fetch_all(MYSQLI_ASSOC);
-    $result2 = $result2->fetch_all(MYSQLI_ASSOC);
-    $result3 = $result3->fetch_all(MYSQLI_ASSOC);
+    $course_key = strtoupper($code) . " " . $number;
 
-    $result["hours"] = [];
-    $result["aka"] = [];
-    $result["time_length"] = [];
-
-    foreach ($result1 as &$insert) {
-      array_push($result["hours"], $insert["hours"]);
+    $cursor = Flight::mongo(array('key' => $course_key));
+    $requisite = $cursor->toArray();
+    if(count($requisite) == 0){
+      throw new NotFoundException("Course not found");
     }
 
-
-    foreach ($result2 as &$insert) {
-      array_push($result["aka"], $insert["aka"]);
-    }
-
-
-    foreach ($result3 as &$insert) {
-      array_push($result["time_length"], $insert["time_length"]);
-    }
-
-
-    $key = $code . " " . $number;
-
-    //get the data from mongodb
-    $client = new \MongoDB\Client(
-      'mongodb+srv://ucalgary:ureqIynl0ZMm0GGr@cluster0.yoz3k.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
-    );
-    $database = $client->requisite;
-    $collection = $database->CPSC;
-    $cursor = $collection->find(array('key' => $key));
-    $requisite = $cursor->toArray()[0];
-
-    $result["prereq"] = json_decode($requisite["prerequisite"]);
-    $result["antireq"] = json_decode($requisite["antirequisite"]);
-    $result["coreq"] = json_decode($requisite["corequisite"]);
+    $requisite = $requisite[0];
+    $result["prerequisite_array"] = json_decode($requisite["prerequisite"]);
+    $result["antirequisite_array"] = json_decode($requisite["antirequisite"]);
+    $result["corequisite_array"] = json_decode($requisite["corequisite"]);
 
     return $result;
   }
 
 
-  //extra end points, get all courses
+  // End point 5.1 - all courses
   public static function AllCourses()
   {
-    $sql = "SELECT *
-                FROM `course` as `C`";
-
+    $sql = "CALL `EP5.1_AllCourses`();";
     $result = Flight::mysql($sql);
-
     if (!$result) {
-      return false;
+      throw new MySQLDatabaseQueryException();
     }
 
     $result = $result->fetch_all(MYSQLI_ASSOC);
     return $result;
   }
 
-  //extra end points, get all courses that has the same code
+  // End point 5.2 - all courses with given code
   public static function CoursesCode($code)
   {
-
-    $sql = "SELECT *
-                FROM `course` as `C` WHERE `C`.`code` = '$code'";
-
+    $sql = "CALL `EP5.2_CoursesCode`('$code');";
     $result = Flight::mysql($sql);
     if (!$result) {
-      return false;
+      throw new MySQLDatabaseQueryException();
     }
 
     $result = $result->fetch_all(MYSQLI_ASSOC);
@@ -146,7 +93,7 @@ class Course
 
     if (!$result || !$result1 || !$result2 || !$result3) {
       return false;
-    }else if ($result->num_rows == 0) {
+    } else if ($result->num_rows == 0) {
       return null;
     }
 

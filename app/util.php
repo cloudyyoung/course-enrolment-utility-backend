@@ -51,8 +51,8 @@ $mongo_connection = new \MongoDB\Client(
     'mongodb+srv://ucalgary:ureqIynl0ZMm0GGr@cluster0.yoz3k.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
 );
 $mongo_database = $mongo_connection->requisite->CPSC;
-Flight::map("mongo", function ($collection, $query = []) use ($mongo_database) {
-    return $mongo_database->$collection->find($query);
+Flight::map("mongo", function ($query = []) use ($mongo_database) {
+    return $mongo_database->find($query);
 });
 
 Flight::map("mysql_escape", function ($string) use ($mysql_connection) {

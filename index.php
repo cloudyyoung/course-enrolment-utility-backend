@@ -58,23 +58,17 @@ Flight::route('GET /api/instructor/@instructor_id:[0-9]{6}', function ($instruct
 Flight::route('GET /api/course(/@code:[A-Za-z]{3,4}(/@number:[0-9]{3}))', function ($code, $number) {
     //If Code and number are null then get all courses
     if ($code == null && $number == null) {
-        $result = Course::AllCourses();
+        Flight::handle("Course::AllCourses");
     }
 
     //if only course is given
     else if ($number == null) {
-        $result = Course::CoursesCode($code);
+        Flight::handle("Course::CoursesCode", $code);
     }
 
     //If both are given
     else {
-        $result = Course::CourseInformation($code, $number);
-    }
-
-    if ($result === false) {
-        Flight::ret(StatusCodes::NOT_FOUND, null, null);
-    } else {
-        Flight::ret(StatusCodes::OK, null, $result);
+        Flight::handle("Course::CourseCodeNumber", $code, $number);
     }
 });
 
