@@ -21,7 +21,7 @@ class Account
     {
         $sql = "CALL `EP1_ LogIn`('$username', '$password');";
         $result = Flight::mysql($sql);
-        if (!$result) {
+        if ($result === false) {
             throw new MySQLDatabaseQueryException();
         }else if ($result->num_rows == 0) {
             throw new IncorrectUsernameOrPasswordException();
@@ -50,7 +50,7 @@ class Account
         $sql = "CALL `EP3_AccountInformation`('$user_id');";
         $result = Flight::mysql($sql);
 
-        if(!$result) {
+        if ($result === false) {
             throw new MySQLDatabaseQueryException();
         } else if ($result->num_rows == 0) {
             throw new UnauthorizedAccessException();
@@ -244,7 +244,7 @@ class Account
     {
         $sql = "CALL `EP2_SignUp`('$email', '$password');";
         $result = Flight::mysql($sql);
-        if (!$result) {
+        if ($result === false) {
             // If mysql error is complaining about duplicated entry
             $message = Flight::get("mysql_connection")->error;
             if(str_starts_with($message, "Duplicate entry")){
@@ -274,7 +274,7 @@ class Account
                 FROM `enrolls`
                 WHERE `user_id` = '$currentID' AND `term` = '$term' AND `year` = '$year'";
         $result = Flight::mysql($sql);
-        if (!$result) {
+        if ($result === false) {
             return false;
         }
 
@@ -299,7 +299,7 @@ class Account
         $sql = "SELECT COUNT(*) AS `totalUsers`
                 FROM `user`";
         $result = Flight::mysql($sql);
-        if (!$result) {
+        if ($result === false) {
             return false;
         }
 

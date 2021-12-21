@@ -109,7 +109,7 @@ class Faculty
 
         $result = Flight::mysql($sql);
 
-        if (!$result) {
+        if ($result === false) {
             return false;
         }
 
@@ -168,7 +168,7 @@ class Faculty
 
         $result = Flight::mysql($sql);
 
-        if (!$result) {
+        if ($result === false) {
             return false;
         }
 
@@ -225,7 +225,7 @@ class Faculty
                 WHERE `P`.`contactable_id` = `E`.`contactable_id`";
 
         $result = Flight::mysql($sql);
-        if (!$result) {
+        if ($result === false) {
             return false;
         }
 
@@ -244,7 +244,7 @@ class Faculty
                FROM `concentration` AS `C`
                WHERE `C`.`program_id` = '$Program_ID'";
         $result = Flight::mysql($sql);
-        if (!$result) {
+        if ($result === false) {
             return false;
         }
 
@@ -259,7 +259,7 @@ class Faculty
         $sql = "SELECT `C`.`program_id`, `C`.`name`, `C`.`description`
                 FROM `concentration` AS `C`";
         $result = Flight::mysql($sql);
-        if (!$result) {
+        if ($result === false) {
             return false;
         }
 

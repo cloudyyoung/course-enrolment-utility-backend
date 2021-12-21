@@ -4,14 +4,12 @@ namespace App;
 
 use Flight;
 use App\MySQLDatabaseQueryException;
-use App\InternalErrorException;
-use App\IncorrectUsernameOrPasswordException;
 
 class Instructor {
     public static function InstructorInformation($instructor_id) {
         $sql = "CALL `EP4_InstructorInformation`('$instructor_id');";
         $result = Flight::mysql($sql);
-        if (!$result) {
+        if ($result === false) {
             throw new MySQLDatabaseQueryException();
         } else if ($result->num_rows == 0) {
             throw new NotFoundException("Instructor not found");

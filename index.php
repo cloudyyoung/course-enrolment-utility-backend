@@ -76,12 +76,7 @@ Flight::route('GET /api/course(/@course_id:[0-9]{4})', function ($course_id) {
 
 // End point 6 - Course Section Information
 Flight::route('GET /api/course/@code:[A-Za-z]{3,4}/@number:[0-9]{3}/section/@year:[0-9]{4}/@term', function ($code, $number, $year, $term) {
-    $result = section::SectionInformation($code, $number, $term, $year);
-    if ($result === false) {
-        Flight::ret(StatusCodes::NOT_FOUND, null, null);
-    } else {
-        Flight::ret(StatusCodes::OK, null, $result);
-    }
+    Flight::handle("Section::SectionInformation", $code, $number, $term, $year);
 });
 
 

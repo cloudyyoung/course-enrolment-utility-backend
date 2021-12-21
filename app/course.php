@@ -14,7 +14,7 @@ class Course
   {
     $sql = "CALL `EP5.1_AllCourses`();";
     $result = Flight::mysql($sql);
-    if (!$result) {
+    if ($result === false) {
       throw new MySQLDatabaseQueryException();
     }
 
@@ -28,7 +28,7 @@ class Course
   {
     $sql = "CALL `EP5.2_CoursesCode`('$code');";
     $result = Flight::mysql($sql);
-    if (!$result) {
+    if ($result === false) {
       throw new MySQLDatabaseQueryException();
     }
 
@@ -43,9 +43,9 @@ class Course
 
     $sql = "CALL `EP5.3_CourseCodeNumber`('$code', $number);";
     $result = Flight::mysql($sql);
-    if($result === false){
+    if ($result === false) {
       throw new MySQLDatabaseQueryException();
-    }else if($result->num_rows == 0){
+    } else if ($result->num_rows == 0) {
       throw new NotFoundException("Course not found");
     }
 
@@ -59,7 +59,7 @@ class Course
 
     $cursor = Flight::mongo(array('key' => $course_key));
     $requisite = $cursor->toArray();
-    if(count($requisite) == 0){
+    if (count($requisite) == 0) {
       throw new NotFoundException("Course not found");
     }
 

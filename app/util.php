@@ -19,7 +19,7 @@ Flight::map('ret', function ($code = StatusCodes::NO_CONTENT, $message = '', $ar
                 "details" => $array,
             )
         ));
-    } else if (!empty($array)) {
+    } else {
         Flight::json($array);
     }
 
