@@ -1,8 +1,6 @@
 <?php
 session_start();
 
-
-
 require __DIR__ . '/vendor/autoload.php';
 require "app/util.php";
 
@@ -11,6 +9,8 @@ use App\Section;
 use App\Faculty;
 use App\Course;
 use App\Account;
+
+
 
 //End Point 7
 Flight::route('GET /api/faculty(/@faculty_id:[0-9]{4})', function ($faculty_id) {
@@ -55,7 +55,6 @@ Flight::route('GET /api/instructor/@instructor_id:[0-9]{6}', function ($instruct
 });
 
 
-
 //End point 12
 Flight::route('GET /api/program(/@program_id:[0-9]{5})', function ($program_id) {
     if ($program_id == null) {
@@ -72,7 +71,6 @@ Flight::route('GET /api/program(/@program_id:[0-9]{5})', function ($program_id) 
 });
 
 
-
 //End point 11
 Flight::route('GET /api/program(/@program_id:[0-9]{5})/concentration', function ($program_id,) {
     if ($program_id == null) {
@@ -87,8 +85,6 @@ Flight::route('GET /api/program(/@program_id:[0-9]{5})/concentration', function 
         Flight::ret(StatusCodes::OK, null, $result);
     }
 });
-
-
 
 
 //End point 2
@@ -110,8 +106,6 @@ Flight::route('POST /api/account', function () {
 });
 
 
-
-
 //End point 9
 Flight::route('GET /api/account/student/plan/@year:[0-9]{4}/@term', function ($year, $term) {
 
@@ -125,8 +119,6 @@ Flight::route('GET /api/account/student/plan/@year:[0-9]{4}/@term', function ($y
         Flight::ret(StatusCodes::OK, null, $result);
     }
 });
-
-
 
 
 //End point 15
@@ -143,8 +135,6 @@ Flight::route('GET /api/account/admin/statistics', function () {
         Flight::ret(StatusCodes::OK, null, $result);
     }
 });
-
-
 
 
 //End point 5
@@ -177,7 +167,6 @@ Flight::route('GET /api/course(/@code:[A-Za-z]{3,4}(/@number:[0-9]{3}))', functi
 });
 
 
-
 //End point 5 with CID
 Flight::route('GET /api/course(/@course_id:[0-9]{4})', function ($course_id) {
 
@@ -196,7 +185,6 @@ Flight::route('GET /api/course(/@course_id:[0-9]{4})', function ($course_id) {
 });
 
 
-
 //End point 6
 Flight::route('GET /api/course/@code:[A-Za-z]{3,4}/@number:[0-9]{3}/section/@year:[0-9]{4}/@term', function ($code, $number, $year, $term) {
 
@@ -207,9 +195,6 @@ Flight::route('GET /api/course/@code:[A-Za-z]{3,4}/@number:[0-9]{3}/section/@yea
         Flight::ret(StatusCodes::OK, null, $result);
     }
 });
-
-
-
 
 
 //End point 1
@@ -226,7 +211,6 @@ Flight::route('PUT /api/account', function () {
         Flight::ret(200, "OK", $account);
     }
 });
-
 
 
 //End point 3
@@ -268,9 +252,7 @@ Flight::route('PUT /api/account/student', function () {
 });
 
 
-
 //End point 14
-
 Flight::route('PUT /api/account/student/plan/@year:[0-9]{4}/@term', function ($year, $term) {
 
     $course_id = Flight::put()["course_id"];
