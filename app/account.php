@@ -48,7 +48,7 @@ class Account
     }
 
     //End point 3
-    public static function Account_Information()
+    public static function AccountInformation()
     {
         $result = null;
 
@@ -77,7 +77,7 @@ class Account
 
     //End point 10
     //INCOMPLETE, DO LATER
-    public static function Student_Information()
+    public static function StudentInformation()
     {
         $result = null;
 

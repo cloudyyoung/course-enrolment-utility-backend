@@ -9,7 +9,7 @@ class section
     //INCOMPLETE, WILL DO LATER
     //Code and number is used for the primary key of the table course.
     //End point 6
-    public static function Section_Information($code, $number, $term, $year)
+    public static function SectionInformation($code, $number, $term, $year)
     {
         $code = strtoupper($code);
         $sql = "SELECT `course_id`, `term`, `year`, `name`, `time`, `note`, `room` FROM `section` NATURAL JOIN `course`
