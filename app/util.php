@@ -53,5 +53,6 @@ Flight::map("mongo", function ($collection, $query = []) use ($mongo_database) {
 });
 
 Flight::map("mysql_escape", function ($string) use ($mysql_connection) {
+    if($string == null) return null;
     return mysqli_real_escape_string($mysql_connection, $string);
 });
