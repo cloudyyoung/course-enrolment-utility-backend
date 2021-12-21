@@ -146,13 +146,11 @@ class Course
 
     if (!$result || !$result1 || !$result2 || !$result3) {
       return false;
-    }
-
-    $result = $result->fetch_all(MYSQLI_ASSOC);
-    if ($result->num_rows == 0) {
+    }else if ($result->num_rows == 0) {
       return null;
     }
 
+    $result = $result->fetch_all(MYSQLI_ASSOC);
     $result = $result[0];
     $result1 = $result1->fetch_all(MYSQLI_ASSOC);
     $result2 = $result2->fetch_all(MYSQLI_ASSOC);

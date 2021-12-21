@@ -23,14 +23,11 @@ class Account
         $result = Flight::mysql($sql);
         if (!$result) {
             throw new MySQLDatabaseQueryException();
-        }
-
-        //if the result is wrong or incorrect password or username then we terminate
-        $result = $result->fetch_all(MYSQLI_ASSOC);
-        if ($result->num_rows == 0) {
+        }else if ($result->num_rows == 0) {
             throw new IncorrectUsernameOrPasswordException();
         }
 
+        $result = $result->fetch_all(MYSQLI_ASSOC);
         $result = $result[0];
         unset($result["password"]);
         
