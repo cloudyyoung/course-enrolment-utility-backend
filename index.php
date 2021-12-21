@@ -21,7 +21,7 @@ Flight::route('PUT /api/account', function () {
     @$email = Flight::put()["email"];
     @$password = Flight::put()["password"];
 
-    Flight::handle("Account::Authenticate", $email, $password);
+    Flight::handle("Account::LogIn", $email, $password);
 });
 
 

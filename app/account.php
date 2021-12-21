@@ -10,7 +10,7 @@ use App\IncorrectUsernameOrPasswordException;
 class Account
 {
     //End point 1
-    public static function Authenticate($username, $password)
+    public static function LogIn($username, $password)
     {
         $sql = "SELECT `U`.`user_id`, `U`.`email`
                 FROM `user` as `U`
