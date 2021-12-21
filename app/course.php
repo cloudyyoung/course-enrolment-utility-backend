@@ -73,83 +73,37 @@ class Course
 
   public static function CourseInformation_CID($course_id)
   {
-    $sql = "SELECT *
-                FROM `course` as `C`
-                WHERE `C`.`course_id` = '$course_id'";
-
-    $sql1 = " SELECT `H`.`hours`
-                  FROM `hours` as `H`
-                  WHERE `H`.`course_id` = '$course_id' ";
-
-    $sql2 = " SELECT `A`.`aka`
-                  FROM `course_aka` as `A`
-                  WHERE `A`.`course_id` = '$course_id'";
-
-    $sql3 = " SELECT `T`.`time_length`
-                  FROM `time_length` as `T`
-                  WHERE `T`.`course_id` = '$course_id'";
-
+    $sql = "CALL `EP5.4_CourseId`($course_id);";
 
     $result = Flight::mysql($sql);
-    $result1 = Flight::mysql($sql1);
-    $result2 = Flight::mysql($sql2);
-    $result3 = Flight::mysql($sql3);
 
-    if (!$result || !$result1 || !$result2 || !$result3) {
-      return false;
+    if ($result === false) {
+      throw new MySQLDatabaseQueryException();
     } else if ($result->num_rows == 0) {
-      return null;
+      throw new NotFoundException("Course not found");
     }
 
     $result = $result->fetch_all(MYSQLI_ASSOC);
     $result = $result[0];
-    $result1 = $result1->fetch_all(MYSQLI_ASSOC);
-    $result2 = $result2->fetch_all(MYSQLI_ASSOC);
-    $result3 = $result3->fetch_all(MYSQLI_ASSOC);
 
-    $result["hours"] = [];
-    $result["aka"] = [];
-    $result["time_length"] = [];
-
-    foreach ($result1 as &$insert) {
-      array_push($result["hours"], $insert["hours"]);
-    }
-
-
-    foreach ($result2 as &$insert) {
-      array_push($result["aka"], $insert["aka"]);
-    }
-
-
-    foreach ($result3 as &$insert) {
-      array_push($result["time_length"], $insert["time_length"]);
-    }
-
-
-    //get code and number of the course
-    $sql = "SELECT `code`,`number`
-              FROM `course`
-              WHERE `course_id` = '$course_id'";
-
-    $CodeAndNumber = Flight::mysql($sql);
-    $CodeAndNumber = $CodeAndNumber->fetch_all(MYSQLI_ASSOC);
-    $CodeAndNumber = $CodeAndNumber[0];
+    $result = Flight::multivalue($result, "hours", "strval");
+    $result = Flight::multivalue($result, "aka", "strval");
+    $result = Flight::multivalue($result, "time_length", "strval");
 
     //create the course name with code and number 
-    $key = $CodeAndNumber['code'] . " " . $CodeAndNumber['number'];
+    $course_key = strtoupper($result['code']) . " " . $result['number'];
 
     //get the data from mongodb
-    $client = new \MongoDB\Client(
-      'mongodb+srv://ucalgary:ureqIynl0ZMm0GGr@cluster0.yoz3k.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
-    );
-    $database = $client->requisite;
-    $collection = $database->CPSC;
-    $cursor = $collection->find(array('key' => $key));
-    $requisite = $cursor->toArray()[0];
+    $cursor = Flight::mongo(array('key' => $course_key));
+    $requisite = $cursor->toArray();
+    if (count($requisite) == 0) {
+      throw new NotFoundException("Course not found");
+    }
 
-    $result["prereq"] = json_decode($requisite["prerequisite"]);
-    $result["antireq"] = json_decode($requisite["antirequisite"]);
-    $result["coreq"] = json_decode($requisite["corequisite"]);
+    $requisite = $requisite[0];
+    $result["prerequisite_array"] = json_decode($requisite["prerequisite"]);
+    $result["antirequisite_array"] = json_decode($requisite["antirequisite"]);
+    $result["corequisite_array"] = json_decode($requisite["corequisite"]);
 
     return $result;
   }
