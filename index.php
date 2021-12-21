@@ -317,7 +317,7 @@ Flight::route('GET /api/course(/@code:[A-Za-z]{3,4}(/@number:[0-9]{3}))', functi
         //If Code and number are null then get all courses
         if ($code == null && $number == null)
         {
-            $result = Course::All_Courses( $con);
+            $result = Course::AllCourses( $con);
         }
 
         //if only course is given
