@@ -3,6 +3,7 @@ session_start();
 
 require __DIR__ . '/vendor/autoload.php';
 require "app/util.php";
+require "app/exception.php";
 
 use App\StatusCodes;
 use App\Section;
@@ -14,35 +15,26 @@ use App\Account;
 
 // End point 1 - Account Log In
 Flight::route('PUT /api/account', function () {
-    $email = Flight::put()["email"];
-    $password = Flight::put()["password"];
+    $email = "";
+    $password = "";
+    
+    @$email = Flight::put()["email"];
+    @$password = Flight::put()["password"];
 
-    $account = Account::Authenticate($email, $password);
-    if ($account == null) {
-        Flight::ret(StatusCodes::FORBIDDEN, "Username or password incorrect");
-    } else if (!$account) {
-        Flight::ret(403, "Internal error", null);
-    } else {
-        Flight::ret(200, "OK", $account);
-    }
+    Flight::handle("Account::Authenticate", $email, $password);
 });
 
 
 // End point 2 - Account Sign Up
 Flight::route('POST /api/account', function () {
     //get the faculty_id by listening
-    $email = $_POST["email"];
-    $password = $_POST["password"];
+    $email = "";
+    $password = "";
+    
+    @$email = $_POST["email"];
+    @$password = $_POST["password"];
 
-    $email = Flight::mysql_escape($email);
-    $password = Flight::mysql_escape($password);
-
-    $result = Account::Account_Signup($email, $password);
-    if ($result === false) {
-        Flight::ret(StatusCodes::NOT_FOUND, "Email already exists.", null);
-    } else {
-        Flight::ret(StatusCodes::OK, null, $result);
-    }
+    Flight::handle("Account::SignUp", $email, $password);
 });
 
 

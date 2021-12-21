@@ -1,6 +1,8 @@
 <?php
 
 use App\StatusCodes;
+use App\InternalErrorException;
+use App\Exception;
 
 
 // RESTful
@@ -42,6 +44,7 @@ if (mysqli_connect_errno()) {
 Flight::map("mysql", function ($sql) use ($mysql_connection) {
     return mysqli_query($mysql_connection, $sql);
 });
+Flight::set("mysql_connection", $mysql_connection);
 
 // Connecting to MongoDB database
 $mongo_connection = new \MongoDB\Client(
@@ -55,4 +58,32 @@ Flight::map("mongo", function ($collection, $query = []) use ($mongo_database) {
 Flight::map("mysql_escape", function ($string) use ($mysql_connection) {
     if($string == null) return null;
     return mysqli_real_escape_string($mysql_connection, $string);
+});
+
+Flight::map("handle", function (string $handler, ...$args) {
+    $result = null;
+
+    // for each argument
+    foreach ($args as &$arg){
+        $arg = Flight::mysql_escape($arg);
+    }
+
+    try{
+        $handler = "App\\" . $handler;
+        if (!is_callable($handler)) {
+            $details = array(
+                "message" => "Defined handler is not callable",
+                "handler" => $handler,
+                "args" => $args
+            );
+            throw new InternalErrorException("Internal error", $details);
+        }
+        
+        $result = $handler(...$args);
+    } catch (Exception $e) {
+        Flight::ret($e->getCode(), $e->getMessage(), $e->getDetails());
+        die();
+    }
+
+    Flight::ret(StatusCodes::OK, null, $result);
 });

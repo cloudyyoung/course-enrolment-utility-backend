@@ -3,6 +3,9 @@
 namespace App;
 
 use Flight;
+use App\MySQLDatabaseQueryException;
+use App\InternalErrorException;
+use App\IncorrectUsernameOrPasswordException;
 
 class Account
 {
@@ -13,15 +16,14 @@ class Account
                 FROM `user` as `U`
                 WHERE `U`.`email` = '$username' AND `U`.`password` = '$password'";
         $result = Flight::mysql($sql);
-
         if (!$result) {
-            return false;
+            throw new MySQLDatabaseQueryException();
         }
 
         //if the result is wrong or incorrect password or username then we terminate
         $result = $result->fetch_all(MYSQLI_ASSOC);
         if (count($result) == 0) {
-            return null;
+            throw new IncorrectUsernameOrPasswordException();
         }
 
         $result = $result[0];
@@ -253,12 +255,12 @@ class Account
     }
 
     //End point 2
-    public static function Account_Signup($email, $password)
+    public static function Signup($email, $password)
     {
         $sql = "INSERT INTO `user` (`email`, `password`) VALUES ('$email','$password')";
         $result = Flight::mysql($sql);
         if (!$result) {
-            return false;
+            throw new MySQLDatabaseQueryException();
         }
 
 
