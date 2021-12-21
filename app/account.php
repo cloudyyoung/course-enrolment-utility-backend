@@ -2,19 +2,8 @@
 
 namespace App;
 
-//use MongoDB\Bson\ObjectId;
-//use Flight;
-
-//use App\Base;
-
 class Account
 {
-
-    public function __construct($object)
-    {
-
-    }
-
     //End point 1
     public static function Authenticate($username, $password, $con)
     {
@@ -23,14 +12,13 @@ class Account
                 WHERE `U`.`email` = '$username' AND `U`.`password` = '$password'";
         $result = mysqli_query($con, $sql);
 
-        if(!$result){
+        if (!$result) {
             return false;
         }
 
         //if the result is wrong or incorrect password or username then we terminate
         $result = $result->fetch_all(MYSQLI_ASSOC);
-        if (count($result) == 0)
-        {
+        if (count($result) == 0) {
             return null;
         }
 
@@ -40,17 +28,14 @@ class Account
         //check if the account is a student account
         $sql2 = "SELECT *
                 FROM `student` as `S`
-                WHERE `S`.`user_id` = $uid";        
-        $result2 = mysqli_query($con, $sql2);    
+                WHERE `S`.`user_id` = $uid";
+        $result2 = mysqli_query($con, $sql2);
         $result2 = $result2->fetch_all(MYSQLI_ASSOC);
 
         //if the account is NOT a student account
-        if (count($result2) == 0)
-        {
+        if (count($result2) == 0) {
             $result["type"] = "admin";
-        }
-        else
-        {
+        } else {
             $result["type"] = "student";
         }
 
@@ -64,16 +49,13 @@ class Account
     public static function Account_Information($con)
     {
         $result = null;
-        
-        if (isset($_SESSION['user_id']) == false)
-        {
+
+        if (isset($_SESSION['user_id']) == false) {
             return false;
-        }
-        else
-        {
+        } else {
             //get the current user's id and type
-            $currentID = $_SESSION['user_id'] ;
-            $currentType= $_SESSION['type'];
+            $currentID = $_SESSION['user_id'];
+            $currentType = $_SESSION['type'];
 
             //get the email of the user and account id
             $sql = "SELECT `U`.`user_id`, `U`.`email`
@@ -87,7 +69,6 @@ class Account
             //add the type into the result and return
             $result['type'] = $currentType;
             return $result;
-
         }
     }
 
@@ -97,14 +78,11 @@ class Account
     public static function Student_Information($con)
     {
         $result = null;
-        
+
         //return null if the user is NOT logged in or the user is NOT a student
-        if (isset($_SESSION['user_id']) == false)
-        {
+        if (isset($_SESSION['user_id']) == false) {
             return false;
-        }        
-        else if ($_SESSION['type']!= "student")
-        {
+        } else if ($_SESSION['type'] != "student") {
             return false;
         }
 
@@ -114,25 +92,25 @@ class Account
         //get all the major
         $sql = "SELECT `program_id` as major
                 FROM `major_in`
-                WHERE `user_id` = '$currentID'";   
-                
+                WHERE `user_id` = '$currentID'";
+
         //get all the minor 
         $sql1 = "SELECT `program_id` as minor
                 FROM `minor_in`
-                WHERE `user_id` = '$currentID'";  
+                WHERE `user_id` = '$currentID'";
 
         //get all the concentrations
         $sql2 = "SELECT `concentration_name`
                 FROM `concentrate_in`
-                WHERE `user_id` = '$currentID'";  
+                WHERE `user_id` = '$currentID'";
 
         //get all course taken
         //get course ID only
         $sql3 = "SELECT `course_id`
                 FROM `enrolls`
-                WHERE `user_id` = '$currentID'";  
+                WHERE `user_id` = '$currentID'";
 
-        $result_out=[];
+        $result_out = [];
         //get the results from the query and put them all the result 3
         $result = mysqli_query($con, $sql);
         $result1 = mysqli_query($con, $sql1);
@@ -143,71 +121,61 @@ class Account
         $result2 = $result2->fetch_all(MYSQLI_ASSOC);
         $result3 = $result3->fetch_all(MYSQLI_ASSOC);
 
-        
+
         $result_out["major"] = [];
         $result_out["minor"] = [];
         $result_out["concentration_name"] = [];
         $result_out["course_id"] = [];
 
-        foreach ($result as &$insert)
-        {
+        foreach ($result as &$insert) {
             array_push($result_out["major"], $insert["major"]);
-        }   
+        }
 
-        foreach ($result1 as &$insert)
-        {
+        foreach ($result1 as &$insert) {
             array_push($result_out["minor"], $insert["minor"]);
-        }  
+        }
 
-        foreach ($result2 as &$insert)
-        {
+        foreach ($result2 as &$insert) {
             array_push($result_out["concentration_name"], $insert["concentration_name"]);
-        }    
+        }
 
-        foreach ($result3 as &$insert)
-        {
+        foreach ($result3 as &$insert) {
             array_push($result_out["course_id"], $insert["course_id"]);
-        }     
+        }
         return $result_out;
-
-
     }
-
 
 
     //End point 13
     public static function SetMajorMinor($con, $major, $minor, $concentration)
     {
         $result = null;
-        
+
         //return null if the user is NOT logged in or the user is NOT a student
-        if (isset($_SESSION['user_id']) == false)
-        {
+        if (isset($_SESSION['user_id']) == false) {
             return false;
-        }        
-        else if ($_SESSION['type']!= "student")
-        {
+        } else if ($_SESSION['type'] != "student") {
             return false;
         }
 
         $currentID = $_SESSION['user_id'];
 
         //delete major in, minor in and concentrate in before setting:
-            $sql = "DELETE  FROM `major_in` 
+        $sql = "DELETE  FROM `major_in` 
                 WHERE `user_id` = '$currentID'";
-            mysqli_query($con, $sql);
+        mysqli_query($con, $sql);
 
-            $sql = "DELETE  FROM `minor_in` 
+        $sql = "DELETE  FROM `minor_in` 
                 WHERE `user_id` = '$currentID'";
-            mysqli_query($con, $sql);
+        mysqli_query($con, $sql);
 
-            $sql = "DELETE  FROM `concentrate_in` 
+        $sql = "DELETE  FROM `concentrate_in` 
                 WHERE `user_id` = '$currentID'";
-            mysqli_query($con, $sql);            
-        
+        mysqli_query($con, $sql);
+
 
         //insert each major and concentration one by one
-        if($major == null){
+        if ($major == null) {
             $major = "[]";
         }
         $major = json_decode($major);
@@ -217,8 +185,8 @@ class Account
             $sql = "INSERT INTO `major_in` (`user_id`, `program_id`) VALUES ('$currentID','$insert')";
             mysqli_query($con, $sql);
         }
-        
-        if($minor == null){
+
+        if ($minor == null) {
             $minor = "[]";
         }
         $minor = json_decode($minor);
@@ -228,10 +196,10 @@ class Account
             mysqli_query($con, $sql);
         }
 
-        if($concentration == null){
+        if ($concentration == null) {
             $concentration = "[]";
         }
-        
+
         $concentration = json_decode($concentration);
         $result["concentration"] = $concentration;
         foreach ($concentration as &$insert) {
@@ -242,7 +210,7 @@ class Account
         }
 
         //$result["major"] = $major;
-       // $result["minor"] = $minor;
+        // $result["minor"] = $minor;
         //$result["concentration"] = $concentration;
         return $result;
     }
@@ -251,148 +219,119 @@ class Account
     //End point 14
     public static function SetPlan($term, $year, $course_id, $con)
     {
-        if (isset($_SESSION['user_id']) == false)
-        {
+        if (isset($_SESSION['user_id']) == false) {
             return false;
-        }     
-        else if ($_SESSION['type']!= "student")
-        {
+        } else if ($_SESSION['type'] != "student") {
             return false;
         }
-        
+
         $currentID = $_SESSION['user_id'];
         $course_id = json_decode($course_id);
 
-        if($course_id == null){
+        if ($course_id == null) {
             $course_id = "[]";
         }
-        
+
         $sql = "DELETE  FROM `enrolls` 
                         WHERE `user_id` = '$currentID' AND `term` = '$term' AND `year` = '$year'";
 
-        if (!mysqli_query($con, $sql))
-        {
+        if (!mysqli_query($con, $sql)) {
             return false;
         }
 
         foreach ($course_id as &$insert) {
             $sql = "INSERT INTO `enrolls` (`user_id`,`course_id` ,`term`,`year`) VALUES ('$currentID','$insert','$term','$year')";
-            mysqli_query($con, $sql);            
-        }
-
-
-        $result_out = Array("course_id" => $course_id);
-        return $result_out;
-
-        //delete then write
-        /*
-        $result = null;
-        
-        //return null if the user is NOT logged in or the user is NOT a student
-        if (isset($_SESSION['user_id']) == false)
-        {
-            return $result;
-        }        
-        else if ($_SESSION['type']!= "student")
-        {
-            return $result;
-        }
-
-        $currentID = $_SESSION['user_id'];
-
-        foreach ($courses as &$insert)
-        {
-            $sql = "INSERT INTO `enrolls` (`user_id`, `course_id`, `term`, `year`) VALUES ('$currentID','$insert', '$term', '$year')";
             mysqli_query($con, $sql);
         }
 
-        $result["term"] = $term;
-        $result["year"] = $year;
-        $result["courses"] = $courses;
-        return $result;*/
 
-    }    
-
-
-}
-
-
-
-/*
-
-    private static $account_db;
-    public static $account;
-    private $exist;
-    public $account_id;
-    public $username;
-    private $password;
-    public $nickname;
-
-    public function __construct($object)
-    {
-        if (self::$account_db == null) {
-            self::$account_db = Flight::get("larp_db")->account;
-        }
-
-        if (is_array($object)) $object = (object) $object;
-
-        $account = null;
-        if (isset($object->account_id)) {
-            $account = self::$account_db->findOne(["_id" => new ObjectId($object->account_id)]);
-        } else if (isset($object->username)) {
-            $account = self::$account_db->findOne(["username" => $object->username]);
-        }
-
-        if ($account != null) {
-            $this->exist = true;
-            $this->account_id = (string)($account->_id);
-            $this->username = $account->username;
-            $this->password = $account->password;
-            $this->nickname = $account->nickname;
-        } else {
-            $this->exist = false;
-        }
+        $result_out = array("course_id" => $course_id);
+        return $result_out;
     }
 
-    public function dump()
+    //End point 2
+    public static function Account_Signup($email, $password, $con)
     {
-        return get_object_vars($this);
+        $sql = "INSERT INTO `user` (`email`, `password`) VALUES ('$email','$password')";
+        $result = mysqli_query($con, $sql);
+        if (!$result) {
+            return false;
+        }
+
+
+        $sql = "SELECT `U`.`user_id`
+                FROM user as U
+                WHERE `U`.`email` = '$email'";
+
+        $result = mysqli_query($con, $sql);
+        $result = $result->fetch_all(MYSQLI_ASSOC);
+        $result = $result[0];
+
+        $user = $result["user_id"];
+
+        $sql = "INSERT INTO `student` (`user_id`) VALUES ('$user')";
+        mysqli_query($con, $sql);
+
+        $result["email"] = $email;
+        $result["password"] = $password;
+        return $result;
     }
 
-    public static function SignIn($username, $password)
+    //End point 9
+    public static function Enroll_Plan($term, $year, $con)
     {
-        $account = new Account(["username" => $username]);
+        $currentID = $_SESSION['user_id'];
+        $sql = "SELECT `course_id`
+                FROM `enrolls`
+                WHERE `user_id` = '$currentID' AND `term` = '$term' AND `year` = '$year'";
+        $result = mysqli_query($con, $sql);
+        if (!$result) {
+            return false;
+        }
 
-        if (!$account->exist || $account->password != $password) {
+        $result = $result->fetch_all(MYSQLI_ASSOC);
+        $result_out_list = [];
+        foreach ($result as &$insert) {
+            array_push($result_out_list, $insert["course_id"]);
+        }
+        $result_out = array("course_id" => $result_out_list);
+
+        return $result_out;
+    }
+
+    //End point 15
+    public static function View_Stat($con)
+    {
+        $type = $_SESSION["type"];
+        if ($type != "admin") {
             return null;
         }
 
-        self::$account = $account;
-        $_SESSION["account_id"] = $account->account_id;
-
-        return $account;
-    }
-
-    public static function Authenticate()
-    {
-        if (!isset($_SESSION["account_id"])) {
+        $sql = "SELECT COUNT(*) AS `totalUsers`
+                FROM `user`";
+        $result = mysqli_query($con, $sql);
+        if (!$result) {
             return false;
         }
 
-        $account_id = $_SESSION["account_id"];
-        $account = new Account(["account_id" => new ObjectId($account_id)]);
-
-        if (!$account->exist) {
+        $sql = "SELECT COUNT(*) AS `totalCourses`
+                FROM `course`";
+        $result1 = mysqli_query($con, $sql);
+        if (!$result1) {
             return false;
         }
 
-        self::$account = $account;
-        return true;
-    }
+        $result = $result->fetch_all(MYSQLI_ASSOC);
+        $result = $result[0];
 
-    public static function SignOut()
-    {
-        $_SESSION["account_id"] = null;
+        $result1 = $result1->fetch_all(MYSQLI_ASSOC);
+        $result1 = $result1[0];
+
+        $result_out = array(
+            "totalUsers" => $result["totalUsers"],
+            "totalCourses" => $result1["totalCourses"]
+        );
+
+        return $result_out;
     }
 }
-*/

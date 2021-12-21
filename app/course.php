@@ -7,11 +7,6 @@ namespace App;
 require 'vendor/autoload.php';
 class Course
 {
-
-  public function __construct($object)
-  {
-  }
-
   //End point 5
   //Don;t forget to add the mongoDB part 
   public static function CourseInformation($code, $number, $con)
@@ -112,7 +107,7 @@ class Course
 
     $sql = "SELECT *
                 FROM `course` as `C` WHERE `C`.`code` = '$code'";
- 
+
     $result = mysqli_query($con, $sql);
     if (!$result) {
       return false;

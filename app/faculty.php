@@ -9,25 +9,14 @@ namespace App;
  *DONT FORGET TO CHANGE THE TABLE NAME AND ATTRIBUTES TO MATCH THE MYSQL DATABASE
  */
 
-class Faculty 
+class Faculty
 {
-    public function __construct($object)
-    {
-        
-    }
-
-//FROM `faculty` AS `F`, `aka` AS `A`, `phone` AS `P`, `website` AS `W`, `room(contactable),` AS `R`, `email` AS `E`
-
-
-    public static function process_info_contactable($result, $result1, $result2, $result3,$result4 ,$result5 )
+    private static function process_info_contactable($result, $result1, $result2, $result3, $result4, $result5)
     {
         //if one of them is incorrect then return false
-        if (!$result || !$result1 || !$result2 || !$result3 || !$result4 || !$result5)
-        {
-          return false;
+        if (!$result || !$result1 || !$result2 || !$result3 || !$result4 || !$result5) {
+            return false;
         }
-
-
 
         //transform the result into readable formats
         $result = $result->fetch_all(MYSQLI_ASSOC);
@@ -46,39 +35,34 @@ class Faculty
         $result["email"] = [];
 
 
-        foreach ($result1 as &$insert)
-        {
-          array_push($result["aka"], $insert["aka"]);
+        foreach ($result1 as &$insert) {
+            array_push($result["aka"], $insert["aka"]);
         }
 
 
-        foreach ($result2 as &$insert)
-        {
-          array_push($result["phone"], $insert["phone"]);
+        foreach ($result2 as &$insert) {
+            array_push($result["phone"], $insert["phone"]);
         }
 
 
-        foreach ($result3 as &$insert)
-        {
-          array_push($result["website"], $insert["website"]);
+        foreach ($result3 as &$insert) {
+            array_push($result["website"], $insert["website"]);
         }
 
 
-        foreach ($result4 as &$insert)
-        {
-          array_push($result["room"], $insert["room"]);
+        foreach ($result4 as &$insert) {
+            array_push($result["room"], $insert["room"]);
         }
 
-        foreach ($result5 as &$insert)
-        {
-          array_push($result["email"], $insert["email"]);
+        foreach ($result5 as &$insert) {
+            array_push($result["email"], $insert["email"]);
         }
 
         return $result;
     }
 
     //End point 7
-    public static function Faculty_Information($faculty_id,  $con)
+    public static function FacultyInformation($faculty_id,  $con)
     {
         //get all components
         $sql = "SELECT `F`.`faculty_id`, `F`.`name`, `F`.`code`, `F`.`contactable_id`
@@ -103,9 +87,9 @@ class Faculty
 
         $sql5 = "   SELECT `E`.`email`
                     FROM `email` AS `E`, `faculty` AS `F`
-                    WHERE `E`.`email` = `F`.`contactable_id` AND `F`.`faculty_id` = '$faculty_id'";    
-                    
-                    
+                    WHERE `E`.`email` = `F`.`contactable_id` AND `F`.`faculty_id` = '$faculty_id'";
+
+
         //get the result of the query for each components
         $result = mysqli_query($con, $sql);
         $result1 = mysqli_query($con, $sql1);
@@ -113,8 +97,7 @@ class Faculty
         $result3 = mysqli_query($con, $sql3);
         $result4 = mysqli_query($con, $sql4);
         $result5 = mysqli_query($con, $sql5);
-        return (faculty::process_info_contactable($result, $result1, $result2, $result3,$result4 ,$result5 ));
-        
+        return (faculty::process_info_contactable($result, $result1, $result2, $result3, $result4, $result5));
     }
 
     //extra end point for end point 7
@@ -122,22 +105,21 @@ class Faculty
     {
         $sql = "SELECT `F`.`faculty_id`, `F`.`name`, `F`.`code`, `F`.`contactable_id`
                 FROM `faculty` AS `F`";
-        
+
         $result = mysqli_query($con, $sql);
 
-        if (!$result)
-        {
+        if (!$result) {
             return false;
         }
 
         $result = $result->fetch_all(MYSQLI_ASSOC);
         return $result;
-    }    
+    }
 
 
 
     //End point 8
-    public static function Department_Information($department_id, $con)
+    public static function DepartmentInformation($department_id, $con)
     {
         $sql = "SELECT *
                 FROM `department` AS `D`
@@ -161,9 +143,9 @@ class Faculty
 
         $sql5 = "   SELECT `E`.`email`
                     FROM `email` AS `E`, `department` AS `D`
-                    WHERE `E`.`email` = `D`.`contactable_id` AND `D`.`department_id` = '$department_id'";    
-                    
-                    
+                    WHERE `E`.`email` = `D`.`contactable_id` AND `D`.`department_id` = '$department_id'";
+
+
         //get the result of the query for each components
         $result = mysqli_query($con, $sql);
         $result1 = mysqli_query($con, $sql1);
@@ -171,8 +153,7 @@ class Faculty
         $result3 = mysqli_query($con, $sql3);
         $result4 = mysqli_query($con, $sql4);
         $result5 = mysqli_query($con, $sql5);
-        return (faculty::process_info_contactable($result, $result1, $result2, $result3,$result4 ,$result5 ));
-        
+        return (faculty::process_info_contactable($result, $result1, $result2, $result3, $result4, $result5));
     }
 
 
@@ -186,39 +167,35 @@ class Faculty
 
         $result = mysqli_query($con, $sql);
 
-        if (!$result)
-        {
+        if (!$result) {
             return false;
         }
 
         $result = $result->fetch_all(MYSQLI_ASSOC);
         return $result;
-
-
-        
-    }    
+    }
 
     //`T`.`title`, `P`.`phones`, `R`.`room`
     //End point 4
-    public static function Instructor_Information($Instructor_id, $con)
+    public static function InstructorInformation($Instructor_id, $con)
     {
 
-        $sql =" SELECT `I`.`instructor_id`, `I`.`name`, `I`.`department_id`
+        $sql = " SELECT `I`.`instructor_id`, `I`.`name`, `I`.`department_id`
                 FROM `instructor` AS `I`
                 WHERE `I`.`instructor_id` = '$Instructor_id'";
-        
-        $sql1 =" SELECT `T`.`title`
+
+        $sql1 = " SELECT `T`.`title`
                 FROM `instructor` AS `I`, `title` AS `T`
                 WHERE `I`.`instructor_id` = `T`.`instructor_id` AND `I`.`instructor_id` = '$Instructor_id'";
-                
-        $sql2 =" SELECT `P`.`phones`
+
+        $sql2 = " SELECT `P`.`phones`
                 FROM `instructor` AS `I`, `phones` AS `P`
                 WHERE `I`.`instructor_id` = `P`.`instructor_id` AND `I`.`instructor_id` = '$Instructor_id'";
-                
-        $sql3 =" SELECT `R`.`room`
+
+        $sql3 = " SELECT `R`.`room`
                 FROM `instructor` AS `I`, `room` AS `R`
                 WHERE `I`.`instructor_id` = `R`.`instructor_id` AND `I`.`instructor_id` = '$Instructor_id'";
-                
+
         $result = mysqli_query($con, $sql);
         $result1 = mysqli_query($con, $sql1);
         $result2 = mysqli_query($con, $sql2);
@@ -234,21 +211,18 @@ class Faculty
         $result["phones"] = [];
         $result["room"] = [];
 
-        foreach ($result1 as &$insert)
-        {
-          array_push($result["title"], $insert["title"]);
+        foreach ($result1 as &$insert) {
+            array_push($result["title"], $insert["title"]);
         }
 
 
-        foreach ($result2 as &$insert)
-        {
-          array_push($result["phones"], $insert["phones"]);
+        foreach ($result2 as &$insert) {
+            array_push($result["phones"], $insert["phones"]);
         }
 
 
-        foreach ($result3 as &$insert)
-        {
-          array_push($result["room"], $insert["room"]);
+        foreach ($result3 as &$insert) {
+            array_push($result["room"], $insert["room"]);
         }
 
         return $result;
@@ -258,7 +232,7 @@ class Faculty
 
 
     //End point 12
-    public static function Program_Information($Program_ID, $con)
+    public static function ProgramInformation($Program_ID, $con)
     {
 
         $sql = "SELECT `P`.`program_id`, `P`.`name`, `P`.`code`, `P`.`department_id`
@@ -283,7 +257,7 @@ class Faculty
 
         $sql5 = "   SELECT `E`.`email`
                     FROM `email` AS `E`,`program` AS `Pa`
-                    WHERE `E`.`email` = `P`.`contactable_id` AND `Pa`.`program_id` = '$Program_ID'";    
+                    WHERE `E`.`email` = `P`.`contactable_id` AND `Pa`.`program_id` = '$Program_ID'";
 
         $result = mysqli_query($con, $sql);
         //get the result of the query for each components
@@ -293,7 +267,7 @@ class Faculty
         $result3 = mysqli_query($con, $sql3);
         $result4 = mysqli_query($con, $sql4);
         $result5 = mysqli_query($con, $sql5);
-        return (faculty::process_info_contactable($result, $result1, $result2, $result3,$result4 ,$result5 ));
+        return (faculty::process_info_contactable($result, $result1, $result2, $result3, $result4, $result5));
     }
 
     //Extra end point for End point 12
@@ -305,8 +279,7 @@ class Faculty
                 WHERE `P`.`contactable_id` = `E`.`contactable_id`";
 
         $result = mysqli_query($con, $sql);
-        if (!$result)
-        {
+        if (!$result) {
             return false;
         }
 
@@ -316,145 +289,35 @@ class Faculty
     }
 
 
-
-
-
-
-
     //End point 11
-   public static function ConcentrationForProgram($Program_ID,$con)
-   {
+    public static function ConcentrationForProgram($Program_ID, $con)
+    {
 
 
-       $sql = "SELECT `C`.`program_id`, `C`.`name`, `C`.`description`
+        $sql = "SELECT `C`.`program_id`, `C`.`name`, `C`.`description`
                FROM `concentration` AS `C`
                WHERE `C`.`program_id` = '$Program_ID'";
-       $result = mysqli_query($con, $sql);
-       if (!$result)
-       {
-           return false;
-       }
+        $result = mysqli_query($con, $sql);
+        if (!$result) {
+            return false;
+        }
 
-       $result = $result->fetch_all(MYSQLI_ASSOC);
-       return $result;
-   }
+        $result = $result->fetch_all(MYSQLI_ASSOC);
+        return $result;
+    }
 
 
     //Extra end point for end point 11
     public static function AllConcentration($con)
     {
-
-
         $sql = "SELECT `C`.`program_id`, `C`.`name`, `C`.`description`
                 FROM `concentration` AS `C`";
         $result = mysqli_query($con, $sql);
-        if (!$result)
-        {
+        if (!$result) {
             return false;
         }
 
         $result = $result->fetch_all(MYSQLI_ASSOC);
         return $result;
     }
-
-
-    //End point 2
-    public static function Account_Signup($email, $password, $con)
-    {                                                            
-        $sql = "INSERT INTO `user` (`email`, `password`) VALUES ('$email','$password')";
-        $result = mysqli_query($con, $sql);
-        if (!$result)
-        {
-            return false;
-        }
-
-
-        $sql = "SELECT `U`.`user_id`
-                FROM user as U
-                WHERE `U`.`email` = '$email'";
-
-        $result = mysqli_query($con, $sql);
-        $result = $result->fetch_all(MYSQLI_ASSOC);
-        $result = $result[0];
-
-        $user = $result["user_id"];
-
-        $sql = "INSERT INTO `student` (`user_id`) VALUES ('$user')";
-        mysqli_query($con, $sql);
-
-        $result["email"] = $email;
-        $result["password"] = $password;
-        return $result;
-    }
-
-
-
-    
-    //End point 9
-    public static function Enroll_Plan($term, $year, $con)
-    {
-        $currentID = $_SESSION['user_id'];
-        $sql = "SELECT `course_id`
-                FROM `enrolls`
-                WHERE `user_id` = '$currentID' AND `term` = '$term' AND `year` = '$year'";
-        $result = mysqli_query($con, $sql);
-        if (!$result)
-        {
-            return false;
-        }
-
-        $result = $result->fetch_all(MYSQLI_ASSOC);
-        $result_out_list = [];
-        foreach($result as &$insert)
-        {
-            array_push($result_out_list, $insert["course_id"]);
-        }
-        $result_out = Array("course_id" => $result_out_list);
- 
-        return $result_out;
-    }
-
-
-
-
-    //End point 15
-    public static function View_Stat($con)
-    {
-        $type = $_SESSION["type"];
-        if($type != "admin"){
-            return null;
-        }
-
-        $sql = "SELECT COUNT(*) AS `totalUsers`
-                FROM `user`";
-        $result = mysqli_query($con, $sql);
-        if (!$result)
-        {
-            return false;
-        }
-
-        $sql = "SELECT COUNT(*) AS `totalCourses`
-                FROM `course`";
-        $result1 = mysqli_query($con, $sql);
-        if (!$result1)
-        {
-            return false;
-        }
- 
-        $result = $result->fetch_all(MYSQLI_ASSOC);
-        $result = $result[0];
-
-        $result1 = $result1->fetch_all(MYSQLI_ASSOC);
-        $result1 = $result1[0];
-
-        $result_out = Array(
-            "totalUsers" => $result["totalUsers"],
-            "totalCourses" => $result1["totalCourses"]
-        );
-
-        return $result_out;           
-    }
-
-
-
 }
