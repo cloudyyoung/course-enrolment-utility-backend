@@ -89,7 +89,6 @@ Flight::route('GET /api/program(/@program_id:[0-9]{5})/concentration', function 
 
 //End point 2
 Flight::route('POST /api/account', function () {
-
     //get the faculty_id by listening
     $email = $_POST["email"];
     $password = $_POST["password"];
@@ -108,7 +107,6 @@ Flight::route('POST /api/account', function () {
 
 //End point 9
 Flight::route('GET /api/account/student/plan/@year:[0-9]{4}/@term', function ($year, $term) {
-
     $year = Flight::mysql_escape($year);
     $term = Flight::mysql_escape($term);
 
@@ -123,9 +121,6 @@ Flight::route('GET /api/account/student/plan/@year:[0-9]{4}/@term', function ($y
 
 //End point 15
 Flight::route('GET /api/account/admin/statistics', function () {
-
-
-
     $result = Account::View_Stat();
     if ($result == null) {
         Flight::ret(StatusCodes::UNAUTHORIZED, "Unauthorized request", $_SESSION);
@@ -139,10 +134,6 @@ Flight::route('GET /api/account/admin/statistics', function () {
 
 //End point 5
 Flight::route('GET /api/course(/@code:[A-Za-z]{3,4}(/@number:[0-9]{3}))', function ($code, $number) {
-
-    //$course_id = $_GET["course_id"];
-
-    $result = null;
     //If Code and number are null then get all courses
     if ($code == null && $number == null) {
         $result = Course::AllCourses();
@@ -158,7 +149,6 @@ Flight::route('GET /api/course(/@code:[A-Za-z]{3,4}(/@number:[0-9]{3}))', functi
         $result = Course::CourseInformation($code, $number);
     }
 
-
     if ($result === false) {
         Flight::ret(StatusCodes::NOT_FOUND, null, null);
     } else {
@@ -169,10 +159,6 @@ Flight::route('GET /api/course(/@code:[A-Za-z]{3,4}(/@number:[0-9]{3}))', functi
 
 //End point 5 with CID
 Flight::route('GET /api/course(/@course_id:[0-9]{4})', function ($course_id) {
-
-    //$course_id = $_GET["course_id"];
-
-
     $result = Course::CourseInformation_CID($course_id);
 
     if ($result === false) {
@@ -187,7 +173,6 @@ Flight::route('GET /api/course(/@course_id:[0-9]{4})', function ($course_id) {
 
 //End point 6
 Flight::route('GET /api/course/@code:[A-Za-z]{3,4}/@number:[0-9]{3}/section/@year:[0-9]{4}/@term', function ($code, $number, $year, $term) {
-
     $result = section::Section_Information($code, $number, $term, $year);
     if ($result === false) {
         Flight::ret(StatusCodes::NOT_FOUND, null, null);
@@ -215,7 +200,6 @@ Flight::route('PUT /api/account', function () {
 
 //End point 3
 Flight::route('GET /api/account', function () {
-
     if (isset($_SESSION['user_id']) == false) {
         Flight::ret(401, "Please log in first.");
     }
@@ -254,7 +238,6 @@ Flight::route('PUT /api/account/student', function () {
 
 //End point 14
 Flight::route('PUT /api/account/student/plan/@year:[0-9]{4}/@term', function ($year, $term) {
-
     $course_id = Flight::put()["course_id"];
 
     if (isset($_SESSION['user_id']) == false) {
