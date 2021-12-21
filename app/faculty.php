@@ -62,6 +62,22 @@ class Faculty
         return $result;
     }
 
+    
+    // End point 7.1 - All faculty
+    public static function AllFaculty()
+    {
+        $sql = "CALL `EP7.1_AllFaculty`();";
+        $result = Flight::mysql($sql);
+
+        if ($result === false) {
+            throw new MySQLDatabaseQueryException();
+        }
+
+        $result = $result->fetch_all(MYSQLI_ASSOC);
+        return $result;
+    }
+
+
     //End point 7.2 - Faculty Information by Faculty ID
     public static function FacultyInformation($faculty_id)
     {
@@ -83,22 +99,6 @@ class Faculty
 
         return $result;
     }
-
-
-    // End point 7.1 - All faculty
-    public static function AllFaculty()
-    {
-        $sql = "CALL `EP7.1_AllFaculty`();";
-        $result = Flight::mysql($sql);
-
-        if ($result === false) {
-            throw new MySQLDatabaseQueryException();
-        }
-
-        $result = $result->fetch_all(MYSQLI_ASSOC);
-        return $result;
-    }
-
 
 
     //End point 8
