@@ -260,6 +260,7 @@ class Account
         }
 
         $result = $result[0];
+        unset($result["password"]);
 
         $result["type"] = "student";
         return $result;
