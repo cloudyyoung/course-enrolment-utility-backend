@@ -169,7 +169,7 @@ Flight::route('GET /api/program(/@program_id:[0-9]{5})', function ($program_id){
 
 
 //End point 11
-Flight::route('GET /api/program(/@program_id:[0-9]{5})/concentration', function ($program_id,){
+Flight::route('GET /api/program(/@program_id:[0-9]{5})/concentration', function ($program_id){
     
     //get the faculty_id by listening
     //$Program_id = $_GET["Program_ID"];
