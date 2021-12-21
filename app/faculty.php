@@ -65,40 +65,23 @@ class Faculty
     //End point 7.2 - Faculty Information by Faculty ID
     public static function FacultyInformation($faculty_id)
     {
-        //get all components
-        $sql = "SELECT `F`.`faculty_id`, `F`.`name`, `F`.`code`, `F`.`contactable_id`
-                FROM `faculty` AS `F`
-                WHERE `F`.`faculty_id` = '$faculty_id'";
-
-        $sql1 = "   SELECT `A`.`aka`
-                    FROM `aka` AS `A`, `faculty` AS `F`
-                    WHERE `A`.`contactable_id` = `F`.`contactable_id` AND `F`.`faculty_id` = '$faculty_id'";
-
-        $sql2 = "   SELECT `P`.`phone`
-                    FROM `phone` AS `P`, `faculty` AS `F`
-                    WHERE `P`.`contactable_id` = `F`.`contactable_id` AND `F`.`faculty_id` = '$faculty_id'";
-
-        $sql3 = "   SELECT `W`.`website`
-                    FROM `website` AS `W`, `faculty` AS `F`
-                    WHERE `W`.`contactable_id` = `F`.`contactable_id` AND `F`.`faculty_id` = '$faculty_id'";
-
-        $sql4 = "   SELECT `R`.`room`
-                    FROM `room(contactable)` AS `R`, `faculty` AS `F`
-                    WHERE `R`.`contactable_id` = `F`.`contactable_id` AND `F`.`faculty_id` =  '$faculty_id'";
-
-        $sql5 = "   SELECT `E`.`email`
-                    FROM `email` AS `E`, `faculty` AS `F`
-                    WHERE `E`.`email` = `F`.`contactable_id` AND `F`.`faculty_id` = '$faculty_id'";
-
-
-        //get the result of the query for each components
+        $sql = "CALL `EP7.2_FacultyInformation`('$faculty_id');";
         $result = Flight::mysql($sql);
-        $result1 = Flight::mysql($sql1);
-        $result2 = Flight::mysql($sql2);
-        $result3 = Flight::mysql($sql3);
-        $result4 = Flight::mysql($sql4);
-        $result5 = Flight::mysql($sql5);
-        return (faculty::process_info_contactable($result, $result1, $result2, $result3, $result4, $result5));
+        if ($result === false) {
+            throw new MySQLDatabaseQueryException();
+        }
+
+        $result = $result->fetch_all(MYSQLI_ASSOC);
+        foreach ($result as &$faculty) {
+            // Handle multiple value array
+            $faculty = Flight::multivalue($faculty, "aka", "strval");
+            $faculty = Flight::multivalue($faculty, "phone", "strval");
+            $faculty = Flight::multivalue($faculty, "website", "strval");
+            $faculty = Flight::multivalue($faculty, "room", "strval");
+            $faculty = Flight::multivalue($faculty, "email", "strval");
+        }
+
+        return $result;
     }
 
 
@@ -113,18 +96,6 @@ class Faculty
         }
 
         $result = $result->fetch_all(MYSQLI_ASSOC);
-
-        // Hide contactable_id field
-        foreach($result as &$faculty){
-            unset($faculty["contactable_id"]);
-
-            $faculty = Flight::multivalue($faculty, "aka", "strval");
-            $faculty = Flight::multivalue($faculty, "phone", "strval");
-            $faculty = Flight::multivalue($faculty, "website", "strval");
-            $faculty = Flight::multivalue($faculty, "room", "strval");
-            $faculty = Flight::multivalue($faculty, "email", "strval");
-        }
-
         return $result;
     }
 
