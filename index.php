@@ -83,7 +83,7 @@ Flight::route('GET /api/course/@code:[A-Za-z]{3,4}/@number:[0-9]{3}/section/@yea
 // End Point 7 - Faculty Information
 Flight::route('GET /api/faculty(/@faculty_id:[0-9]{4})', function ($faculty_id) {
     if ($faculty_id == null) {
-        $result = Faculty::AllFaculty();
+        Flight::handle("Faculty::AllFaculty");
     } else {
         $result = Faculty::FacultyInformation($faculty_id);
     }

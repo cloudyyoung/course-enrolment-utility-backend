@@ -101,19 +101,24 @@ class Faculty
         return (faculty::process_info_contactable($result, $result1, $result2, $result3, $result4, $result5));
     }
 
-    //extra end point for end point 7
+
+    // End point 7.1 - All faculty
     public static function AllFaculty()
     {
-        $sql = "SELECT `F`.`faculty_id`, `F`.`name`, `F`.`code`, `F`.`contactable_id`
-                FROM `faculty` AS `F`";
-
+        $sql = "CALL `EP7.1_AllFaculty`();";
         $result = Flight::mysql($sql);
 
         if ($result === false) {
-            return false;
+            throw new MySQLDatabaseQueryException();
         }
 
         $result = $result->fetch_all(MYSQLI_ASSOC);
+
+        // Hide contactable_id field
+        foreach($result as &$faculty){
+            unset($faculty["contactable_id"]);
+        }
+
         return $result;
     }
 
