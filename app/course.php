@@ -9,7 +9,35 @@ use Flight;
 require 'vendor/autoload.php';
 class Course
 {
-  //End point 5.3 - course code and number
+  // End point 5.1 - All Courses
+  public static function AllCourses()
+  {
+    $sql = "CALL `EP5.1_AllCourses`();";
+    $result = Flight::mysql($sql);
+    if (!$result) {
+      throw new MySQLDatabaseQueryException();
+    }
+
+    $result = $result->fetch_all(MYSQLI_ASSOC);
+    return $result;
+  }
+
+
+  // End point 5.2 - Courses Information by Course Code
+  public static function CoursesCode($code)
+  {
+    $sql = "CALL `EP5.2_CoursesCode`('$code');";
+    $result = Flight::mysql($sql);
+    if (!$result) {
+      throw new MySQLDatabaseQueryException();
+    }
+
+    $result = $result->fetch_all(MYSQLI_ASSOC);
+    return $result;
+  }
+
+
+  //End point 5.3 - Course Information by Course Key
   public static function CourseCodeNumber($code, $number)
   {
 
@@ -44,33 +72,7 @@ class Course
   }
 
 
-  // End point 5.1 - all courses
-  public static function AllCourses()
-  {
-    $sql = "CALL `EP5.1_AllCourses`();";
-    $result = Flight::mysql($sql);
-    if (!$result) {
-      throw new MySQLDatabaseQueryException();
-    }
-
-    $result = $result->fetch_all(MYSQLI_ASSOC);
-    return $result;
-  }
-
-  // End point 5.2 - all courses with given code
-  public static function CoursesCode($code)
-  {
-    $sql = "CALL `EP5.2_CoursesCode`('$code');";
-    $result = Flight::mysql($sql);
-    if (!$result) {
-      throw new MySQLDatabaseQueryException();
-    }
-
-    $result = $result->fetch_all(MYSQLI_ASSOC);
-    return $result;
-  }
-
-
+  // EP5.4 - Course Information by Course ID
   public static function CourseInformation_CID($course_id)
   {
     $sql = "CALL `EP5.4_CourseId`($course_id);";
