@@ -9,6 +9,13 @@ use App\IncorrectUsernameOrPasswordException;
 
 class Account
 {
+    private static function AuthenticateSession()
+    {
+        if (isset($_SESSION['user_id']) == false) {
+            throw new UnauthorizedAccessException();
+        }
+    }
+
     //End point 1
     public static function LogIn($username, $password)
     {
@@ -37,28 +44,24 @@ class Account
     //End point 3
     public static function AccountInformation()
     {
-        $result = null;
+        self::AuthenticateSession();
+        
+        //get the current user's id and type
+        $user_id = $_SESSION['user_id'];
 
-        if (isset($_SESSION['user_id']) == false) {
-            return false;
-        } else {
-            //get the current user's id and type
-            $currentID = $_SESSION['user_id'];
-            $currentType = $_SESSION['type'];
+        //get the email of the user and account id
+        $sql = "CALL `EP3_AccountInformation`('$user_id');";
+        $result = Flight::mysql($sql);
 
-            //get the email of the user and account id
-            $sql = "SELECT `U`.`user_id`, `U`.`email`
-            FROM `user` as `U`
-            WHERE `U`.`user_id` ='$currentID'";
-            $result = Flight::mysql($sql);
-
-            $result = $result->fetch_all(MYSQLI_ASSOC);
-            $result = $result[0];
-
-            //add the type into the result and return
-            $result['type'] = $currentType;
-            return $result;
+        if(!$result) {
+            throw new MySQLDatabaseQueryException();
+        } else if ($result->num_rows == 0) {
+            throw new UnauthorizedAccessException();
         }
+
+        $result = $result->fetch_all(MYSQLI_ASSOC);
+        $result = $result[0];
+        return $result;
     }
 
 

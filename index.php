@@ -40,16 +40,7 @@ Flight::route('POST /api/account', function () {
 
 // End point 3 - Account Information
 Flight::route('GET /api/account', function () {
-    if (isset($_SESSION['user_id']) == false) {
-        Flight::ret(401, "Please log in first.");
-    }
-
-    $account = Account::AccountInformation();
-    if ($account == null) {
-        Flight::ret(500, "Username or password incorrect");
-    } else {
-        Flight::ret(200, "OK", $account);
-    }
+    Flight::handle("Account::AccountInformation");
 });
 
 
