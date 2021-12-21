@@ -149,7 +149,7 @@ class Course
     }
 
     $result = $result->fetch_all(MYSQLI_ASSOC);
-    if (count($result) == 0) {
+    if ($result->num_rows == 0) {
       return null;
     }
 

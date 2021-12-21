@@ -27,7 +27,7 @@ class Account
 
         //if the result is wrong or incorrect password or username then we terminate
         $result = $result->fetch_all(MYSQLI_ASSOC);
-        if (count($result) == 0) {
+        if ($result->num_rows == 0) {
             throw new IncorrectUsernameOrPasswordException();
         }
 
