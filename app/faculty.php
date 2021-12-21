@@ -62,7 +62,7 @@ class Faculty
         return $result;
     }
 
-    //End point 7
+    //End point 7.2 - Faculty Information by Faculty ID
     public static function FacultyInformation($faculty_id)
     {
         //get all components
@@ -117,6 +117,12 @@ class Faculty
         // Hide contactable_id field
         foreach($result as &$faculty){
             unset($faculty["contactable_id"]);
+
+            $faculty = Flight::multivalue($faculty, "aka", "strval");
+            $faculty = Flight::multivalue($faculty, "phone", "strval");
+            $faculty = Flight::multivalue($faculty, "website", "strval");
+            $faculty = Flight::multivalue($faculty, "room", "strval");
+            $faculty = Flight::multivalue($faculty, "email", "strval");
         }
 
         return $result;
