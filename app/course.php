@@ -2,6 +2,8 @@
 
 namespace App;
 
+use Flight;
+
 //aka --> contractable
 //AKA --> course_Id
 require 'vendor/autoload.php';
@@ -9,7 +11,7 @@ class Course
 {
   //End point 5
   //Don;t forget to add the mongoDB part 
-  public static function CourseInformation($code, $number, $con)
+  public static function CourseInformation($code, $number)
   {
 
     $sql = "SELECT *
@@ -32,10 +34,10 @@ class Course
                         `C`.`code` = '$code' AND `C`.`number` = '$number'";
 
 
-    $result = mysqli_query($con, $sql);
-    $result1 = mysqli_query($con, $sql1);
-    $result2 = mysqli_query($con, $sql2);
-    $result3 = mysqli_query($con, $sql3);
+    $result = Flight::mysql($sql);
+    $result1 = Flight::mysql($sql1);
+    $result2 = Flight::mysql($sql2);
+    $result3 = Flight::mysql($sql3);
 
     if (!$result || !$result1 || !$result2 || !$result3) {
       return false;
@@ -86,12 +88,12 @@ class Course
 
 
   //extra end points, get all courses
-  public static function AllCourses($con)
+  public static function AllCourses()
   {
     $sql = "SELECT *
                 FROM `course` as `C`";
 
-    $result = mysqli_query($con, $sql);
+    $result = Flight::mysql($sql);
 
     if (!$result) {
       return false;
@@ -102,13 +104,13 @@ class Course
   }
 
   //extra end points, get all courses that has the same code
-  public static function CoursesCode($code, $con)
+  public static function CoursesCode($code)
   {
 
     $sql = "SELECT *
                 FROM `course` as `C` WHERE `C`.`code` = '$code'";
 
-    $result = mysqli_query($con, $sql);
+    $result = Flight::mysql($sql);
     if (!$result) {
       return false;
     }
@@ -118,7 +120,7 @@ class Course
   }
 
 
-  public static function CourseInformation_CID($course_id, $con)
+  public static function CourseInformation_CID($course_id)
   {
     $sql = "SELECT *
                 FROM `course` as `C`
@@ -137,10 +139,10 @@ class Course
                   WHERE `T`.`course_id` = '$course_id'";
 
 
-    $result = mysqli_query($con, $sql);
-    $result1 = mysqli_query($con, $sql1);
-    $result2 = mysqli_query($con, $sql2);
-    $result3 = mysqli_query($con, $sql3);
+    $result = Flight::mysql($sql);
+    $result1 = Flight::mysql($sql1);
+    $result2 = Flight::mysql($sql2);
+    $result3 = Flight::mysql($sql3);
 
     if (!$result || !$result1 || !$result2 || !$result3) {
       return false;
@@ -180,7 +182,7 @@ class Course
               FROM `course`
               WHERE `course_id` = '$course_id'";
 
-    $CodeAndNumber = mysqli_query($con, $sql);
+    $CodeAndNumber = Flight::mysql($sql);
     $CodeAndNumber = $CodeAndNumber->fetch_all(MYSQLI_ASSOC);
     $CodeAndNumber = $CodeAndNumber[0];
 

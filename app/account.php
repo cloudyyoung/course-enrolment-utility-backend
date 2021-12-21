@@ -2,15 +2,17 @@
 
 namespace App;
 
+use Flight;
+
 class Account
 {
     //End point 1
-    public static function Authenticate($username, $password, $con)
+    public static function Authenticate($username, $password)
     {
         $sql = "SELECT `U`.`user_id`, `U`.`email`
                 FROM `user` as `U`
                 WHERE `U`.`email` = '$username' AND `U`.`password` = '$password'";
-        $result = mysqli_query($con, $sql);
+        $result = Flight::mysql($sql);
 
         if (!$result) {
             return false;
@@ -29,7 +31,7 @@ class Account
         $sql2 = "SELECT *
                 FROM `student` as `S`
                 WHERE `S`.`user_id` = $uid";
-        $result2 = mysqli_query($con, $sql2);
+        $result2 = Flight::mysql($sql2);
         $result2 = $result2->fetch_all(MYSQLI_ASSOC);
 
         //if the account is NOT a student account
@@ -46,7 +48,7 @@ class Account
     }
 
     //End point 3
-    public static function Account_Information($con)
+    public static function Account_Information()
     {
         $result = null;
 
@@ -61,7 +63,7 @@ class Account
             $sql = "SELECT `U`.`user_id`, `U`.`email`
             FROM `user` as `U`
             WHERE `U`.`user_id` ='$currentID'";
-            $result = mysqli_query($con, $sql);
+            $result = Flight::mysql($sql);
 
             $result = $result->fetch_all(MYSQLI_ASSOC);
             $result = $result[0];
@@ -75,7 +77,7 @@ class Account
 
     //End point 10
     //INCOMPLETE, DO LATER
-    public static function Student_Information($con)
+    public static function Student_Information()
     {
         $result = null;
 
@@ -112,10 +114,10 @@ class Account
 
         $result_out = [];
         //get the results from the query and put them all the result 3
-        $result = mysqli_query($con, $sql);
-        $result1 = mysqli_query($con, $sql1);
-        $result2 = mysqli_query($con, $sql2);
-        $result3 = mysqli_query($con, $sql3);
+        $result = Flight::mysql($sql);
+        $result1 = Flight::mysql($sql1);
+        $result2 = Flight::mysql($sql2);
+        $result3 = Flight::mysql($sql3);
         $result = $result->fetch_all(MYSQLI_ASSOC);
         $result1 = $result1->fetch_all(MYSQLI_ASSOC);
         $result2 = $result2->fetch_all(MYSQLI_ASSOC);
@@ -147,7 +149,7 @@ class Account
 
 
     //End point 13
-    public static function SetMajorMinor($con, $major, $minor, $concentration)
+    public static function SetMajorMinor($major, $minor, $concentration)
     {
         $result = null;
 
@@ -163,15 +165,15 @@ class Account
         //delete major in, minor in and concentrate in before setting:
         $sql = "DELETE  FROM `major_in` 
                 WHERE `user_id` = '$currentID'";
-        mysqli_query($con, $sql);
+        Flight::mysql($sql);
 
         $sql = "DELETE  FROM `minor_in` 
                 WHERE `user_id` = '$currentID'";
-        mysqli_query($con, $sql);
+        Flight::mysql($sql);
 
         $sql = "DELETE  FROM `concentrate_in` 
                 WHERE `user_id` = '$currentID'";
-        mysqli_query($con, $sql);
+        Flight::mysql($sql);
 
 
         //insert each major and concentration one by one
@@ -183,7 +185,7 @@ class Account
         foreach ($major as &$insert) {
 
             $sql = "INSERT INTO `major_in` (`user_id`, `program_id`) VALUES ('$currentID','$insert')";
-            mysqli_query($con, $sql);
+            Flight::mysql($sql);
         }
 
         if ($minor == null) {
@@ -193,7 +195,7 @@ class Account
         $result["minor"] = $minor;
         foreach ($minor as &$insert) {
             $sql = "INSERT INTO `minor_in` (`user_id`, `program_id`) VALUES ('$currentID','$insert')";
-            mysqli_query($con, $sql);
+            Flight::mysql($sql);
         }
 
         if ($concentration == null) {
@@ -206,7 +208,7 @@ class Account
             $pid = $insert['program_id'];
             $name = $insert['name'];
             $sql = "INSERT INTO `concentrate_in` (`user_id`,`program_id`, `concentration_name`) VALUES ('$currentID', '$pid' ,' $name ')";
-            mysqli_query($con, $sql);
+            Flight::mysql($sql);
         }
 
         //$result["major"] = $major;
@@ -217,7 +219,7 @@ class Account
 
 
     //End point 14
-    public static function SetPlan($term, $year, $course_id, $con)
+    public static function SetPlan($term, $year, $course_id)
     {
         if (isset($_SESSION['user_id']) == false) {
             return false;
@@ -235,13 +237,14 @@ class Account
         $sql = "DELETE  FROM `enrolls` 
                         WHERE `user_id` = '$currentID' AND `term` = '$term' AND `year` = '$year'";
 
-        if (!mysqli_query($con, $sql)) {
+        $result = Flight::mysql($sql);
+        if ($result === false) {
             return false;
         }
 
         foreach ($course_id as &$insert) {
             $sql = "INSERT INTO `enrolls` (`user_id`,`course_id` ,`term`,`year`) VALUES ('$currentID','$insert','$term','$year')";
-            mysqli_query($con, $sql);
+            Flight::mysql($sql);
         }
 
 
@@ -250,10 +253,10 @@ class Account
     }
 
     //End point 2
-    public static function Account_Signup($email, $password, $con)
+    public static function Account_Signup($email, $password)
     {
         $sql = "INSERT INTO `user` (`email`, `password`) VALUES ('$email','$password')";
-        $result = mysqli_query($con, $sql);
+        $result = Flight::mysql($sql);
         if (!$result) {
             return false;
         }
@@ -263,14 +266,14 @@ class Account
                 FROM user as U
                 WHERE `U`.`email` = '$email'";
 
-        $result = mysqli_query($con, $sql);
+        $result = Flight::mysql($sql);
         $result = $result->fetch_all(MYSQLI_ASSOC);
         $result = $result[0];
 
         $user = $result["user_id"];
 
         $sql = "INSERT INTO `student` (`user_id`) VALUES ('$user')";
-        mysqli_query($con, $sql);
+        Flight::mysql($sql);
 
         $result["email"] = $email;
         $result["password"] = $password;
@@ -278,13 +281,13 @@ class Account
     }
 
     //End point 9
-    public static function Enroll_Plan($term, $year, $con)
+    public static function Enroll_Plan($term, $year)
     {
         $currentID = $_SESSION['user_id'];
         $sql = "SELECT `course_id`
                 FROM `enrolls`
                 WHERE `user_id` = '$currentID' AND `term` = '$term' AND `year` = '$year'";
-        $result = mysqli_query($con, $sql);
+        $result = Flight::mysql($sql);
         if (!$result) {
             return false;
         }
@@ -300,7 +303,7 @@ class Account
     }
 
     //End point 15
-    public static function View_Stat($con)
+    public static function View_Stat()
     {
         $type = $_SESSION["type"];
         if ($type != "admin") {
@@ -309,14 +312,14 @@ class Account
 
         $sql = "SELECT COUNT(*) AS `totalUsers`
                 FROM `user`";
-        $result = mysqli_query($con, $sql);
+        $result = Flight::mysql($sql);
         if (!$result) {
             return false;
         }
 
         $sql = "SELECT COUNT(*) AS `totalCourses`
                 FROM `course`";
-        $result1 = mysqli_query($con, $sql);
+        $result1 = Flight::mysql($sql);
         if (!$result1) {
             return false;
         }

@@ -31,3 +31,27 @@ Flight::map("put", function () {
     parse_str(file_get_contents("php://input"), $put);
     return $put;
 });
+
+
+// Connecting to MySQL database
+$mysql_connection = mysqli_connect("155.138.157.78", "ucalgary", "cv0V9c9ZqCf55g.0", "ucalgary");
+if (mysqli_connect_errno()) {
+    Flight::ret(StatusCodes::INTERNAL_SERVER_ERROR, "Server cannot establish connection with database", null);
+    die();
+}
+Flight::map("mysql", function ($sql) use ($mysql_connection) {
+    return mysqli_query($mysql_connection, $sql);
+});
+
+// Connecting to MongoDB database
+$mongo_connection = new \MongoDB\Client(
+    'mongodb+srv://ucalgary:ureqIynl0ZMm0GGr@cluster0.yoz3k.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
+);
+$mongo_database = $mongo_connection->requisite->CPSC;
+Flight::map("mongo", function ($collection, $query = []) use ($mongo_database) {
+    return $mongo_database->$collection->find($query);
+});
+
+Flight::map("mysql_escape", function ($string) use ($mysql_connection) {
+    return mysqli_real_escape_string($mysql_connection, $string);
+});

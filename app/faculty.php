@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Flight;
 
 //aka --> contractable
 //AKA --> course_Id
@@ -62,7 +63,7 @@ class Faculty
     }
 
     //End point 7
-    public static function FacultyInformation($faculty_id,  $con)
+    public static function FacultyInformation($faculty_id)
     {
         //get all components
         $sql = "SELECT `F`.`faculty_id`, `F`.`name`, `F`.`code`, `F`.`contactable_id`
@@ -91,22 +92,22 @@ class Faculty
 
 
         //get the result of the query for each components
-        $result = mysqli_query($con, $sql);
-        $result1 = mysqli_query($con, $sql1);
-        $result2 = mysqli_query($con, $sql2);
-        $result3 = mysqli_query($con, $sql3);
-        $result4 = mysqli_query($con, $sql4);
-        $result5 = mysqli_query($con, $sql5);
+        $result = Flight::mysql($sql);
+        $result1 = Flight::mysql($sql1);
+        $result2 = Flight::mysql($sql2);
+        $result3 = Flight::mysql($sql3);
+        $result4 = Flight::mysql($sql4);
+        $result5 = Flight::mysql($sql5);
         return (faculty::process_info_contactable($result, $result1, $result2, $result3, $result4, $result5));
     }
 
     //extra end point for end point 7
-    public static function AllFaculty($con)
+    public static function AllFaculty()
     {
         $sql = "SELECT `F`.`faculty_id`, `F`.`name`, `F`.`code`, `F`.`contactable_id`
                 FROM `faculty` AS `F`";
 
-        $result = mysqli_query($con, $sql);
+        $result = Flight::mysql($sql);
 
         if (!$result) {
             return false;
@@ -119,7 +120,7 @@ class Faculty
 
 
     //End point 8
-    public static function DepartmentInformation($department_id, $con)
+    public static function DepartmentInformation($department_id)
     {
         $sql = "SELECT *
                 FROM `department` AS `D`
@@ -147,25 +148,25 @@ class Faculty
 
 
         //get the result of the query for each components
-        $result = mysqli_query($con, $sql);
-        $result1 = mysqli_query($con, $sql1);
-        $result2 = mysqli_query($con, $sql2);
-        $result3 = mysqli_query($con, $sql3);
-        $result4 = mysqli_query($con, $sql4);
-        $result5 = mysqli_query($con, $sql5);
+        $result = Flight::mysql($sql);
+        $result1 = Flight::mysql($sql1);
+        $result2 = Flight::mysql($sql2);
+        $result3 = Flight::mysql($sql3);
+        $result4 = Flight::mysql($sql4);
+        $result5 = Flight::mysql($sql5);
         return (faculty::process_info_contactable($result, $result1, $result2, $result3, $result4, $result5));
     }
 
 
 
     //Extra end for end point 8
-    public static function AllDepartment($con)
+    public static function AllDepartment()
     {
         $sql = "SELECT `D`.`department_id`, `D`.`name`, `D`.`code`, `D`.`faculty_id`
                 FROM `department` AS `D`";
 
 
-        $result = mysqli_query($con, $sql);
+        $result = Flight::mysql($sql);
 
         if (!$result) {
             return false;
@@ -177,7 +178,7 @@ class Faculty
 
     //`T`.`title`, `P`.`phones`, `R`.`room`
     //End point 4
-    public static function InstructorInformation($Instructor_id, $con)
+    public static function InstructorInformation($Instructor_id)
     {
 
         $sql = " SELECT `I`.`instructor_id`, `I`.`name`, `I`.`department_id`
@@ -196,10 +197,10 @@ class Faculty
                 FROM `instructor` AS `I`, `room` AS `R`
                 WHERE `I`.`instructor_id` = `R`.`instructor_id` AND `I`.`instructor_id` = '$Instructor_id'";
 
-        $result = mysqli_query($con, $sql);
-        $result1 = mysqli_query($con, $sql1);
-        $result2 = mysqli_query($con, $sql2);
-        $result3 = mysqli_query($con, $sql3);
+        $result = Flight::mysql($sql);
+        $result1 = Flight::mysql($sql1);
+        $result2 = Flight::mysql($sql2);
+        $result3 = Flight::mysql($sql3);
 
         $result = $result->fetch_all(MYSQLI_ASSOC);
         $result = $result[0];
@@ -232,7 +233,7 @@ class Faculty
 
 
     //End point 12
-    public static function ProgramInformation($Program_ID, $con)
+    public static function ProgramInformation($Program_ID)
     {
 
         $sql = "SELECT `P`.`program_id`, `P`.`name`, `P`.`code`, `P`.`department_id`
@@ -259,26 +260,26 @@ class Faculty
                     FROM `email` AS `E`,`program` AS `Pa`
                     WHERE `E`.`email` = `P`.`contactable_id` AND `Pa`.`program_id` = '$Program_ID'";
 
-        $result = mysqli_query($con, $sql);
+        $result = Flight::mysql($sql);
         //get the result of the query for each components
-        $result = mysqli_query($con, $sql);
-        $result1 = mysqli_query($con, $sql1);
-        $result2 = mysqli_query($con, $sql2);
-        $result3 = mysqli_query($con, $sql3);
-        $result4 = mysqli_query($con, $sql4);
-        $result5 = mysqli_query($con, $sql5);
+        $result = Flight::mysql($sql);
+        $result1 = Flight::mysql($sql1);
+        $result2 = Flight::mysql($sql2);
+        $result3 = Flight::mysql($sql3);
+        $result4 = Flight::mysql($sql4);
+        $result5 = Flight::mysql($sql5);
         return (faculty::process_info_contactable($result, $result1, $result2, $result3, $result4, $result5));
     }
 
     //Extra end point for End point 12
-    public static function AllProgram($con)
+    public static function AllProgram()
     {
 
         $sql = "SELECT `P`.`program_id`, `P`.`name`, `P`.`code`, `P`.`department_id`
                 FROM `program` AS `P`
                 WHERE `P`.`contactable_id` = `E`.`contactable_id`";
 
-        $result = mysqli_query($con, $sql);
+        $result = Flight::mysql($sql);
         if (!$result) {
             return false;
         }
@@ -290,14 +291,14 @@ class Faculty
 
 
     //End point 11
-    public static function ConcentrationForProgram($Program_ID, $con)
+    public static function ConcentrationForProgram($Program_ID)
     {
 
 
         $sql = "SELECT `C`.`program_id`, `C`.`name`, `C`.`description`
                FROM `concentration` AS `C`
                WHERE `C`.`program_id` = '$Program_ID'";
-        $result = mysqli_query($con, $sql);
+        $result = Flight::mysql($sql);
         if (!$result) {
             return false;
         }
@@ -308,11 +309,11 @@ class Faculty
 
 
     //Extra end point for end point 11
-    public static function AllConcentration($con)
+    public static function AllConcentration()
     {
         $sql = "SELECT `C`.`program_id`, `C`.`name`, `C`.`description`
                 FROM `concentration` AS `C`";
-        $result = mysqli_query($con, $sql);
+        $result = Flight::mysql($sql);
         if (!$result) {
             return false;
         }
