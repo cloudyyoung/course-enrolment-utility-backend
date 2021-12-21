@@ -75,15 +75,7 @@ Flight::route('GET /api/course(/@code:[A-Za-z]{3,4}(/@number:[0-9]{3}))', functi
 
 // End point 5.4 - Course Information by Course_ID
 Flight::route('GET /api/course(/@course_id:[0-9]{4})', function ($course_id) {
-    $result = Course::CourseInformation_CID($course_id);
-
-    if ($result === false) {
-        Flight::ret(StatusCodes::NOT_FOUND, "Internal error occured", null);
-    } else if ($result == null) {
-        Flight::ret(StatusCodes::NOT_FOUND, "Course not FOUND", null);
-    } else {
-        Flight::ret(StatusCodes::OK, null, $result);
-    }
+    Flight::handle("Course::CourseInformation_CID", $course_id);
 });
 
 
