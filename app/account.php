@@ -245,6 +245,12 @@ class Account
         $sql = "CALL `EP2_SignUp`('$email', '$password');";
         $result = Flight::mysql($sql);
         if (!$result) {
+            // If mysql error is complaining about duplicated entry
+            $message = Flight::get("mysql_connection")->error;
+            if(str_starts_with($message, "Duplicate entry")){
+               throw new EmailAlreadyRegisteredException();
+            }
+            
             throw new MySQLDatabaseQueryException();
         }
         
