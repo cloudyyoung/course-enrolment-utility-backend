@@ -9,29 +9,6 @@ use Flight;
 require 'vendor/autoload.php';
 class Course
 {
-  private static function ParseArray($array, $key, $type){
-    $val = $array[$key];
-    if($val == null) return $array;
-    if ($val == "null") {
-      $array[$key] = null;
-      return $array;
-    }
-    
-    $arr = explode(",", $val);
-    $val2 = [];
-    foreach($arr as $a){
-      if($a == "null"){
-        $a = null;
-      }else{
-        $val2[] = $type($a);
-      }
-    }
-    
-    $array[$key] = $val2;
-    return $array;
-  }
-
-
   //End point 5.3 - course code and number
   public static function CourseCodeNumber($code, $number)
   {
@@ -46,9 +23,9 @@ class Course
 
     $result = $result->fetch_all(MYSQLI_ASSOC);
     $result = $result[0];
-    $result = self::ParseArray($result, "aka", "strval");
-    $result = self::ParseArray($result, "hours", "strval");
-    $result = self::ParseArray($result, "time_length", "strval");
+    $result = Flight::multivalue($result, "aka", "strval");
+    $result = Flight::multivalue($result, "hours", "strval");
+    $result = Flight::multivalue($result, "time_length", "strval");
 
     $course_key = strtoupper($code) . " " . $number;
 
