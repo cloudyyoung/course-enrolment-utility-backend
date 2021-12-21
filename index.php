@@ -45,12 +45,7 @@ Flight::route('GET /api/account', function () {
 
 // End point 4 - Instructor Information
 Flight::route('GET /api/instructor/@instructor_id:[0-9]{6}', function ($instructor_id) {
-    $result = Instructor::InstructorInformation($instructor_id);
-    if ($result === false) {
-        Flight::ret(StatusCodes::NOT_FOUND, null, null);
-    } else {
-        Flight::ret(StatusCodes::OK, null, $result);
-    }
+    Flight::handle("Instructor::InstructorInformation", $instructor_id);
 });
 
 

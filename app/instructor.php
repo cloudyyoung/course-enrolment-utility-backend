@@ -14,7 +14,7 @@ class Instructor {
         if (!$result) {
             throw new MySQLDatabaseQueryException();
         } else if ($result->num_rows == 0) {
-            throw new NotFoundException();
+            throw new NotFoundException("Instructor not found");
         }
         
         $result = $result->fetch_all(MYSQLI_ASSOC);
