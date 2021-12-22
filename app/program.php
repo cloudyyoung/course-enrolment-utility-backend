@@ -3,6 +3,7 @@
 namespace App;
 
 use Flight;
+use App\NotFoundException;
 use App\MySQLDatabaseQueryException;
 
 class Program extends Contactable
@@ -32,6 +33,8 @@ class Program extends Contactable
         $result = Flight::mysql($sql);
         if ($result === false) {
             throw new MySQLDatabaseQueryException();
+        }else if ($result->num_rows == 0) {
+            throw new NotFoundException("Program not found");
         }
 
         $result = $result->fetch_all(MYSQLI_ASSOC);
