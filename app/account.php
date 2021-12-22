@@ -89,6 +89,23 @@ class Account
 
         $result = $result->fetch_all(MYSQLI_ASSOC);
         $result = $result[0];
+        unset($result["password"]);
+        return $result;
+    }
+
+    
+    // End point 17
+    public static function ChangePassword($password){
+        self::AuthenticateSession();
+
+        $user_id = $_SESSION['user_id'];
+        $sql = "CALL `EP17_ChangePassword`('$user_id', '$password');";
+        $result = Flight::mysql($sql);
+        if ($result === false) {
+            throw new MySQLDatabaseQueryException();
+        }
+
+        $result = self::AccountInformation();
         return $result;
     }
 }

@@ -172,6 +172,12 @@ Flight::route('GET /api/account/admin/statistics', function () {
 });
 
 
+// End point 17
+Flight::route('PUT /api/account/password', function () {
+    $password = Flight::put()["password"];
+    Flight::handle("Account::ChangePassword", $password);
+});
+
 
 Flight::route("*", function () {
     Flight::ret(StatusCodes::NOT_FOUND, "Endpoint not found", null);
