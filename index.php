@@ -21,7 +21,6 @@ Flight::route('PUT /api/account', function () {
 
 // End point 2 - Account Sign Up
 Flight::route('POST /api/account', function () {
-    //get the faculty_id by listening
     $email = "";
     $password = "";
     
