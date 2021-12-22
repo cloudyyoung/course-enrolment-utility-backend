@@ -42,7 +42,7 @@ if ($mysql_connection->connect_error) {
     die();
 }
 Flight::map("mysql", function ($sql) use ($mysql_connection) {
-    return $mysql_connection->query($sql, MYSQLI_USE_RESULT);
+    return $mysql_connection->query($sql);
 });
 Flight::set("mysql_connection", $mysql_connection);
 
