@@ -198,14 +198,7 @@ Flight::route('PUT /api/account/student/plan/@year:[0-9]{4}/@term', function ($y
 
 // End point 15
 Flight::route('GET /api/account/admin/statistics', function () {
-    $result = Account::View_Stat();
-    if ($result == null) {
-        Flight::ret(StatusCodes::UNAUTHORIZED, "Unauthorized request", $_SESSION);
-    } else if ($result === false) {
-        Flight::ret(StatusCodes::NOT_FOUND, null, null);
-    } else {
-        Flight::ret(StatusCodes::OK, null, $result);
-    }
+    Flight::handle("Admin::WebsiteStatistics");
 });
 
 

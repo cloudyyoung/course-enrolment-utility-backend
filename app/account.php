@@ -9,7 +9,7 @@ use App\IncorrectUsernameOrPasswordException;
 
 class Account
 {
-    private static function AuthenticateSession()
+    protected static function AuthenticateSession()
     {
         if (isset($_SESSION['user_id']) == false) {
             throw new UnauthorizedAccessException();
@@ -284,42 +284,6 @@ class Account
             array_push($result_out_list, $insert["course_id"]);
         }
         $result_out = array("course_id" => $result_out_list);
-
-        return $result_out;
-    }
-
-    //End point 15
-    public static function View_Stat()
-    {
-        $type = $_SESSION["type"];
-        if ($type != "admin") {
-            return null;
-        }
-
-        $sql = "SELECT COUNT(*) AS `totalUsers`
-                FROM `user`";
-        $result = Flight::mysql($sql);
-        if ($result === false) {
-            return false;
-        }
-
-        $sql = "SELECT COUNT(*) AS `totalCourses`
-                FROM `course`";
-        $result1 = Flight::mysql($sql);
-        if (!$result1) {
-            return false;
-        }
-
-        $result = $result->fetch_all(MYSQLI_ASSOC);
-        $result = $result[0];
-
-        $result1 = $result1->fetch_all(MYSQLI_ASSOC);
-        $result1 = $result1[0];
-
-        $result_out = array(
-            "totalUsers" => $result["totalUsers"],
-            "totalCourses" => $result1["totalCourses"]
-        );
 
         return $result_out;
     }
