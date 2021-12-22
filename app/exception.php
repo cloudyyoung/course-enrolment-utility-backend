@@ -5,7 +5,6 @@ namespace App;
 use \Flight;
 use App\StatusCodes;
 
-
 class Exception extends \Exception{
     private $details = null;
     public function __construct(string $message, int $code, array $details = null) {

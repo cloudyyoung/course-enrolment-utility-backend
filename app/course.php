@@ -3,10 +3,10 @@
 namespace App;
 
 use Flight;
+use App\NotFoundException;
+use App\MySQLDatabaseQueryException;
 
-//aka --> contractable
-//AKA --> course_Id
-require 'vendor/autoload.php';
+
 class Course
 {
   // End point 5.1 - All Courses

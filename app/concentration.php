@@ -3,6 +3,7 @@
 namespace App;
 
 use Flight;
+use App\MySQLDatabaseQueryException;
 
 class Concentration
 {

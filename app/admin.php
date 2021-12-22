@@ -4,8 +4,8 @@ namespace App;
 
 use Flight;
 use App\UnauthorizedAccessException;
-use App\NotFoundException;
 use App\MySQLDatabaseQueryException;
+use App\InternalErrorException;
 
 class Admin extends Account {
     protected static function AuthenticateSession(){

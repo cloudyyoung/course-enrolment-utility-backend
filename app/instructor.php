@@ -3,6 +3,7 @@
 namespace App;
 
 use Flight;
+use App\NotFoundException;
 use App\MySQLDatabaseQueryException;
 
 class Instructor {

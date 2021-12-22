@@ -3,9 +3,11 @@
 namespace App;
 
 use Flight;
+use App\UnauthorizedAccessException;
 use App\MySQLDatabaseQueryException;
 use App\InternalErrorException;
 use App\IncorrectUsernameOrPasswordException;
+use App\EmailAlreadyRegisteredException;
 
 class Account
 {

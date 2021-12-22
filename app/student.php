@@ -3,8 +3,8 @@
 namespace App;
 
 use Flight;
-use App\UnauthorizedAccessException;
 use App\MySQLDatabaseQueryException;
+use App\InvalidIDException;
 use App\InternalErrorException;
 
 class Student extends Account
