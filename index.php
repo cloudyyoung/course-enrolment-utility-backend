@@ -9,6 +9,7 @@ use App\StatusCodes;
 use App\Section;
 use App\Instructor;
 use App\Faculty;
+use App\Department;
 use App\Course;
 use App\Account;
 
@@ -99,15 +100,9 @@ Flight::route('GET /api/faculty(/@faculty_id:[0-9]{4})', function ($faculty_id) 
 // End point 8 - Department Information
 Flight::route('GET /api/department(/@department_id:[0-9]{5})', function ($department_id) {
     if ($department_id == null) {
-        $result = Faculty::AllDepartment();
+        Flight::handle("Department::AllDepartment");
     } else {
-        $result = Faculty::DepartmentInformation($department_id);
-    }
-
-    if ($result === false) {
-        Flight::ret(StatusCodes::NOT_FOUND, null, null);
-    } else {
-        Flight::ret(StatusCodes::OK, null, $result);
+        Flight::handle("Department::DepartmentInformation", $department_id);
     }
 });
 

@@ -62,7 +62,7 @@ class Faculty
         return $result;
     }
 
-    
+
     // End point 7.1 - All faculty
     public static function AllFaculty()
     {
@@ -100,63 +100,6 @@ class Faculty
         return $result;
     }
 
-
-    //End point 8
-    public static function DepartmentInformation($department_id)
-    {
-        $sql = "SELECT *
-                FROM `department` AS `D`
-                WHERE `D`.`department_id` = '$department_id'";
-
-        $sql1 = "   SELECT `A`.`aka`
-                    FROM `aka` AS `A`, `department` AS `D`
-                    WHERE `A`.`contactable_id` = `D`.`contactable_id` AND `D`.`department_id` = '$department_id'";
-
-        $sql2 = "   SELECT `P`.`phone`
-                    FROM `phone` AS `P`, `department` AS `D`
-                    WHERE `P`.`contactable_id` = `D`.`contactable_id` AND `D`.`department_id` = '$department_id'";
-
-        $sql3 = "   SELECT `W`.`website`
-                    FROM `website` AS `W`, `department` AS `D`
-                    WHERE `W`.`contactable_id` = `D`.`contactable_id` AND `D`.`department_id` = '$department_id'";
-
-        $sql4 = "   SELECT `R`.`room`
-                    FROM `room(contactable)` AS `R`, `department` AS `D`
-                    WHERE `R`.`contactable_id` = `D`.`contactable_id` AND`D`.`department_id` = '$department_id'";
-
-        $sql5 = "   SELECT `E`.`email`
-                    FROM `email` AS `E`, `department` AS `D`
-                    WHERE `E`.`email` = `D`.`contactable_id` AND `D`.`department_id` = '$department_id'";
-
-
-        //get the result of the query for each components
-        $result = Flight::mysql($sql);
-        $result1 = Flight::mysql($sql1);
-        $result2 = Flight::mysql($sql2);
-        $result3 = Flight::mysql($sql3);
-        $result4 = Flight::mysql($sql4);
-        $result5 = Flight::mysql($sql5);
-        return (faculty::process_info_contactable($result, $result1, $result2, $result3, $result4, $result5));
-    }
-
-
-
-    //Extra end for end point 8
-    public static function AllDepartment()
-    {
-        $sql = "SELECT `D`.`department_id`, `D`.`name`, `D`.`code`, `D`.`faculty_id`
-                FROM `department` AS `D`";
-
-
-        $result = Flight::mysql($sql);
-
-        if ($result === false) {
-            return false;
-        }
-
-        $result = $result->fetch_all(MYSQLI_ASSOC);
-        return $result;
-    }
 
 
     //End point 12
