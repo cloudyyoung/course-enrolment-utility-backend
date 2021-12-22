@@ -49,7 +49,12 @@ class Student extends Account
         $sql = "CALL `EP13_SetMajorMinorConcentration`('$user_id', '$major', '$minor', '$concentration');";
         $result = Flight::mysql($sql);
         if($result === false){
-            throw new MySQLDatabaseQueryException();
+            $message = Flight::get("mysql_connection")->error;
+            if(preg_match("/a foreign key constraint fails/", $message)){
+                throw new InvalidIDException("A program ID or concentration name is invalid");
+            }else{
+                throw new MySQLDatabaseQueryException();
+            }
         }
 
         $result = self::StudentInformation();

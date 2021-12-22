@@ -66,3 +66,10 @@ class MySQLDatabaseQueryException extends Exception
         parent::__construct("Internal error", StatusCodes::BAD_REQUEST, $details);
     }
 }
+
+class InvalidIDException extends Exception
+{
+    public function __construct(string $message = "ID is invalid") {
+        parent::__construct($message, StatusCodes::BAD_REQUEST);
+    }
+}
