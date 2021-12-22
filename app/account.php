@@ -19,7 +19,7 @@ class Account
     //End point 1
     public static function LogIn($username, $password)
     {
-        $sql = "CALL `EP1_ LogIn`('$username', '$password');";
+        $sql = "CALL `EP1_LogIn`('$username', '$password');";
         $result = Flight::mysql($sql);
         if ($result === false) {
             throw new MySQLDatabaseQueryException();

@@ -117,17 +117,7 @@ Flight::route('GET /api/account/student/plan/@year:[0-9]{4}/@term', function ($y
 
 // End point 10 - Student Information
 Flight::route('GET /api/account/student', function () {
-
-    if (isset($_SESSION['user_id']) == false) {
-        Flight::ret(401, "Please log in first.");
-    }
-
-    $account = Account::StudentInformation();
-    if ($account == null) {
-        Flight::ret(401, "Unexpected error.");
-    } else {
-        Flight::ret(200, "OK", $account);
-    }
+    Flight::handle("Student::StudentInformation");
 });
 
 
@@ -153,10 +143,6 @@ Flight::route('GET /api/program(/@program_id:[0-9]{5})', function ($program_id) 
 
 // End point 13 - Student: Set major, minor and concentration
 Flight::route('PUT /api/account/student', function () {
-    if (isset($_SESSION['user_id']) == false) {
-        Flight::ret(401, "Please log in first.");
-    }
-
     $major = [];
     $minor = [];
     $concentration = [];
@@ -164,13 +150,7 @@ Flight::route('PUT /api/account/student', function () {
     @$major = Flight::put()["major"];
     @$minor = Flight::put()["minor"];
     @$concentration = Flight::put()["concentration"];
-
-    $account = Account::SetMajorMinor($major, $minor, $concentration);
-    if ($account == null) {
-        Flight::ret(401, "Username or password incorrect");
-    } else {
-        Flight::ret(200, "OK", $account);
-    }
+   
 });
 
 
