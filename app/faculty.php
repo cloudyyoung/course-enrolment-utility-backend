@@ -36,7 +36,7 @@ class Faculty extends Contactable
 
         $result = $result->fetch_all(MYSQLI_ASSOC);
         $result = self::Contactable($result);
-
+        $result = $result[0];
         return $result;
     }
 }
