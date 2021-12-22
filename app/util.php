@@ -36,13 +36,15 @@ Flight::map("put", function () {
 
 
 // Connecting to MySQL database
-$mysql_connection = mysqli_connect("155.138.157.78", "ucalgary", "cv0V9c9ZqCf55g.0", "ucalgary");
-if (mysqli_connect_errno()) {
+$mysql_connection = new mysqli("155.138.157.78", "ucalgary", "cv0V9c9ZqCf55g.0", "ucalgary");
+if ($mysql_connection->connect_error) {
     Flight::ret(StatusCodes::INTERNAL_SERVER_ERROR, "Server cannot establish connection with database", null);
     die();
 }
 Flight::map("mysql", function ($sql) use ($mysql_connection) {
-    return mysqli_query($mysql_connection, $sql);
+    @$mysql_connection->close();
+    @$mysql_connection->connect();
+    return $mysql_connection->query($sql);
 });
 Flight::set("mysql_connection", $mysql_connection);
 
