@@ -6,12 +6,6 @@ require "app/util.php";
 require "app/exception.php";
 
 use App\StatusCodes;
-use App\Section;
-use App\Instructor;
-use App\Faculty;
-use App\Department;
-use App\Course;
-use App\Account;
 
 // End point 1 - Account Log In
 Flight::route('PUT /api/account', function () {
