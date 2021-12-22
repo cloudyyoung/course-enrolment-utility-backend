@@ -20,19 +20,7 @@ class section
         $result = $result->fetch_all(MYSQLI_ASSOC);
 
         foreach($result as &$section){
-            $section = Flight::multivalue($section, "instructor_name", "strval");
-            $section = Flight::multivalue($section, "instructor_id", "intval");
-
-            $section["instructor"] = [];
-            foreach($section["instructor_name"] as $key => $value){
-                $section["instructor"][] = [
-                    "name" => $value,
-                    "id" => $section["instructor_id"][$key]
-                ];
-            }
-
-            unset($section["instructor_name"]);
-            unset($section["instructor_id"]);
+            $section = Flight::multivalue($section, "instructor");
         }
         
         return $result;

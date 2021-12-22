@@ -31,26 +31,10 @@ class Student extends Account
         $result = $result->fetch_all(MYSQLI_ASSOC);
         $result = $result[0];
 
-        $result = Flight::multivalue($result, "major", "intval");
-        $result = Flight::multivalue($result, "minor", "intval");
-        $result = Flight::multivalue($result, "enroll", "intval");
-
-        $result = Flight::multivalue($result, "concentration_name", "strval");
-        $result = Flight::multivalue($result, "concentration_program_id", "intval");
-        
-        $result["concentration"] = [];
-        
-        if($result["concentration_name"] != null){
-            foreach ($result["concentration_name"] as $key => $value) {
-                $result["concentration"][] = [
-                    "name" => $value,
-                    "program_id" => $result["concentration_program_id"][$key]
-                ];
-            }
-        }
-        
-        unset($result["concentration_name"]);
-        unset($result["concentration_program_id"]);
+        $result = Flight::multivalue($result, "major");
+        $result = Flight::multivalue($result, "minor");
+        $result = Flight::multivalue($result, "enroll");
+        $result = Flight::multivalue($result, "concentration");
         
         return $result;
     }

@@ -51,9 +51,9 @@ class Course
 
     $result = $result->fetch_all(MYSQLI_ASSOC);
     $result = $result[0];
-    $result = Flight::multivalue($result, "aka", "strval");
-    $result = Flight::multivalue($result, "hours", "strval");
-    $result = Flight::multivalue($result, "time_length", "strval");
+    $result = Flight::multivalue($result, "aka");
+    $result = Flight::multivalue($result, "hours");
+    $result = Flight::multivalue($result, "time_length");
 
     $course_key = strtoupper($code) . " " . $number;
 
@@ -88,9 +88,9 @@ class Course
     $result = $result->fetch_all(MYSQLI_ASSOC);
     $result = $result[0];
 
-    $result = Flight::multivalue($result, "hours", "strval");
-    $result = Flight::multivalue($result, "aka", "strval");
-    $result = Flight::multivalue($result, "time_length", "strval");
+    $result = Flight::multivalue($result, "hours");
+    $result = Flight::multivalue($result, "aka");
+    $result = Flight::multivalue($result, "time_length");
 
     //create the course name with code and number 
     $course_key = strtoupper($result['code']) . " " . $result['number'];

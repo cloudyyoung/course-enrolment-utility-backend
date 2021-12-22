@@ -8,11 +8,11 @@ class Contactable {
     public static function Contactable($result){
         foreach ($result as &$row) {
             // Handle multiple value array
-            $row = Flight::multivalue($row, "aka", "strval");
-            $row = Flight::multivalue($row, "phone", "strval");
-            $row = Flight::multivalue($row, "website", "strval");
-            $row = Flight::multivalue($row, "room", "strval");
-            $row = Flight::multivalue($row, "email", "strval");
+            $row = Flight::multivalue($row, "aka");
+            $row = Flight::multivalue($row, "phone");
+            $row = Flight::multivalue($row, "website");
+            $row = Flight::multivalue($row, "room");
+            $row = Flight::multivalue($row, "email");
         }
 
         return $result;

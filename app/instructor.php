@@ -18,9 +18,9 @@ class Instructor {
         $result = $result->fetch_all(MYSQLI_ASSOC);
         $result = $result[0];
 
-        $result = Flight::multivalue($result, "title", "strval");
-        $result = Flight::multivalue($result, "phone", "strval");
-        $result = Flight::multivalue($result, "room", "strval");
+        $result = Flight::multivalue($result, "title");
+        $result = Flight::multivalue($result, "phone");
+        $result = Flight::multivalue($result, "room");
         
         return $result;
     }

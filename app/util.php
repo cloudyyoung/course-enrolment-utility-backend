@@ -91,24 +91,11 @@ Flight::map("handle", function (string $handler, ...$args) {
     Flight::ret(StatusCodes::OK, null, $result);
 });
 
-Flight::map("multivalue", function (array $array, $key, $type) {
-    $val = $array[$key];
-    if ($val == null) return $array;
-    if ($val == "null") {
+Flight::map("multivalue", function (array $array, $key) {
+    if($array[$key] == "null" || $array[$key] == "[\"null\"]") {
         $array[$key] = null;
-        return $array;
+    }else{
+        $array[$key] = json_decode($array[$key], true);
     }
-
-    $arr = explode(",", $val);
-    $val2 = [];
-    foreach ($arr as $a) {
-        if ($a == "null") {
-            $a = null;
-        } else {
-            $val2[] = $type($a);
-        }
-    }
-
-    $array[$key] = $val2;
     return $array;
 });
