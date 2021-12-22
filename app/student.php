@@ -33,8 +33,8 @@ class Student extends Account
 
         $result = Flight::multivalue($result, "major");
         $result = Flight::multivalue($result, "minor");
-        $result = Flight::multivalue($result, "enroll");
         $result = Flight::multivalue($result, "concentration");
+        $result = Flight::multivalue($result, "courses_taken");
         
         return $result;
     }
