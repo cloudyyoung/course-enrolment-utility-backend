@@ -143,13 +143,25 @@ Flight::route('GET /api/program(/@program_id:[0-9]{5})', function ($program_id) 
 
 // End point 13 - Student: Set major, minor and concentration
 Flight::route('PUT /api/account/student', function () {
-    $major = [];
-    $minor = [];
-    $concentration = [];
+    $major = "[]";
+    $minor = "[]";
+    $concentration = "[]";
 
     @$major = Flight::put()["major"];
     @$minor = Flight::put()["minor"];
     @$concentration = Flight::put()["concentration"];
+
+    if($major == null) {
+        $major = "[]";
+    }
+
+    if ($minor == null) {
+        $minor = "[]";
+    }
+
+    if ($concentration == null) {
+        $concentration = "[]";
+    }
     
     Flight::handle("Student::SetMajorMinorConcentration", $major, $minor, $concentration);
 });
