@@ -40,72 +40,19 @@ class Student extends Account
     }
 
 
-    //End point 13
-    public static function SetMajorMinor($major, $minor, $concentration)
+    // End point 13 - Set Major, Minor and Concentration
+    public static function SetMajorMinorConcentration($major, $minor, $concentration)
     {
-        $result = null;
+        self::AuthenticateSession();
 
-        //return null if the user is NOT logged in or the user is NOT a student
-        if (isset($_SESSION['user_id']) == false) {
-            return false;
-        } else if ($_SESSION['type'] != "student") {
-            return false;
+        $user_id = $_SESSION['user_id'];
+        $sql = "CALL `EP13_SetMajorMinorConcentration`('$user_id', '$major', '$minor', '$concentration');";
+        $result = Flight::mysql($sql);
+        if($result === false){
+            throw new MySQLDatabaseQueryException();
         }
 
-        $currentID = $_SESSION['user_id'];
-
-        //delete major in, minor in and concentrate in before setting:
-        $sql = "DELETE  FROM `major_in` 
-                WHERE `user_id` = '$currentID'";
-        Flight::mysql($sql);
-
-        $sql = "DELETE  FROM `minor_in` 
-                WHERE `user_id` = '$currentID'";
-        Flight::mysql($sql);
-
-        $sql = "DELETE  FROM `concentrate_in` 
-                WHERE `user_id` = '$currentID'";
-        Flight::mysql($sql);
-
-
-        //insert each major and concentration one by one
-        if ($major == null) {
-            $major = "[]";
-        }
-        $major = json_decode($major);
-        $result["major"] = $major;
-        foreach ($major as &$insert) {
-
-            $sql = "INSERT INTO `major_in` (`user_id`, `program_id`) VALUES ('$currentID','$insert')";
-            Flight::mysql($sql);
-        }
-
-        if ($minor == null) {
-            $minor = "[]";
-        }
-        $minor = json_decode($minor);
-        $result["minor"] = $minor;
-        foreach ($minor as &$insert) {
-            $sql = "INSERT INTO `minor_in` (`user_id`, `program_id`) VALUES ('$currentID','$insert')";
-            Flight::mysql($sql);
-        }
-
-        if ($concentration == null) {
-            $concentration = "[]";
-        }
-
-        $concentration = json_decode($concentration);
-        $result["concentration"] = $concentration;
-        foreach ($concentration as &$insert) {
-            $pid = $insert['program_id'];
-            $name = $insert['name'];
-            $sql = "INSERT INTO `concentrate_in` (`user_id`,`program_id`, `concentration_name`) VALUES ('$currentID', '$pid' ,' $name ')";
-            Flight::mysql($sql);
-        }
-
-        //$result["major"] = $major;
-        // $result["minor"] = $minor;
-        //$result["concentration"] = $concentration;
+        $result = self::StudentInformation();
         return $result;
     }
 
