@@ -80,7 +80,6 @@ class Student extends Account
             }
         }
 
-        // TODO: Change to EP16
         $result = self::GetEnrolmentPlan($term, $year);
         return $result;
     }
