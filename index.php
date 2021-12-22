@@ -163,7 +163,7 @@ Flight::route('PUT /api/account/student', function () {
         $concentration = "[]";
     }
     
-    Flight::handle("Student::SetMajorMinorConcentration", $major, $minor, $concentration);
+    Flight::handle("Student::UpdateMajorMinorConcentration", $major, $minor, $concentration);
 });
 
 

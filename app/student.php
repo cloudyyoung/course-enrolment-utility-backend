@@ -41,12 +41,12 @@ class Student extends Account
 
 
     // End point 13 - Set Major, Minor and Concentration
-    public static function SetMajorMinorConcentration($major, $minor, $concentration)
+    public static function UpdateMajorMinorConcentration($major, $minor, $concentration)
     {
         self::AuthenticateSession();
 
         $user_id = $_SESSION['user_id'];
-        $sql = "CALL `EP13_SetMajorMinorConcentration`('$user_id', '$major', '$minor', '$concentration');";
+        $sql = "CALL `EP13_UpdateMajorMinorConcentration`('$user_id', '$major', '$minor', '$concentration');";
         $result = Flight::mysql($sql);
         if($result === false){
             $message = Flight::get("mysql_connection")->error;
@@ -62,7 +62,7 @@ class Student extends Account
     }
 
 
-    //End point 14
+    //End point 14 - Update Plan by Semester
     public static function SetPlan($term, $year, $course_id)
     {
         if (isset($_SESSION['user_id']) == false) {
