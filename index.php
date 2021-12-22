@@ -86,13 +86,7 @@ Flight::route('GET /api/faculty(/@faculty_id:[0-9]{4})', function ($faculty_id) 
     if ($faculty_id == null) {
         Flight::handle("Faculty::AllFaculty");
     } else {
-        $result = Faculty::FacultyInformation($faculty_id);
-    }
-
-    if ($result === false) {
-        Flight::ret(StatusCodes::NOT_FOUND, null, null);
-    } else {
-        Flight::ret(StatusCodes::OK, null, $result);
+        Flight::handle("Faculty::FacultyInformation", $faculty_id);
     }
 });
 
