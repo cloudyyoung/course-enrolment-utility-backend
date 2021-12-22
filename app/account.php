@@ -14,7 +14,7 @@ class Account
     protected static function AuthenticateSession()
     {
         if (isset($_SESSION['user_id']) == false) {
-            throw new UnauthorizedAccessException();
+            throw new UnauthorizedAccessException("Please log in to access");
         }
     }
 
