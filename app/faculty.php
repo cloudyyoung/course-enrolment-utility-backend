@@ -39,39 +39,4 @@ class Faculty extends Contactable
 
         return $result;
     }
-
-
-
-
-    //End point 11
-    public static function ConcentrationForProgram($Program_ID)
-    {
-
-
-        $sql = "SELECT `C`.`program_id`, `C`.`name`, `C`.`description`
-               FROM `concentration` AS `C`
-               WHERE `C`.`program_id` = '$Program_ID'";
-        $result = Flight::mysql($sql);
-        if ($result === false) {
-            return false;
-        }
-
-        $result = $result->fetch_all(MYSQLI_ASSOC);
-        return $result;
-    }
-
-
-    //Extra end point for end point 11
-    public static function AllConcentration()
-    {
-        $sql = "SELECT `C`.`program_id`, `C`.`name`, `C`.`description`
-                FROM `concentration` AS `C`";
-        $result = Flight::mysql($sql);
-        if ($result === false) {
-            return false;
-        }
-
-        $result = $result->fetch_all(MYSQLI_ASSOC);
-        return $result;
-    }
 }
