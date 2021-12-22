@@ -17,11 +17,11 @@ class Admin extends Account {
     }
 
     
-    // End point 15 - Website Statistics
+    // End point 16 - Website Statistics
     public static function WebsiteStatistics() {
         self::AuthenticateSession();
 
-        $sql = "CALL `EP15_WebsiteStatistics`();";
+        $sql = "CALL `EP16_WebsiteStatistics`();";
         $result = Flight::mysql($sql);
         if ($result === false) {
             throw new MySQLDatabaseQueryException();

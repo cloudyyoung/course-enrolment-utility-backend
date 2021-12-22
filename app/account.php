@@ -16,7 +16,7 @@ class Account
         }
     }
 
-    //End point 1
+    // End point 1
     public static function LogIn($username, $password)
     {
         $sql = "CALL `EP1_LogIn`('$username', '$password');";
@@ -39,7 +39,7 @@ class Account
     }
 
     
-    //End point 2
+    // End point 2
     public static function Signup($email, $password)
     {
         $sql = "CALL `EP2_SignUp`('$email', '$password');";
@@ -67,7 +67,7 @@ class Account
     }
 
 
-    //End point 3
+    // End point 3
     public static function AccountInformation()
     {
         self::AuthenticateSession();

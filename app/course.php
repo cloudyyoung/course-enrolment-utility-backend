@@ -37,7 +37,7 @@ class Course
   }
 
 
-  //End point 5.3 - Course Information by Course Key
+  // End point 5.3 - Course Information by Course Key
   public static function CourseCodeNumber($code, $number)
   {
 

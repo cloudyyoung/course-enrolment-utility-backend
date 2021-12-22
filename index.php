@@ -101,20 +101,6 @@ Flight::route('GET /api/department(/@department_id:[0-9]{5})', function ($depart
 });
 
 
-// End point 9 - Student Enrollment Plan
-Flight::route('GET /api/account/student/plan/@year:[0-9]{4}/@term', function ($year, $term) {
-    $year = Flight::mysql_escape($year);
-    $term = Flight::mysql_escape($term);
-
-    $result = Account::Enroll_Plan($term, $year);
-    if ($result === false) {
-        Flight::ret(StatusCodes::NOT_FOUND, null, null);
-    } else {
-        Flight::ret(StatusCodes::OK, null, $result);
-    }
-});
-
-
 // End point 10 - Student Information
 Flight::route('GET /api/account/student', function () {
     Flight::handle("Student::StudentInformation");
@@ -182,6 +168,12 @@ Flight::route('PUT /api/account/student/plan/@year:[0-9]{4}/@term', function ($y
 
 
 // End point 15
+Flight::route('GET /api/account/student/plan/@year:[0-9]{4}/@term', function ($year, $term) {
+    Flight::handle("Student::GetEnrolmentPlan", $term, $year);
+});
+
+
+// End point 16
 Flight::route('GET /api/account/admin/statistics', function () {
     Flight::handle("Admin::WebsiteStatistics");
 });

@@ -62,7 +62,7 @@ class Student extends Account
     }
 
 
-    //End point 14 - Update Plan by Semester
+    // End point 14 - Update Plan by Semester
     public static function UpdateEnrolmentPlan($term, $year, $course_id)
     {
         self::AuthenticateSession();
@@ -81,30 +81,29 @@ class Student extends Account
         }
 
         // TODO: Change to EP16
-        $result = self::StudentInformation();
-        $result = $result["enrolls"];
+        $result = self::GetEnrolmentPlan($term, $year);
         return $result;
     }
 
+    
+    // End point 15 - Get Enrolment Plan
+    public static function GetEnrolmentPlan($term, $year){
+        self::AuthenticateSession();
 
-    //End point 9
-    public static function Enroll_Plan($term, $year)
-    {
-        $currentID = $_SESSION['user_id'];
-        $sql = "SELECT `course_id`
-                FROM `enrolls`
-                WHERE `user_id` = '$currentID' AND `term` = '$term' AND `year` = '$year'";
+        $user_id = $_SESSION['user_id'];
+
+        $sql = "CALL `EP15_GetEnrolmentPlan`('$user_id', '$term', '$year');";
         $result = Flight::mysql($sql);
-        if ($result === false) {
-            return false;
+        if($result === false){
+            throw new MySQLDatabaseQueryException();
         }
 
         $result = $result->fetch_all(MYSQLI_ASSOC);
-        $result_out_list = [];
-        foreach ($result as &$insert) {
-            array_push($result_out_list, $insert["course_id"]);
+        $result_out = [];
+
+        foreach($result as $course_id){
+            $result_out[] = $course_id['course_id'];
         }
-        $result_out = array("course_id" => $result_out_list);
 
         return $result_out;
     }

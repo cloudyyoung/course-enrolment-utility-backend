@@ -20,7 +20,7 @@ class Concentration
     }
 
 
-    //End point 11.2 - Concentration Information by Program ID
+    // End point 11.2 - Concentration Information by Program ID
     public static function ConcentrationForProgram($program_id)
     {
         // Check if program_id is valid

@@ -23,7 +23,7 @@ class Faculty extends Contactable
     }
 
 
-    //End point 7.2 - Faculty Information by Faculty ID
+    // End point 7.2 - Faculty Information by Faculty ID
     public static function FacultyInformation($faculty_id)
     {
         $sql = "CALL `EP7.2_FacultyInformation`('$faculty_id');";
