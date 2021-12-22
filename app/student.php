@@ -34,7 +34,7 @@ class Student extends Account
         $result = Flight::multivalue($result, "major");
         $result = Flight::multivalue($result, "minor");
         $result = Flight::multivalue($result, "concentration");
-        $result = Flight::multivalue($result, "courses_taken");
+        $result = Flight::multivalue($result, "enrolls");
         
         return $result;
     }
@@ -63,37 +63,27 @@ class Student extends Account
 
 
     //End point 14 - Update Plan by Semester
-    public static function SetPlan($term, $year, $course_id)
+    public static function UpdateEnrolmentPlan($term, $year, $course_id)
     {
-        if (isset($_SESSION['user_id']) == false) {
-            return false;
-        } else if ($_SESSION['type'] != "student") {
-            return false;
-        }
+        self::AuthenticateSession();
 
-        $currentID = $_SESSION['user_id'];
-        $course_id = json_decode($course_id);
-
-        if ($course_id == null) {
-            $course_id = "[]";
-        }
-
-        $sql = "DELETE  FROM `enrolls` 
-                        WHERE `user_id` = '$currentID' AND `term` = '$term' AND `year` = '$year'";
-
+        $user_id = $_SESSION['user_id'];
+        
+        $sql = "CALL `EP14_UpdateEnrolmentPlan`('$user_id', '$term', '$year', '$course_id');";
         $result = Flight::mysql($sql);
-        if ($result === false) {
-            return false;
+        if($result === false){
+            $message = Flight::get("mysql_connection")->error;
+            if (preg_match("/a foreign key constraint fails/", $message)) {
+                throw new InvalidIDException("A program ID or concentration name is invalid");
+            } else {
+                throw new MySQLDatabaseQueryException();
+            }
         }
 
-        foreach ($course_id as &$insert) {
-            $sql = "INSERT INTO `enrolls` (`user_id`,`course_id` ,`term`,`year`) VALUES ('$currentID','$insert','$term','$year')";
-            Flight::mysql($sql);
-        }
-
-
-        $result_out = array("course_id" => $course_id);
-        return $result_out;
+        // TODO: Change to EP16
+        $result = self::StudentInformation();
+        $result = $result["enrolls"];
+        return $result;
     }
 
 

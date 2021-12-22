@@ -169,17 +169,15 @@ Flight::route('PUT /api/account/student', function () {
 
 // End point 14
 Flight::route('PUT /api/account/student/plan/@year:[0-9]{4}/@term', function ($year, $term) {
-    $course_id = Flight::put()["course_id"];
+    $course_id = "[]";
+    
+    @$course_id = Flight::put()["course_id"];
 
-    if (isset($_SESSION['user_id']) == false) {
-        Flight::ret(401, "Please log in first.");
+    if ($course_id == null) {
+        $course_id = "[]";
     }
 
-    $account = Account::SetPlan($term, $year, $course_id);
-    if ($account === false) {
-        Flight::ret(StatusCodes::NOT_FOUND, "Unauthroized access", null);
-    }
-    Flight::ret(200, "OK", $account);
+    Flight::handle("Student::UpdateEnrolmentPlan", $term, $year, $course_id);
 });
 
 
