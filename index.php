@@ -156,15 +156,9 @@ Flight::route('GET /api/program(/@program_id:[0-9]{5})/concentration', function 
 // End point 12 - Program Information
 Flight::route('GET /api/program(/@program_id:[0-9]{5})', function ($program_id) {
     if ($program_id == null) {
-        $result = Faculty::ProgramInformation($program_id);
+        Flight::handle("Program::AllProgram");
     } else {
-        $result = Faculty::ProgramInformation($program_id);
-    }
-
-    if ($result === false) {
-        Flight::ret(StatusCodes::NOT_FOUND, null, null);
-    } else {
-        Flight::ret(StatusCodes::OK, null, $result);
+        Flight::handle("Program::ProgramInformation", $program_id);
     }
 });
 

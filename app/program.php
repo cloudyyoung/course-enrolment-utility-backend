@@ -5,14 +5,15 @@ namespace App;
 use Flight;
 use App\MySQLDatabaseQueryException;
 
-class Department extends Contactable {
-
-    // End point 8.1 - All departments
-    public static function AllDepartment()
+class Program extends Contactable
+{
+    //Extra end point for End point 12
+    public static function AllProgram()
     {
-        $sql = "CALL `EP8.1_AllDepartment`();";
-        $result = Flight::mysql($sql);
 
+        $sql = "CALL `EP12.1_AllProgram`();";
+
+        $result = Flight::mysql($sql);
         if ($result === false) {
             throw new MySQLDatabaseQueryException();
         }
@@ -22,10 +23,12 @@ class Department extends Contactable {
     }
 
     
-    // End point 8.2 - Department Information by Department ID
-    public static function DepartmentInformation($department_id)
+    //End point 12
+    public static function ProgramInformation($Program_ID)
     {
-        $sql = "CALL `EP8.2_DepartmentInformation`('$department_id');";
+
+        $sql = "CALL `EP12.2_ProgramInformation`('$Program_ID');";
+
         $result = Flight::mysql($sql);
         if ($result === false) {
             throw new MySQLDatabaseQueryException();
