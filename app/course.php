@@ -168,6 +168,7 @@ class Course
     $course_key = strtoupper($result['code']) . " " . $result['number'];
 
     //get the data from mongodb
+    /*
     $cursor = Flight::mongo(array('key' => $course_key));
     $requisite = $cursor->toArray();
     if (count($requisite) == 0) {
@@ -177,8 +178,8 @@ class Course
     $requisite = $requisite[0];
     $result["prerequisite_array"] = json_decode($requisite["prerequisite"]);
     $result["antirequisite_array"] = json_decode($requisite["antirequisite"]);
-    $result["corequisite_array"] = json_decode($requisite["corequisite"]);
-
+    $result["corequisite_array"] = json_decode($requisite["corequisite"]);*/
+    $result = course::mongoDBCourse($result, $course_key);
     return $result;
   }
 }
