@@ -48,22 +48,19 @@ class Course
       }
 
 
-      $result["prerequisite_array"] = [];
-      $result["antirequisite_array"] = [];
-      $result["corequisite_array"] = [];
       
 
       //loop through each courses
       foreach ($result as &$course) {
-        $code = "CPSC";
+        $code = $course["code"];;
         $number = $course["number"];
         $search = strtoupper($code) . " " . $number;
 
         //add each course's requisite to the result array
         // FIXME: Can't handle when a course DOES NOT have requisite record in Mongodb
-        array_push($result["prerequisite_array"], $dictionary[$search]["prerequisite"]);
-        array_push($result["antirequisite_array"], $dictionary[$search]["antirequisite"]);
-        array_push($result["corequisite_array"], $dictionary[$search]["corequisite"]);
+        $course["prerequisite_array"]=$dictionary[$search]["prerequisite"];
+        $course["antirequisite_array"]=$dictionary[$search]["antirequisite"];
+        $course["corequisite_array"]=$dictionary[$search]["corequisite"];
       }
 
       return $result;
