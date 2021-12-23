@@ -10,7 +10,7 @@ use App\MySQLDatabaseQueryException;
 class Course
 {
 
-  public static function mongoDBCourse($result, $course_key = null)
+  private static function mongoDBCourse($result, $course_key = null)
   {
     //if we want a specific course
     if ($course_key != null) {
@@ -47,12 +47,6 @@ class Course
         $dictionary[$insert["key"]] = $insert;
       }
 
-
-      // $result["prerequisite_array"] = [];
-      // $result["antirequisite_array"] = [];
-      // $result["corequisite_array"] = [];
-      
-
       //loop through each courses
       foreach ($result as &$course) {
         $code = $course["code"];;
@@ -60,7 +54,6 @@ class Course
         $search = strtoupper($code) . " " . $number;
 
         //add each course's requisite to the result array
-        // FIXME: Can't handle when a course DOES NOT have requisite record in Mongodb
         $course["prerequisite_array"]=$dictionary[$search]["prerequisite"];
         $course["antirequisite_array"]=$dictionary[$search]["antirequisite"];
         $course["corequisite_array"]=$dictionary[$search]["corequisite"];
@@ -70,12 +63,8 @@ class Course
     }
   }
 
-
-
-
-
+  
   // End point 5.1 - All Courses
-  //Check
   public static function AllCourses()
   {
     $sql = "CALL `EP5.1_AllCourses`();";
@@ -85,7 +74,6 @@ class Course
     }
 
     $result = $result->fetch_all(MYSQLI_ASSOC);
-
     $result = course::mongoDBCourse($result);
     return $result;
   }
@@ -103,7 +91,6 @@ class Course
     $result = $result->fetch_all(MYSQLI_ASSOC);
     $result = course::mongoDBCourse($result);
     return $result;    
-
   }
 
 
@@ -125,21 +112,8 @@ class Course
     $result = Flight::multivalue($result, "hours");
     $result = Flight::multivalue($result, "time_length");
 
-
     $course_key = strtoupper($code) . " " . $number;
-    /*
-    $cursor = Flight::mongo(array('key' => $course_key));
-    $requisite = $cursor->toArray();
-    if (count($requisite) == 0) {
-      throw new NotFoundException("Course not found");
-    }
-
-    $requisite = $requisite[0];
-    $result["prerequisite_array"] = json_decode($requisite["prerequisite"]);
-    $result["antirequisite_array"] = json_decode($requisite["antirequisite"]);
-    $result["corequisite_array"] = json_decode($requisite["corequisite"]);*/
-    $result = course::mongoDBCourse($result, $course_key);
-
+    $result = self::mongoDBCourse($result, $course_key);
     return $result;
   }
 
@@ -166,20 +140,7 @@ class Course
 
     //create the course name with code and number 
     $course_key = strtoupper($result['code']) . " " . $result['number'];
-
-    //get the data from mongodb
-    /*
-    $cursor = Flight::mongo(array('key' => $course_key));
-    $requisite = $cursor->toArray();
-    if (count($requisite) == 0) {
-      throw new NotFoundException("Course not found");
-    }
-
-    $requisite = $requisite[0];
-    $result["prerequisite_array"] = json_decode($requisite["prerequisite"]);
-    $result["antirequisite_array"] = json_decode($requisite["antirequisite"]);
-    $result["corequisite_array"] = json_decode($requisite["corequisite"]);*/
-    $result = course::mongoDBCourse($result, $course_key);
+    $result = self::mongoDBCourse($result, $course_key);
     return $result;
   }
 }
