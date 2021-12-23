@@ -10,21 +10,68 @@ use App\MySQLDatabaseQueryException;
 class Course
 {
 
-  public static function mongoDBCourse($result, $course_key)
+  public static function mongoDBCourse($result, $course_key = null)
   {
-    $cursor = Flight::mongo(array('key' => $course_key));
-    $requisite = $cursor->toArray();
-    if (count($requisite) == 0) {
-      throw new NotFoundException("Course not found");
+    //if we want a specific course
+    if ($course_key != null)
+    {
+      $cursor = Flight::mongo(array('key' => $course_key));
+      $requisite = $cursor->toArray();
+      if (count($requisite) == 0) {
+        throw new NotFoundException("Course not found");
+      }
+
+      $requisite = $requisite[0];
+      $result["prerequisite_array"] = json_decode($requisite["prerequisite"]);
+      $result["antirequisite_array"] = json_decode($requisite["antirequisite"]);
+      $result["corequisite_array"] = json_decode($requisite["corequisite"]);
+
+      return $result;          
+
     }
 
-    $requisite = $requisite[0];
-    $result["prerequisite_array"] = json_decode($requisite["prerequisite"]);
-    $result["antirequisite_array"] = json_decode($requisite["antirequisite"]);
-    $result["corequisite_array"] = json_decode($requisite["corequisite"]);
+    //if we want all courses
+    else
+    {
+      $cursor = Flight::mongo();
+      $requisite = $cursor->toArray();
+      if (count($requisite) == 0) {
+        throw new NotFoundException("Course not found");
+      }
 
-    return $result;    
+      $dictionary = (object) null;
+
+      //put all the information in a hash table, course id --> information
+      foreach ($requisite as &$insert)
+      {
+          $dictionary[$insert["key"]] =  $insert;
+      }
+
+      $result["prerequisite_array"] = [];
+      $result["antirequisite_array"] = [];
+      $result["corequisite_array"] = [];      
+      
+      //loop through each courses
+      foreach ($result as &$course)
+      {
+        $code = $course["code"];
+        $number = $course["number"];
+        $search = strtoupper($code) . " " . $number;
+
+        //add each course's requisite to the result array
+        array_push($result["prerequisite_array"], $dictionary[$search]["prequisite"]);
+        array_push($result["antirequisite_array"], $dictionary[$search]["antirequisite"]);
+        array_push($result["corequisite_array"], $dictionary[$search]["corequisite"]);
+      }
+
+      return $result;
+    }
+
+
   }
+
+ 
+
 
 
   // End point 5.1 - All Courses
@@ -37,6 +84,8 @@ class Course
     }
 
     $result = $result->fetch_all(MYSQLI_ASSOC);
+
+    $result = course::mongoDBCourse($result);
     return $result;
   }
 
