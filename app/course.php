@@ -75,6 +75,7 @@ class Course
 
 
   // End point 5.1 - All Courses
+  //Check
   public static function AllCourses()
   {
     $sql = "CALL `EP5.1_AllCourses`();";
@@ -100,7 +101,9 @@ class Course
     }
 
     $result = $result->fetch_all(MYSQLI_ASSOC);
-    return $result;
+    $result = course::mongoDBCourse($result);
+    return $result;    
+
   }
 
 
