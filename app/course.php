@@ -48,6 +48,9 @@ class Course
       }
 
 
+      // $result["prerequisite_array"] = [];
+      // $result["antirequisite_array"] = [];
+      // $result["corequisite_array"] = [];
       
 
       //loop through each courses
