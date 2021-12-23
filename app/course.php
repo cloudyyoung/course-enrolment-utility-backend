@@ -38,9 +38,16 @@ class Course
 
       $dictionary = array();
 
+
+
       //put all the information in a hash table, course id --> information
-      foreach ($requisite as &$insert) {
-        $dictionary[$insert["key"]] = $insert;
+      foreach ($requisite as &$insert)
+      {
+        $insert["key"] = json_decode($insert["key"]);
+        $insert["prerequisite"] = json_decode($insert["prerequisite"]);
+        $insert["antirequisite"] = json_decode($insert["antirequisite"]);
+        $insert["corequisite"] = json_decode($insert["corequisite"]);
+        $dictionary[$insert["key"]] =  $insert;
       }
 
 
