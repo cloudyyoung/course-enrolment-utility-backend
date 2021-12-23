@@ -55,7 +55,7 @@ class Course
 
       //loop through each courses
       foreach ($result as &$course) {
-        $code = $course["code"];
+        $code = "CPSC";
         $number = $course["number"];
         $search = strtoupper($code) . " " . $number;
 
