@@ -5,7 +5,7 @@ namespace App;
 use Flight;
 use App\MySQLDatabaseQueryException;
 
-class section
+class Section
 {
     // End point 6 - Section Information
     public static function SectionInformation($code, $number, $term, $year)

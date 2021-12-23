@@ -2,8 +2,6 @@
 session_start();
 
 require __DIR__ . '/vendor/autoload.php';
-require "app/util.php";
-require "app/exception.php";
 
 use App\StatusCodes;
 
