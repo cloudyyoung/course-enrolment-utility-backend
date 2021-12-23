@@ -98,12 +98,6 @@ class Student extends Account
         }
 
         $result = $result->fetch_all(MYSQLI_ASSOC);
-        $result_out = [];
-
-        foreach($result as $course_id){
-            $result_out[] = $course_id['course_id'];
-        }
-
-        return $result_out;
+        return $result;
     }
 }
