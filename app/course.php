@@ -9,6 +9,24 @@ use App\MySQLDatabaseQueryException;
 
 class Course
 {
+
+  public static function mongoDBCourse($result, $course_key)
+  {
+    $cursor = Flight::mongo(array('key' => $course_key));
+    $requisite = $cursor->toArray();
+    if (count($requisite) == 0) {
+      throw new NotFoundException("Course not found");
+    }
+
+    $requisite = $requisite[0];
+    $result["prerequisite_array"] = json_decode($requisite["prerequisite"]);
+    $result["antirequisite_array"] = json_decode($requisite["antirequisite"]);
+    $result["corequisite_array"] = json_decode($requisite["corequisite"]);
+
+    return $result;    
+  }
+
+
   // End point 5.1 - All Courses
   public static function AllCourses()
   {
@@ -55,8 +73,9 @@ class Course
     $result = Flight::multivalue($result, "hours");
     $result = Flight::multivalue($result, "time_length");
 
+    
     $course_key = strtoupper($code) . " " . $number;
-
+    /*
     $cursor = Flight::mongo(array('key' => $course_key));
     $requisite = $cursor->toArray();
     if (count($requisite) == 0) {
@@ -66,7 +85,8 @@ class Course
     $requisite = $requisite[0];
     $result["prerequisite_array"] = json_decode($requisite["prerequisite"]);
     $result["antirequisite_array"] = json_decode($requisite["antirequisite"]);
-    $result["corequisite_array"] = json_decode($requisite["corequisite"]);
+    $result["corequisite_array"] = json_decode($requisite["corequisite"]);*/
+    $result = course::mongoDBCourse($result, $course_key);
 
     return $result;
   }
